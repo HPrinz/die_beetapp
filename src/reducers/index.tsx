@@ -1,10 +1,14 @@
 import { combineReducers } from "redux";
-import gardenState, { GardenState } from "./GardenReducer";
+import garden, { GardenState } from "./garden";
+import location, { LocationState } from "./location";
+
 
 export interface RootState {
-  gardenState: GardenState;
+  garden: GardenState;
+  location: LocationState;
 }
 
 export default combineReducers<RootState>({
-  gardenState
+  garden,
+  location,
 });

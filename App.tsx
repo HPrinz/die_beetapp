@@ -1,31 +1,25 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { Hello } from "./src/components/Hello";
+import { Route, Router } from "react-router";
+
+import createHistory from "history/createMemoryHistory";
+import { NativeRouter, Link } from "react-router-native";
+import { BrowserRouter } from "react-router-dom";
+import createStore from "./src/store";
+import ReactDOM from "react-dom";
+import { Provider } from "react-redux";
 import { MainView } from "./src/components/MainView";
+import Hello from "./src/components/Hello";
 
-export default class App extends React.Component {
-  fetchQuestions = (name: string) => {
-    return "TASK";
-  };
+const history = createHistory();
+const store = createStore(history);
 
-  render() {
-    return (
-      <View style={styles.container}>
-        <Hello name="Kai" enthusiasmLevel={3}>
-          {" "}
-        </Hello>
+const app = () => (
+  <Provider store={store}>
+    <Router history={history}>
+      <Hello />
+    </Router>
+  </Provider>
+);
 
-        <MainView loadQuestions={this.fetchQuestions} />
-      </View>
-    );
-  }
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center"
-  }
-});
+export default app;

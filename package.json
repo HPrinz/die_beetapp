@@ -25,12 +25,17 @@
     "preset": "jest-expo"
   },
   "dependencies": {
+    "@types/react-dom": "^16.0.5",
     "@types/react-redux": "^5.0.19",
+    "@types/react-router-dom": "^4.2.6",
+    "@types/react-router-native": "^4.2.2",
     "expo": "^27.0.1",
     "react": "16.3.1",
+    "react-dom": "^16.3.2",
     "react-native": "~0.55.2",
-    "react-navigation": "^2.0.0-rc.9",
     "react-redux": "^5.0.7",
+    "react-router-dom": "^4.2.2",
+    "react-router-native": "^4.2.0",
     "redux": "^4.0.0"
   }
 }

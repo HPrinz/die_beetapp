@@ -11,7 +11,7 @@ import { loadTasks } from "../actions";
 
 import AsqHeader from "./AsqHeader.js";
 
-type StateToPropsType = { loadQuestions: Function };
+type StateToPropsType = { loadQuestions?: Function };
 
 type DispatchToPropsType = {};
 

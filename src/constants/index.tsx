@@ -4,5 +4,8 @@ export type DECREMENT_COUNTER = typeof DECREMENT_COUNTER;
 export const INCREMENT_COUNTER = "INCREMENT_COUNTER";
 export type INCREMENT_COUNTER = typeof INCREMENT_COUNTER;
 
+export const LOCATION_SET = "LOCATION_SET";
+export type LOCATION_SET = typeof LOCATION_SET;
+
 export const LOAD_TASKS = "LOAD_TASKS";
 export type LOAD_TASKS = typeof LOAD_TASKS;

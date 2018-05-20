@@ -10,8 +10,12 @@ export interface DecrementCounter {
   type: constants.DECREMENT_COUNTER;
 }
 
-export type LoadTasks {
+export interface LoadTasks {
   type: constants.LOAD_TASKS;
+}
+
+export interface LocationSet {
+  type: constants.LOCATION_SET;
 }
 
 export type CounterAction =
