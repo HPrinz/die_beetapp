@@ -9,9 +9,11 @@ import {
 import { connect } from "react-redux";
 import { loadTasks } from "../actions";
 
-import AsqHeader from "./AsqHeader.js";
+import Header from "./Header.js";
 
-type StateToPropsType = { loadQuestions?: Function };
+type StateToPropsType = {
+  //  loadQuestions: Function
+};
 
 type DispatchToPropsType = {};
 
@@ -19,7 +21,7 @@ export type MainProps = StateToPropsType & DispatchToPropsType;
 
 type MainState = {};
 
-export class MainView extends React.Component<MainProps, MainState> {
+class MainView extends React.Component<MainProps, MainState> {
   public props: MainProps;
 
   constructor(props: MainProps) {
@@ -29,7 +31,7 @@ export class MainView extends React.Component<MainProps, MainState> {
   }
 
   fetchQuestions = () => {
-    this.props.loadQuestions();
+    // this.props.loadQuestions();
   };
 
   onAsqSelected = () => {

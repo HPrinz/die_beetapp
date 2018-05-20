@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { View, StyleSheet, Text } from "react-native";
 //import { Font } from 'expo';
 
-class AsqHeader extends Component {
+class Header extends Component {
   state = {
     fontLoaded: false
   };
@@ -32,4 +32,4 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   }
 });
-export default AsqHeader;
+export default Header;

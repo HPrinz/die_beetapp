@@ -5,10 +5,12 @@ import { OtherActionResponse } from "../actions/action.type";
 
 export type GardenState = {
   counterLevel: number;
+  setupStep: number;
 };
 
 const defaultState: GardenState = {
-  counterLevel: 0
+  counterLevel: 0,
+  setupStep: 0
 };
 
 export default (
