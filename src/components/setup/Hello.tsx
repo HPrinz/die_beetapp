@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
 import { RouteComponentProps, withRouter } from "react-router";
+import { Link } from "react-router-native";
 
 type OwnProps = {};
 
@@ -19,19 +20,14 @@ class Hello extends React.Component<HelloProps, HelloState> {
   constructor(props: HelloProps) {
     super(props);
   }
-  //this.props.history.push("/beet")
-  onNext = () => {};
 
   render() {
     return (
       <View style={styles.root}>
-        <Text style={styles.greeting}>Hallo!</Text>
-
-        <View style={styles.buttons}>
-          <View style={styles.button}>
-            <Button title="next" onPress={this.onNext} color="red" />
-          </View>
-        </View>
+        <Text>Hallo!</Text>
+        <Link to="/bedtype">
+          <Text>Beete einrichten</Text>
+        </Link>
       </View>
     );
   }
@@ -45,20 +41,5 @@ const styles = StyleSheet.create({
   root: {
     alignItems: "center",
     alignSelf: "center"
-  },
-  buttons: {
-    flexDirection: "row",
-    minHeight: 70,
-    alignItems: "stretch",
-    alignSelf: "center",
-    borderWidth: 5
-  },
-  button: {
-    flex: 1,
-    paddingVertical: 0
-  },
-  greeting: {
-    color: "#999",
-    fontWeight: "bold"
   }
 });

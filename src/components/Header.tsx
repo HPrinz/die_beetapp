@@ -1,29 +1,19 @@
-import React, { Component } from "react";
+import React from "react";
 import { View, StyleSheet, Text } from "react-native";
-//import { Font } from 'expo';
 
-class Header extends Component {
-  state = {
-    fontLoaded: false
-  };
-
+class Header extends React.Component {
   render() {
     return (
       <View style={styles.viewStyle}>
-        {<Text style={styles.asq}>ASQ*</Text>}
+        <Text style={styles.heading}>die beetapp</Text>
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  asqlato: {
-    fontSize: 35,
-    fontFamily: "Lato-black"
-  },
-  asq: {
-    fontSize: 35,
-    fontWeight: "900"
+  heading: {
+    fontSize: 35
   },
   viewStyle: {
     flex: 1,
@@ -32,4 +22,6 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   }
 });
+
+export { Header as PureComponent };
 export default Header;
