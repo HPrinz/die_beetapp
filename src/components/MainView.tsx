@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import {
   Text,
   View,
@@ -19,7 +19,7 @@ export type MainProps = StateToPropsType & DispatchToPropsType;
 
 type MainState = {};
 
-export class MainView extends Component<MainProps, MainState> {
+export class MainView extends React.Component<MainProps, MainState> {
   public props: MainProps;
 
   constructor(props: MainProps) {

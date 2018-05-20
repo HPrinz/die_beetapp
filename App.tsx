@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Hello } from "./src/components/Hello";
-import MainView from "./src/components/MainView";
+import { MainView } from "./src/components/MainView";
 
 export default class App extends React.Component {
   fetchQuestions = (name: string) => {
