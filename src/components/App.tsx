@@ -10,6 +10,7 @@ import Setup from "./setup/Setup";
 type OwnProps = RouteComponentProps<{}>;
 
 type StateToPropsType = {
+  //Did the user the intro/setup of the app?
   isSetUp: boolean;
 };
 
