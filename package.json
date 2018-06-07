@@ -34,6 +34,7 @@
     "react-dom": "^16.3.2",
     "react-native": "~0.55.2",
     "react-native-elements": "^0.19.1",
+    "react-native-maps": "^0.21.0",
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.2.2",
     "react-router-native": "^4.2.0",
