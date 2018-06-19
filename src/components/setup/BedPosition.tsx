@@ -20,6 +20,7 @@ type State = {
   region: Region,
   place: string,
   ready: boolean
+  map: Map;
 };
 
 const window = Dimensions.get('window');
@@ -37,11 +38,10 @@ const initialRegion = {
 }
 
 export default class BedPostion extends React.Component<Props, State> {
-  map: any;
+
   constructor(props: Props) {
     super(props);
-
-    this.map = null;
+    this.setRegion = this.setRegion.bind(this);
 
     this.state = {
       region: {
@@ -49,22 +49,23 @@ export default class BedPostion extends React.Component<Props, State> {
         longitude: initialRegion.longitude,
         latitudeDelta: initialRegion.latitudeDelta,
         longitudeDelta: initialRegion.longitudeDelta,
+       
       },
       place: "",
-      ready: true
+      ready: false,
+      map: null,
     };
   }
 
-  setRegion(region: { latitude: number; longitude: number; latitudeDelta: number; longitudeDelta: number; }) {
-    if (this.state.ready) {
-      //setTimeout(() => this.map.mapview.animateToRegion(region), 10);
+  setRegion(region: Region) {
+    if (this.state.ready && this.state.map) {
+      setTimeout(() => this.state.map.animateToRegion(region), 10);
     }
-    this.setState({ region });
+    this.setState({ ...this.state, region });
   }
 
   componentDidMount() {
     console.log('Component did mount');
-    this.getCurrentPosition();
   }
 
   getCurrentPosition() {
@@ -83,14 +84,10 @@ export default class BedPostion extends React.Component<Props, State> {
           //TODO: better design
           switch (error.code) {
             case 1:
-              if (Platform.OS === "ios") {
-                Alert.alert("", "Para ubicar tu locación habilita permiso para la aplicación en Ajustes - Privacidad - Localización");
-              } else {
-                Alert.alert("", "Para ubicar tu locación habilita permiso para la aplicación en Ajustes - Apps - ExampleApp - Localización");
-              }
-              break;
+            Alert.alert("", "ERROR 1");
+            break;
             default:
-              Alert.alert("", "Error al detectar tu locación");
+              Alert.alert("", "ERROR DEFAULT");
           }
         }
       );
@@ -128,14 +125,16 @@ export default class BedPostion extends React.Component<Props, State> {
 
           <MapView
             showsUserLocation
-            ref={map => { this.map = map }}
+            ref={map => { if(this.state.map == null) this.setState({...this.state, map })}}
             initialRegion={initialRegion}
             showsMyLocationButton={false}
-            style={{ flex: 4 }}>
+            style={{ flex: 4 }}
+            onMapReady={() => {this.setState({...this.state, ready: true}); this.getCurrentPosition();}}
+            onRegionChange={(region: Region) =>  this.setState({ region })}>
 
             {!!this.state.region.latitude && !!this.state.region.longitude && <Marker
               coordinate={{ "latitude": this.state.region.latitude, "longitude": this.state.region.longitude }}
-              title={"Your^ Location"}
+              title={"Your Location"}
             />}
 
           </MapView>
