@@ -20,7 +20,7 @@ type State = {
   region: Region,
   place: string,
   ready: boolean
-  map: Map;
+  map: any;
 };
 
 const window = Dimensions.get('window');
