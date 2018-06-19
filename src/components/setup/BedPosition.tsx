@@ -4,6 +4,7 @@ import { RouteComponentProps, withRouter } from "react-router";
 import { Link } from "react-router-native";
 import MapView, { Region } from "react-native-maps";
 import { Marker } from "react-native-maps";
+import { getWeather } from "../../actions/getWeather";
 
 type OwnProps = {};
 
@@ -19,16 +20,15 @@ export type Props = RouteComponentProps<{}> &
 type State = {
   region: Region,
   place: string,
-  ready: boolean
-  map: any;
+  ready: boolean,
+  map: any,
+  temperature?: number
 };
 
 const window = Dimensions.get('window');
 
 const LATITUDE_DELTA = 0.01;
 const LONGITUDE_DELTA = 0.01;
-
-
 
 const initialRegion = {
   latitude: 13.405665044,
@@ -49,7 +49,6 @@ export default class BedPostion extends React.Component<Props, State> {
         longitude: initialRegion.longitude,
         latitudeDelta: initialRegion.latitudeDelta,
         longitudeDelta: initialRegion.longitudeDelta,
-       
       },
       place: "",
       ready: false,
@@ -57,11 +56,19 @@ export default class BedPostion extends React.Component<Props, State> {
     };
   }
 
-  setRegion(region: Region) {
+  moveToRegion(region: Region) {
     if (this.state.ready && this.state.map) {
       setTimeout(() => this.state.map.animateToRegion(region), 10);
     }
+    this.setRegion(region);
+  }
+
+  setRegion(region: Region) {
     this.setState({ ...this.state, region });
+    getWeather(region.latitude, region.longitude).then((weather) => {
+      // Alert.alert(JSON.stringify(weather));
+      this.setState({...this.state, temperature: weather.main.temp})
+    });
   }
 
   componentDidMount() {
@@ -78,7 +85,7 @@ export default class BedPostion extends React.Component<Props, State> {
             latitudeDelta: LATITUDE_DELTA,
             longitudeDelta: LONGITUDE_DELTA,
           };
-          this.setRegion(region);
+          this.moveToRegion(region);
         },
         (error) => {
           //TODO: better design
@@ -106,6 +113,7 @@ export default class BedPostion extends React.Component<Props, State> {
           backgroundColor: 'powderblue'
         }}>
           <Text>Gartenort:</Text>
+          <Text>Temperatur:{this.state.temperature || '...'}</Text>
         </View>
         <View style={{
           flex: 0.5, flexDirection: 'row', justifyContent: 'space-between', width: 200,
@@ -130,11 +138,11 @@ export default class BedPostion extends React.Component<Props, State> {
             showsMyLocationButton={false}
             style={{ flex: 4 }}
             onMapReady={() => {this.setState({...this.state, ready: true}); this.getCurrentPosition();}}
-            onRegionChange={(region: Region) =>  this.setState({ region })}>
+            onRegionChange={this.setRegion}>
 
             {!!this.state.region.latitude && !!this.state.region.longitude && <Marker
               coordinate={{ "latitude": this.state.region.latitude, "longitude": this.state.region.longitude }}
-              title={"Your Location"}
+              title={"deine Beete <3"}
             />}
 
           </MapView>

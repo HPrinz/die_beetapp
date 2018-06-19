@@ -1,6 +1,6 @@
-import { LOCATION_SET } from "../constants";
 import { OtherActionResponse } from "./action.type";
 import { weatherApiUrl, weatherApiKey } from "../config";
+import { Alert } from "react-native";
 
 export type GetWeatherActionResponse = {
     location: string,
@@ -16,35 +16,33 @@ export type LocationActionResponse = GetWeatherActionResponse | OtherActionRespo
 
 export type GetWeatherAction = (location: string) => GetWeatherActionResponse;
 
-export async function getWeather(lat: number, lon :number) : Promise<GetWeatherActionResponse> {
-        const url = `${weatherApiUrl}/weather?lat=${lat}&lon${lon}units=metric&appid=${weatherApiKey}`;
-        
-        try {
-          let response = await fetch(url);
-          const result = await response.json();
+export async function getWeather(lat: number, lon :number) {
+    const url = `${weatherApiUrl}/weather?lat=${lat}&lon=${lon}&units=metric&appid=${weatherApiKey}`;
     
-          return {
-            location: result.name,
-            forecast: result.weather[0].main,
-            feelsLike: (result.main.temp_min | 0),
-            current: (result.main.temp | 0),
-            low: '',
-            high: '',
-            icon: ''
-          };
-        } catch(error) {
-          console.log(error);
-          return {
-            location: '',
-            forecast: '',
-            feelsLike: '',
-            current: '',
-            low: '',
-            high: '',
-            icon: ''
-          };
-        }
+    try {
+      let response = await fetch(url);
+
+      return await response.json();
+
+      // return {
+      //   location: result.name,
+      //   forecast: result.weather[0].main,
+      //   feelsLike: (result.main.temp_min | 0),
+      //   current: (result.main.temp | 0),
+      // };
+    } catch(error) {
+      console.log(error);
+      return {
+        location: '',
+        forecast: '',
+        feelsLike: '',
+        current: '',
+        low: '',
+        high: '',
+        icon: ''
+      };
     }
+}
 
 
 
