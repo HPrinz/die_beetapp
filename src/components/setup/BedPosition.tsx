@@ -5,6 +5,7 @@ import { Link } from "react-router-native";
 import MapView, { Region } from "react-native-maps";
 import { Marker } from "react-native-maps";
 import { getWeather } from "../../actions/getWeather";
+import { Input, Button } from "react-native-elements";
 
 type OwnProps = {};
 
@@ -107,27 +108,15 @@ class BedPostion extends React.Component<Props, State> {
     return (
 
       <View style={styles.fulscreen}>
-
-        <View style={{
-          flex: 0.5, flexDirection: 'row', justifyContent: 'space-between',
-          backgroundColor: 'powderblue'
-        }}>
           <Text>Gartenort:</Text>
-          <Text>Temperatur:{this.state.temperature || '...'}</Text>
-        </View>
-        <View style={{
-          flex: 0.5, flexDirection: 'row', justifyContent: 'space-between', width: 200,
-          backgroundColor: 'powderblue'
-        }}>
-          <TextInput
-            style={{ width: 200, borderColor: 'gray', borderWidth: 1 }}
-            //onChangeText={(text) => this.setState({ text })}
-            value={this.state.place}
-          />
+          <View style={{
+            flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'stretch', 
+          }}>
+          <Input placeholder='Berlin' value={this.state.place} onChangeText={(text: any) => this.setState({ place: text })}/>
         </View>
 
         <View style={{
-          flex: 4, flexDirection: 'row', justifyContent: 'space-between',
+          flex: 5, flexDirection: 'row', justifyContent: 'center',
           backgroundColor: 'steelblue'
         }}>
 
@@ -136,7 +125,7 @@ class BedPostion extends React.Component<Props, State> {
             ref={map => { if(this.state.map == null) this.setState({...this.state, map })}}
             initialRegion={initialRegion}
             showsMyLocationButton={false}
-            style={{ flex: 4 }}
+            style={{ flex: 1 }}
             onMapReady={() => {this.setState({...this.state, ready: true}); this.getCurrentPosition();}}
             onRegionChange={this.setRegion}>
 
@@ -146,14 +135,13 @@ class BedPostion extends React.Component<Props, State> {
             />}
 
           </MapView>
+                    
         </View>
         <View style={{
-          flex: 1, flexDirection: 'row', justifyContent: 'space-between',
-          backgroundColor: 'blue'
+          flex: 1, flexDirection: 'column', justifyContent: 'space-around', alignItems: 'stretch', 
         }}>
-          <Link to="/crops">
-            <Text>Kulturen wählen</Text>
-          </Link>
+          <Text>Temperatur:{this.state.temperature || '...'}</Text>
+          <Link to="/crops" component={Button} title='Kulturen wählen' />
         </View>
       </View>
     );
@@ -166,9 +154,10 @@ export default withRouter(BedPostion);
 const styles = StyleSheet.create({
   fulscreen: {
     width: window.width,
-    height: window.height,
+    height: window.height - 60,
     alignItems: "center",
-    alignSelf: "center"
+    justifyContent: 'flex-start', 
+    flex: 1,
   },
   root: {
     flex: 1,

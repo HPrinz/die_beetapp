@@ -6,6 +6,13 @@ export interface IncrementCounter {
   type: constants.INCREMENT_COUNTER;
 }
 
+export interface SetOnboardingStepCompleted {
+  type: constants.ONBOARDING_STEP_COMPLETED,
+  attributes: {
+    step : number
+  }
+}
+
 export interface DecrementCounter {
   type: constants.DECREMENT_COUNTER;
 }
@@ -19,13 +26,15 @@ export interface LocationSet {
 }
 
 export type CounterAction =
-  | IncrementCounter
-  | DecrementCounter
+  | SetOnboardingStepCompleted
   | OtherActionResponse;
 
-export function incrementCounter(): IncrementCounter {
+export function SetOnboardingStepCompleted(step: number): SetOnboardingStepCompleted {
   return {
-    type: constants.INCREMENT_COUNTER
+    type: constants.ONBOARDING_STEP_COMPLETED,
+    attributes: {
+      step
+    }
   };
 }
 

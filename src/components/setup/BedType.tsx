@@ -31,7 +31,7 @@ class BedType extends React.Component<Props, State> {
 
         <View style={styles.row}>
           <Tile
-            imageSrc={require("../../../assets/img/beet.png")}
+            imageSrc={require("../../../assets/img/beet.jpg")}
             title="Beete"
             width={tileWidth}
             titleStyle={[styles.tileTitle]}
@@ -55,7 +55,7 @@ class BedType extends React.Component<Props, State> {
             containerStyle={[styles.tileBox]}
           />
           <Tile
-            imageSrc={require("../../../assets/img/hochbeet.png")}
+            imageSrc={require("../../../assets/img/hochbeet.jpg")}
             title="Hochbeete"
             width={tileWidth}
             titleStyle={[styles.tileTitle]}
@@ -65,7 +65,7 @@ class BedType extends React.Component<Props, State> {
 
         <View style={styles.row}>
         <Tile
-            imageSrc={require("../../../assets/img/gewachshaus.png")}
+            imageSrc={require("../../../assets/img/gewaechshaus.jpg")}
             title="Gewächshaus"
             width={tileWidth}
             titleStyle={[styles.tileTitle]}
@@ -84,9 +84,7 @@ class BedType extends React.Component<Props, State> {
         Navigation: https://facebook.github.io/react-native/docs/navigation.html
         <Button title="Test" onPress={() => navigate("/bedsizes")}/>
  */}
-        <Link to="/bedattributes">
-          <Text>Beete konfigurieren</Text>
-        </Link>
+        <Link to="/bedattributes" component={Button} title='Beete konfigurieren' />
       </View>
     );
   }

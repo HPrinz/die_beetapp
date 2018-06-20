@@ -1,7 +1,8 @@
 import React from "react";
-import { Button, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { RouteComponentProps, withRouter } from "react-router";
 import { Link } from "react-router-native";
+import { Button } from "react-native-elements";
 
 type OwnProps = {};
 
@@ -25,10 +26,7 @@ class Crops extends React.Component<Props, State> {
     return (
       <View style={styles.root}>
         <Text>Kulturen auswählen</Text>
-
-        <Link to="/hello">
-          <Text>Fertig!</Text>
-        </Link>
+        <Link to="/hello" component={Button} title='Fertig!'/>
       </View>
     );
   }
@@ -39,6 +37,7 @@ export default withRouter(Crops);
 const styles = StyleSheet.create({
   root: {
     alignItems: "center",
-    alignSelf: "center"
+    alignSelf: "center",
+    flex: 1,
   }
 });

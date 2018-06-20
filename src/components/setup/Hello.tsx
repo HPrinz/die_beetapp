@@ -1,7 +1,8 @@
 import React from "react";
-import { Button, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { RouteComponentProps, withRouter } from "react-router";
 import { Link } from "react-router-native";
+import { Button } from "react-native-elements";
 
 type OwnProps = {};
 
@@ -25,9 +26,7 @@ class Hello extends React.Component<HelloProps, HelloState> {
     return (
       <View style={styles.root}>
         <Text>Hallo!</Text>
-        <Link to="/bedtype">
-          <Text>Beete einrichten</Text>
-        </Link>
+        <Link to="/bedtype" component={Button} title='Beete einrichten'/>
       </View>
     );
   }
@@ -40,6 +39,7 @@ export default withRouter(Hello);
 const styles = StyleSheet.create({
   root: {
     alignItems: "center",
-    alignSelf: "center"
+    alignSelf: "center",
+    flex: 1,
   }
 });

@@ -1,2 +1,2 @@
-export type OtherActionResponse = { type: string };
-export const OtherActionResponse: OtherActionResponse = { type: "" };
+export type OtherActionResponse = { type: string, attributes : any };
+export const OtherActionResponse: OtherActionResponse = { type: "", attributes: {} };
