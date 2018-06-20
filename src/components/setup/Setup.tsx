@@ -10,9 +10,10 @@ import {
 import { Link } from "react-router-native";
 import Hello from "./Hello";
 import BedType from "./BedType";
-import BedSizes from "./BedSizes";
+import BedAttributes from "./BedAttributes";
 import BedPosition from "./BedPosition";
 import Header from "../Header";
+import Crops from "./Crops";
 
 type OwnProps = {};
 
@@ -39,8 +40,9 @@ class Setup extends React.Component<SetupProps, SetupState> {
         <Switch>
           <Route path="/hello" component={Hello} exact />
           <Route path="/bedtype" component={BedType} exact />
-          <Route path="/bedsizes" component={BedSizes} exact />
+          <Route path="/bedattributes" component={BedAttributes} exact />
           <Route path="/bedposition" component={BedPosition} exact />
+          <Route path="/crops" component={Crops} exact />
           {/* TODO: more to come! */}
           <Redirect to="/hello" />
         </Switch>

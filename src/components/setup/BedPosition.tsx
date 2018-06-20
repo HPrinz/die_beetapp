@@ -37,7 +37,7 @@ const initialRegion = {
   longitudeDelta: 0.0421,
 }
 
-export default class BedPostion extends React.Component<Props, State> {
+class BedPostion extends React.Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
@@ -151,16 +151,17 @@ export default class BedPostion extends React.Component<Props, State> {
           flex: 1, flexDirection: 'row', justifyContent: 'space-between',
           backgroundColor: 'blue'
         }}>
-          <Link to="/bedposition">
-            <Text>Gartenort zeigen</Text>
+          <Link to="/crops">
+            <Text>Kulturen wählen</Text>
           </Link>
         </View>
       </View>
     );
   }
 }
-//export { BedPostion as PureComponent };
-//export default withRouter(BedPostion);
+
+export { BedPostion as PureComponent };
+export default withRouter(BedPostion);
 
 const styles = StyleSheet.create({
   fulscreen: {

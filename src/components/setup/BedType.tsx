@@ -30,52 +30,50 @@ class BedType extends React.Component<Props, State> {
         <Text>Beetarten auswählen:</Text>
 
         <View style={styles.row}>
-
           <Tile
-            imageSrc={require("../../../assets/img/beete.jpg")}
+            imageSrc={require("../../../assets/img/beet.png")}
             title="Beete"
             width={tileWidth}
             titleStyle={[styles.tileTitle]}
             containerStyle={[styles.tileBox]}
           />
-
           <Tile
-            imageSrc={require("../../../assets/img/beete.jpg")}
+            imageSrc={require("../../../assets/img/fruehbeet.png")}
+            title="Frühbeet"
+            width={tileWidth}
+            titleStyle={[styles.tileTitle]}
+            containerStyle={[styles.tileBox]}
+          />
+        </View>
+
+        <View style={styles.row}>
+         <Tile
+            imageSrc={require("../../../assets/img/kuebel.png")}
             title="Kübel, Kisten"
             width={tileWidth}
             titleStyle={[styles.tileTitle]}
             containerStyle={[styles.tileBox]}
           />
-        </View>
-        <View style={styles.row}>
           <Tile
-            imageSrc={require("../../../assets/img/beete.jpg")}
+            imageSrc={require("../../../assets/img/hochbeet.png")}
             title="Hochbeete"
             width={tileWidth}
             titleStyle={[styles.tileTitle]}
             containerStyle={[styles.tileBox]}
           />
-
-          <Tile
-            imageSrc={require("../../../assets/img/beete.jpg")}
-            title="Gewächshaus (unbeheizt)"
-            width={tileWidth}
-            titleStyle={[styles.tileTitle]}
-            containerStyle={[styles.tileBox]}
-          />
         </View>
+
         <View style={styles.row}>
-          <Tile
-            imageSrc={require("../../../assets/img/beete.jpg")}
-            title="Gewächshaus (beheizt)"
+        <Tile
+            imageSrc={require("../../../assets/img/gewachshaus.png")}
+            title="Gewächshaus"
             width={tileWidth}
             titleStyle={[styles.tileTitle]}
             containerStyle={[styles.tileBox]}
           />
-
           <Tile
-            imageSrc={require("../../../assets/img/beete.jpg")}
-            title="Frühbeet"
+            imageSrc={require("../../../assets/img/gewaechshaus_beheizt.png")}
+            title="Gewächshaus (beheizt)"
             width={tileWidth}
             titleStyle={[styles.tileTitle]}
             containerStyle={[styles.tileBox]}
@@ -86,8 +84,8 @@ class BedType extends React.Component<Props, State> {
         Navigation: https://facebook.github.io/react-native/docs/navigation.html
         <Button title="Test" onPress={() => navigate("/bedsizes")}/>
  */}
-        <Link to="/bedsizes">
-          <Text>Beetgrößen einstellen</Text>
+        <Link to="/bedattributes">
+          <Text>Beete konfigurieren</Text>
         </Link>
       </View>
     );
@@ -98,20 +96,22 @@ export default withRouter(BedType);
 
 const styles = StyleSheet.create({
   root: {
+    flex: 1,
     alignItems: "center",
     alignSelf: "center"
   },
   row: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    margin: 10,
   },
   tileBox: {
     borderWidth: 0.5,
     borderColor: '#d6d7da',
   },
   tileTitle: {
-    fontSize: 16,
+    fontSize: 10,
     marginTop: 0
   },
 });

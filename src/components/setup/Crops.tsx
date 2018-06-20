@@ -16,7 +16,7 @@ export type Props = RouteComponentProps<{}> &
 
 type State = {};
 
-class BedSizes extends React.Component<Props, State> {
+class Crops extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
   }
@@ -24,17 +24,17 @@ class BedSizes extends React.Component<Props, State> {
   render() {
     return (
       <View style={styles.root}>
-        <Text>Beetgrößen einstellen:</Text>
+        <Text>Kulturen auswählen</Text>
 
-        <Link to="/bedposition">
-          <Text>Gartenort zeigen</Text>
+        <Link to="/hello">
+          <Text>Fertig!</Text>
         </Link>
       </View>
     );
   }
 }
-export { BedSizes as PureComponent };
-export default withRouter(BedSizes);
+export { Crops as PureComponent };
+export default withRouter(Crops);
 
 const styles = StyleSheet.create({
   root: {
