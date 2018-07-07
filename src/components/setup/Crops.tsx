@@ -1,8 +1,8 @@
 import React from "react";
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { RouteComponentProps, withRouter } from "react-router";
 import { Link } from "react-router-native";
-import { Button, Card, ListItem, CheckBox } from "react-native-elements";
+import { Button, Tile } from "react-native-elements";
 
 type OwnProps = {};
 
@@ -10,57 +10,43 @@ type StateToPropsType = {};
 
 type DispatchToPropsType = {};
 
-type State = {
-  CultureList: Culture[];
-};
-
 export type Props = RouteComponentProps<{}> &
   OwnProps &
   StateToPropsType &
-  DispatchToPropsType & State;
+  DispatchToPropsType;
 
-class Culture {
-  Name: string;
-  ImageUrl: string;
-  Checked: boolean;
-
-  constructor(pName: string, pImageUrl: string, pChecked: boolean) {
-    this.Name = pName;
-    this.ImageUrl = pImageUrl;
-    this.Checked = pChecked;
-  }
-}
+type State = {};
 
 class Crops extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = {
-      CultureList: [
-        new Culture("Tomate", "", false),
-        new Culture("Salat", "", true),
-      ]
-    }
   }
 
   render() {
     return (
       <View style={styles.root}>
+        <Text>Kulturen auswählen</Text>
 
-        <Card title="Kulturen auswählen">
-          {
-            this.state.CultureList.map((u, i) => {
-              return (
-                <CheckBox
-                  key={u.Name}
-                  title={u.Name}
-                  checked={u.Checked}
-                  onPress={() => u.Checked = !u.Checked}
-                />
-              );
-            })
-          }
-        </Card>
-        <Link to="/hello" component={Button} title='Fertig!' />
+        <View style={styles.row}>
+          <Tile
+            imageSrc={require("../../../assets/img/tomate.png")}
+            title="Tomate"
+            width={150}
+            height={150}
+            titleStyle={[styles.tileTitle]}
+            containerStyle={[styles.tileBox]}
+          />
+          <Tile
+            imageSrc={require("../../../assets/img/salat.png")}
+            title="Salat"
+            width={150}
+            height={150}
+            titleStyle={[styles.tileTitle]}
+            containerStyle={[styles.tileBox]}
+          />
+        </View>
+
+        <Link to="/finish" component={Button} title='Fertig!' />
       </View>
     );
   }
@@ -73,5 +59,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "center",
     flex: 1,
-  }
+  },
+  row: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    margin: 10,
+  },
+  tileBox: {
+    borderWidth: 0.5,
+    borderColor: '#d6d7da',
+  },
+  tileTitle: {
+    fontSize: 10,
+    marginTop: 0
+  },
 });
