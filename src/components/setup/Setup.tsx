@@ -15,6 +15,7 @@ import BedPosition from "./BedPosition";
 import Header from "../Header";
 import Crops from "./Crops";
 import App from "../App";
+import MainView from "../MainView";
 
 type OwnProps = {};
 
@@ -44,7 +45,7 @@ class Setup extends React.Component<SetupProps, SetupState> {
           <Route path="/bedattributes" component={BedAttributes} exact />
           <Route path="/bedposition" component={BedPosition} exact />
           <Route path="/crops" component={Crops} exact />
-          <Route path="/finish" component={App} exact />
+          <Route path="/finish" component={MainView} exact />
           {/* TODO: more to come! */}
           <Redirect to="/hello" />
         </Switch>

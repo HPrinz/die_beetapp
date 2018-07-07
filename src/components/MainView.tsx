@@ -4,12 +4,13 @@ import {
   View,
   StyleSheet,
   ScrollView,
-  TouchableOpacity
+  TouchableOpacity,
+  ListView
 } from "react-native";
 import { connect } from "react-redux";
-import { loadTasks } from "../actions";
 
 import Header from "./Header.js";
+import { ListItem } from "react-native-elements";
 
 type StateToPropsType = {
   //  loadQuestions: Function
@@ -19,7 +20,7 @@ type DispatchToPropsType = {};
 
 export type MainProps = StateToPropsType & DispatchToPropsType;
 
-type MainState = {};
+type MainState = {tasks: Object[]};
 
 class MainView extends React.Component<MainProps, MainState> {
   public props: MainProps;
@@ -27,7 +28,25 @@ class MainView extends React.Component<MainProps, MainState> {
   constructor(props: MainProps) {
     super(props);
     this.props = props;
-    this.state = {};
+    this.state = {
+      tasks:  [
+        {
+          name: 'Gießen',
+          avatar_url: "../../assets/img/giessen.png",
+          subtitle: 'Beet'
+        },
+        {
+          name: 'Gießen',
+          avatar_url: "../../assets/img/giessen.png",
+          subtitle: 'Gewächshaus'
+        },
+        {
+          name: 'Tomaten ausgeizen',
+          avatar_url: "../../assets/img/tomate.png",
+          subtitle: 'Gewächshaus'
+        },
+      ],
+  };
   }
 
   fetchQuestions = () => {
@@ -41,32 +60,23 @@ class MainView extends React.Component<MainProps, MainState> {
   componentDidMount() {
     return this.fetchQuestions();
   }
-
-  render() {
+  
+  render () {
     return (
-      <View style={styles.parent}>
-        <View style={styles.asqcontainer}>
-          <TouchableOpacity
-            onPress={this.onAsqSelected}
-            style={styles.touchableStyles}
-          >
-            <Text
-              style={{
-                color: "#841584",
-                fontSize: 22,
-                textAlign: "center",
-                fontWeight: "600"
-              }}
-            >
-              GartenApp
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-        <ScrollView style={{ flex: 2, flexGrow: 2 }} />
+      <View>
+         { this.state.tasks.map((l : any, i) => (
+        <ListItem
+          key={i}
+          // leftAvatar={{ source: { uri: {require(l.avatar_url)} } }}
+          title={l.name}
+          subtitle={l.subtitle}
+        />
+        ))
+      }
       </View>
-    );
+    )
   }
+
 }
 
 const styles = StyleSheet.create({

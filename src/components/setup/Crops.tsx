@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { RouteComponentProps, withRouter } from "react-router";
 import { Link } from "react-router-native";
-import { Button } from "react-native-elements";
+import { Button, Tile } from "react-native-elements";
 
 type OwnProps = {};
 
@@ -26,7 +26,27 @@ class Crops extends React.Component<Props, State> {
     return (
       <View style={styles.root}>
         <Text>Kulturen auswählen</Text>
-        <Link to="/hello" component={Button} title='Fertig!'/>
+
+        <View style={styles.row}>
+          <Tile
+            imageSrc={require("../../../assets/img/tomate.png")}
+            title="Tomate"
+            width={150}
+            height={150}
+            titleStyle={[styles.tileTitle]}
+            containerStyle={[styles.tileBox]}
+          />
+          <Tile
+            imageSrc={require("../../../assets/img/salat.png")}
+            title="Salat"
+            width={150}
+            height={150}
+            titleStyle={[styles.tileTitle]}
+            containerStyle={[styles.tileBox]}
+          />
+        </View>
+
+        <Link to="/finish" component={Button} title='Fertig!'/>
       </View>
     );
   }
@@ -39,5 +59,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "center",
     flex: 1,
-  }
+  },
+  row: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    margin: 10,
+  },
+  tileBox: {
+    borderWidth: 0.5,
+    borderColor: '#d6d7da',
+  },
+  tileTitle: {
+    fontSize: 10,
+    marginTop: 0
+  },
 });
