@@ -21,7 +21,7 @@ interface DispatchToPropsType {
 
 export type BedTypeProps = RouteComponentProps<{}> &
   StateToPropsType &
-  DispatchToPropsType  &
+  DispatchToPropsType &
   OwnProps;
 
 const tileWidth: number = 150;
@@ -43,6 +43,7 @@ class BedType extends React.Component<BedTypeProps, State> {
         <View style={styles.row}>
           {this.props.bedTypes.map((bed: BedProps) => (
             <Tile
+              key={bed.type}
               imageSrc={bed.image}
               title={bed.type}
               width={tileWidth}
@@ -50,7 +51,7 @@ class BedType extends React.Component<BedTypeProps, State> {
               containerStyle={[styles.tileBox]}
             />
           ))};
-        </View> 
+        </View>
 
         <Link
           to="/bedattributes"
@@ -63,7 +64,7 @@ class BedType extends React.Component<BedTypeProps, State> {
   }
 }
 
-function  mapStateToProps(state: RootState): StateToPropsType{
+function mapStateToProps(state: RootState): StateToPropsType {
   return {
     bedTypes: state.garden.setup.bedTypes
   }

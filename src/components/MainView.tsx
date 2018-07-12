@@ -4,16 +4,20 @@ import {
   StyleSheet,
 } from "react-native";
 import { connect } from "react-redux";
+import TaskList, { Task } from "./tasks/TaskList";
 
-import { ListItem } from "react-native-elements";
+type OwnPropsType = {
+};
 
 type StateToPropsType = {};
 
 type DispatchToPropsType = {};
 
-export type MainProps = StateToPropsType & DispatchToPropsType;
+export type MainProps = StateToPropsType & DispatchToPropsType & OwnPropsType;
 
-type MainState = { tasks: Object[] };
+type MainState = {
+  TaskList: Task[];
+};
 
 class MainView extends React.Component<MainProps, MainState> {
   public props: MainProps;
@@ -22,45 +26,49 @@ class MainView extends React.Component<MainProps, MainState> {
     super(props);
     this.props = props;
     this.state = {
-      tasks: [
+      TaskList
+        : [{
+          name: "Gießen",
+          Description: "",
+          AvatarUrl: "../../../assets/img/giessen.png",
+          Bed: "Beet",
+          Done: false,
+        } as Task,
         {
           name: "Gießen",
-          avatar_url: "../../assets/img/giessen.png",
-          subtitle: "Beet"
-        },
-        {
-          name: "Gießen",
-          avatar_url: "../../assets/img/giessen.png",
-          subtitle: "Gewächshaus"
-        },
+          Description: "",
+          AvatarUrl: "../../../assets/img/giessen.png",
+          Bed: "Gewächshaus",
+          Done: false,
+        } as Task,
         {
           name: "Tomaten ausgeizen",
-          avatar_url: "../../assets/img/tomate.png",
-          subtitle: "Gewächshaus"
-        }
-      ]
-    };
+          Description: "",
+          AvatarUrl: "../../../assets/img/tomate.png",
+          Bed: "Gewächshaus",
+          Done: false,
+        } as Task]
+    }
   }
 
-  componentDidMount() {}
+  componentDidMount() { }
 
   render() {
     return (
-      <View>
-        {this.state.tasks.map((l: any, i) => (
-          <ListItem
-            key={i}
-            // leftAvatar={{ source: l.avatar_url }}
-            title={l.name}
-            subtitle={l.subtitle}
-          />
-        ))}
+      <View style={styles.root}>
+        <TaskList TaskList={this.state.TaskList} />
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  root: {
+    alignItems: "center",
+    alignSelf: "center",
+    flex: 1,
+  },
+
   parent: {
     flex: 1
   },
