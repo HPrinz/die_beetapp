@@ -3,9 +3,11 @@ import { StyleSheet, Text, View, Alert } from "react-native";
 import { RouteComponentProps, withRouter } from "react-router";
 import { Link } from "react-router-native";
 import { Tile, Button } from "react-native-elements";
-import { GardenState, BedProps } from "../../reducers/garden";
 import { SetBedTypes } from "../../actions";
-import { connect } from "../../../node_modules/@types/react-redux";
+import { connect } from "react-redux";
+import { RootState } from "../../reducers";
+import { Dispatch } from "../../../node_modules/redux";
+import { BedProps } from "../../reducers/garden";
 
 type OwnProps = {};
 
@@ -13,21 +15,23 @@ type StateToPropsType = {
   bedTypes: BedProps[];
 };
 
-type DispatchToPropsType = {
-  updateBedTypes: SetBedTypes;
+interface DispatchToPropsType {
+  updateBedTypes: () => void
 };
 
 export type BedTypeProps = RouteComponentProps<{}> &
-  OwnProps &
   StateToPropsType &
-  DispatchToPropsType;
+  DispatchToPropsType  &
+  OwnProps;
 
 const tileWidth: number = 150;
 
 type State = {};
 
 class BedType extends React.Component<BedTypeProps, State> {
+
   constructor(props: BedTypeProps) {
+    console.log(JSON.stringify(props))
     super(props);
   }
 
@@ -37,21 +41,21 @@ class BedType extends React.Component<BedTypeProps, State> {
         <Text>Beetarten auswählen:</Text>
 
         <View style={styles.row}>
-          {this.props.bedTypes.map((bed: BedProps) => {
+          {this.props.bedTypes.map((bed: BedProps) => (
             <Tile
-              imageSrc={require("../../../assets/img/kuebel.png")}
+              imageSrc={bed.image}
               title={bed.type}
               width={tileWidth}
               titleStyle={[styles.tileTitle]}
               containerStyle={[styles.tileBox]}
-            />;
-          })}
-        </View>
+            />
+          ))};
+        </View> 
 
         <Link
           to="/bedattributes"
           component={Button}
-          onPress={() => this.props.updateBedTypes}
+          onPress={this.props.updateBedTypes}
           title="Beete konfigurieren"
         />
       </View>
@@ -59,25 +63,20 @@ class BedType extends React.Component<BedTypeProps, State> {
   }
 }
 
-const mapStateToProps = (state: GardenState) => ({
-  bedTypes: state.setup.bedTypes
-});
+function  mapStateToProps(state: RootState): StateToPropsType{
+  return {
+    bedTypes: state.garden.setup.bedTypes
+  }
+}
 
-const mapDispatchToProps: DispatchToPropsType = {
-  // TODO make dynamic
-  updateBedTypes: SetBedTypes([
-    { type: "beet", selected: 2, image: "" },
-    { type: "gewaechshaus", selected: 1, image: "" }
-  ])
+function mapDispatchToProps(dispatch: Dispatch<SetBedTypes>): DispatchToPropsType {
+  return {
+    updateBedTypes: () => dispatch(SetBedTypes([]))
+  }
 };
 
 export { BedType as PureComponent };
-export default withRouter(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(BedType)
-);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(BedType));
 
 const styles = StyleSheet.create({
   root: {

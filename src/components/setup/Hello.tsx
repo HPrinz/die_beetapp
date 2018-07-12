@@ -3,12 +3,17 @@ import { StyleSheet, Text, View } from "react-native";
 import { RouteComponentProps, withRouter } from "react-router";
 import { Link } from "react-router-native";
 import { Button } from "react-native-elements";
+import { connect } from "react-redux";
+import { startSetup, StartSetup } from "../../actions";
+import { Dispatch } from 'react-redux';
 
 type OwnProps = {};
 
 type StateToPropsType = {};
 
-type DispatchToPropsType = {};
+interface DispatchToPropsType {
+  doStartSetup: () => void
+};
 
 export type HelloProps = RouteComponentProps<{}> &
   OwnProps &
@@ -26,13 +31,20 @@ class Hello extends React.Component<HelloProps, HelloState> {
     return (
       <View style={styles.root}>
         <Text>Hallo!</Text>
-        <Link to="/bedtype" component={Button} title='Beete einrichten'/>
+        <Link to="/bedtype" component={Button} title='Beete einrichten' onPress={this.props.doStartSetup} />
       </View>
     );
   }
 }
+
+function mapDispatchToProps(dispatch: Dispatch<StartSetup>): DispatchToPropsType {
+  return {
+    doStartSetup: () => dispatch(startSetup())
+  };
+};
+
 export { Hello as PureComponent };
-export default withRouter(Hello);
+export default withRouter(connect<null, DispatchToPropsType>(null,mapDispatchToProps)(Hello));
 
 // styles
 

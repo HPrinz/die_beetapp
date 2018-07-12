@@ -14,7 +14,7 @@ export type LocationState = {
     location: Location;
 };
 
-const defaultState: LocationState = {
+export const defaultState: LocationState = {
     location: {},
 };
 

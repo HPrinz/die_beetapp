@@ -1,7 +1,6 @@
-import { SetOnboardingStepCompleted } from "../actions";
-import { ONBOARDING_STEP_COMPLETED } from "../constants";
+import { SetOnboardingStepCompleted, StartSetup } from "../actions";
+import { ONBOARDING_STEP_COMPLETED, SETUP_STARTED } from "../constants";
 import { LatLng } from "react-native-maps";
-import { OtherActionResponse } from "../actions/action.type";
 
 export type BedProps = {
   type: string;
@@ -20,33 +19,38 @@ export type GardenState = {
   };
 };
 
-const defaultState: GardenState = {
+export const defaultGardenState: GardenState = {
   setupStep: 0,
   setup: {
     bedTypes: [
       {
         type: "Beet",
-        image: "../../../assets/img/beet.jpg",
+        image: require("../../assets/img/beet.jpg"),
         selected: 0
       },
       {
         type: "Frühbeet",
-        image: "../../../assets/img/fruehbeet.png",
+        image: require("../../assets/img/fruehbeet.png"),
+        selected: 0
+      },
+      {
+        type: "Hochbeet",
+        image: require("../../assets/img/hochbeet.jpg"),
         selected: 0
       },
       {
         type: "Kübel/Kasten",
-        image: "../../../assets/img/kuebel.png",
+        image: require("../../assets/img/kuebel.png"),
         selected: 0
       },
       {
         type: "Gewächshaus",
-        image: "../../../assets/img/gewaechshaus.jpg",
+        image: require("../../assets/img/gewaechshaus.jpg"),
         selected: 0
       },
       {
         type: "Gewächshaus (beheizt)",
-        image: "../../../assets/img/gewaechshaus_beheizt.png",
+        image: require("../../assets/img/gewaechshaus_beheizt.png"),
         selected: 0
       }
     ],
@@ -55,10 +59,15 @@ const defaultState: GardenState = {
 };
 
 export default (
-  state: GardenState = defaultState,
-  action: SetOnboardingStepCompleted | OtherActionResponse
+  state: GardenState = defaultGardenState,
+  action: SetOnboardingStepCompleted | StartSetup
 ) => {
   switch (action.type) {
+    case SETUP_STARTED:
+      console.log('YIEHA');
+      return {
+        ...defaultGardenState
+      };
     case ONBOARDING_STEP_COMPLETED:
       return {
         ...state,

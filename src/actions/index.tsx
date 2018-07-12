@@ -17,15 +17,26 @@ export interface SetBedTypes {
   };
 }
 
-export interface LoadTasks {
-  type: constants.LOAD_TASKS;
+export interface StartSetup {
+  type: constants.SETUP_STARTED;
 }
 
 export interface LocationSet {
   type: constants.LOCATION_SET;
 }
 
-export type CounterAction = SetOnboardingStepCompleted | OtherActionResponse;
+export interface LoadTasks {
+  type: constants.LOAD_TASKS;
+}
+
+// ---------------------------------
+
+export function startSetup() : StartSetup {
+  console.log('&/%/(RFIS');
+  return {
+    type: constants.SETUP_STARTED
+  }
+}
 
 export function SetOnboardingStepCompleted(
   step: number
@@ -39,6 +50,7 @@ export function SetOnboardingStepCompleted(
 }
 
 export function SetBedTypes(bedTypes: BedProps[]): SetBedTypes {
+  console.log('JKHG' + JSON.stringify(bedTypes));
   return {
     type: constants.SET_BED_TYPES,
     attributes: {

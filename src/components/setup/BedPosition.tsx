@@ -100,7 +100,7 @@ class BedPostion extends React.Component<Props, State> {
         }
       );
     } catch (e) {
-      alert(e.message || "");
+      Alert.alert(e.message || "");
     }
   };
 

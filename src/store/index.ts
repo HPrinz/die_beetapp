@@ -5,7 +5,7 @@ import { setLocation } from "../actions/setLocation";
 
 export default (
   history: any,
-  initialState = { location: {}, garden: {} } as RootState
+  initialState = { garden: {}, location: {} } as RootState
 ) => {
   const middlewares: Middleware[] = [];
 

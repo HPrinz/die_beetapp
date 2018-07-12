@@ -1,3 +1,6 @@
+export const SETUP_STARTED = "SETUP_STARTED";
+export type SETUP_STARTED = typeof SETUP_STARTED;
+
 export const SET_BED_TYPES = "SET_BED_TYPES";
 export type SET_BED_TYPES = typeof SET_BED_TYPES;
 
