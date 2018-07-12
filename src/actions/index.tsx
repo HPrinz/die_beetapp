@@ -1,20 +1,20 @@
 import * as constants from "../constants";
 import { OtherActionResponse } from "./action.type";
 import { GardenModel } from "../models/Garden";
-
-export interface IncrementCounter {
-  type: constants.INCREMENT_COUNTER;
-}
+import { BedProps } from "../reducers/garden";
 
 export interface SetOnboardingStepCompleted {
-  type: constants.ONBOARDING_STEP_COMPLETED,
+  type: constants.ONBOARDING_STEP_COMPLETED;
   attributes: {
-    step : number
-  }
+    step: number;
+  };
 }
 
-export interface DecrementCounter {
-  type: constants.DECREMENT_COUNTER;
+export interface SetBedTypes {
+  type: constants.SET_BED_TYPES;
+  attributes: {
+    bedTypes: BedProps[];
+  };
 }
 
 export interface LoadTasks {
@@ -25,11 +25,11 @@ export interface LocationSet {
   type: constants.LOCATION_SET;
 }
 
-export type CounterAction =
-  | SetOnboardingStepCompleted
-  | OtherActionResponse;
+export type CounterAction = SetOnboardingStepCompleted | OtherActionResponse;
 
-export function SetOnboardingStepCompleted(step: number): SetOnboardingStepCompleted {
+export function SetOnboardingStepCompleted(
+  step: number
+): SetOnboardingStepCompleted {
   return {
     type: constants.ONBOARDING_STEP_COMPLETED,
     attributes: {
@@ -38,9 +38,12 @@ export function SetOnboardingStepCompleted(step: number): SetOnboardingStepCompl
   };
 }
 
-export function decrementEnthusiasm(): DecrementCounter {
+export function SetBedTypes(bedTypes: BedProps[]): SetBedTypes {
   return {
-    type: constants.DECREMENT_COUNTER
+    type: constants.SET_BED_TYPES,
+    attributes: {
+      bedTypes
+    }
   };
 }
 
@@ -50,4 +53,4 @@ export function loadTasks(garden: GardenModel): LoadTasks {
   };
 }
 
-export default loadTasks
+export default loadTasks;

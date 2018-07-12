@@ -1,26 +1,19 @@
 import React from "react";
 import {
-  Text,
   View,
   StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  ListView
 } from "react-native";
 import { connect } from "react-redux";
 
-import Header from "./Header.js";
 import { ListItem } from "react-native-elements";
 
-type StateToPropsType = {
-  //  loadQuestions: Function
-};
+type StateToPropsType = {};
 
 type DispatchToPropsType = {};
 
 export type MainProps = StateToPropsType & DispatchToPropsType;
 
-type MainState = {tasks: Object[]};
+type MainState = { tasks: Object[] };
 
 class MainView extends React.Component<MainProps, MainState> {
   public props: MainProps;
@@ -29,54 +22,42 @@ class MainView extends React.Component<MainProps, MainState> {
     super(props);
     this.props = props;
     this.state = {
-      tasks:  [
+      tasks: [
         {
-          name: 'Gießen',
+          name: "Gießen",
           avatar_url: "../../assets/img/giessen.png",
-          subtitle: 'Beet'
+          subtitle: "Beet"
         },
         {
-          name: 'Gießen',
+          name: "Gießen",
           avatar_url: "../../assets/img/giessen.png",
-          subtitle: 'Gewächshaus'
+          subtitle: "Gewächshaus"
         },
         {
-          name: 'Tomaten ausgeizen',
+          name: "Tomaten ausgeizen",
           avatar_url: "../../assets/img/tomate.png",
-          subtitle: 'Gewächshaus'
-        },
-      ],
-  };
+          subtitle: "Gewächshaus"
+        }
+      ]
+    };
   }
 
-  fetchQuestions = () => {
-    // this.props.loadQuestions();
-  };
+  componentDidMount() {}
 
-  onAsqSelected = () => {
-    this.fetchQuestions();
-  };
-
-  componentDidMount() {
-    return this.fetchQuestions();
-  }
-  
-  render () {
+  render() {
     return (
       <View>
-         { this.state.tasks.map((l : any, i) => (
-        <ListItem
-          key={i}
-          // leftAvatar={{ source: { uri: {require(l.avatar_url)} } }}
-          title={l.name}
-          subtitle={l.subtitle}
-        />
-        ))
-      }
+        {this.state.tasks.map((l: any, i) => (
+          <ListItem
+            key={i}
+            // leftAvatar={{ source: l.avatar_url }}
+            title={l.name}
+            subtitle={l.subtitle}
+          />
+        ))}
       </View>
-    )
+    );
   }
-
 }
 
 const styles = StyleSheet.create({
@@ -127,4 +108,7 @@ const styles = StyleSheet.create({
 const mapDispatchToProps: DispatchToPropsType = {};
 
 export { MainView as PureComponent };
-export default connect(null, mapDispatchToProps)(MainView);
+export default connect(
+  null,
+  mapDispatchToProps
+)(MainView);
