@@ -5,6 +5,7 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import TaskList, { Task } from "./tasks/TaskList";
+import TaskDetailItem from "./tasks/TaskDetailItem";
 
 type OwnPropsType = {
 };
@@ -28,20 +29,23 @@ class MainView extends React.Component<MainProps, MainState> {
     this.state = {
       TaskList
         : [{
+          type: "giessen",
           name: "Gießen",
           Description: "",
           AvatarUrl: "../../../assets/img/giessen.png",
           Bed: "Beet",
-          Done: false,
+          Done: true,
         } as Task,
         {
-          name: "Gießen",
+          type: "giessen",
+          name: "Gießen1",
           Description: "",
           AvatarUrl: "../../../assets/img/giessen.png",
           Bed: "Gewächshaus",
           Done: false,
         } as Task,
         {
+          type: "geizen",
           name: "Tomaten ausgeizen",
           Description: "",
           AvatarUrl: "../../../assets/img/tomate.png",
@@ -55,8 +59,10 @@ class MainView extends React.Component<MainProps, MainState> {
 
   render() {
     return (
+
       <View style={styles.root}>
         <TaskList TaskList={this.state.TaskList} />
+        <TaskDetailItem Task={this.state.TaskList[0]} />
       </View>
     );
   }
@@ -64,8 +70,6 @@ class MainView extends React.Component<MainProps, MainState> {
 
 const styles = StyleSheet.create({
   root: {
-    alignItems: "center",
-    alignSelf: "center",
     flex: 1,
   },
 
