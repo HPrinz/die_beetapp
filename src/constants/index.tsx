@@ -10,6 +10,12 @@ export type ADD_BED_TYPE = typeof ADD_BED_TYPE;
 export const REMOVE_BED_TYPE = "REMOVE_BED_TYPE";
 export type REMOVE_BED_TYPE = typeof REMOVE_BED_TYPE;
 
+export const SET_BED_SIZE = "SET_BED_SIZE";
+export type SET_BED_SIZE = typeof SET_BED_SIZE;
+
+export const SET_BED_SUN = "SET_BED_SUN";
+export type SET_BED_SUN = typeof SET_BED_SUN;
+
 export const ONBOARDING_STEP_COMPLETED = "ONBOARDING_STEP_COMPLETED";
 export type ONBOARDING_STEP_COMPLETED = typeof ONBOARDING_STEP_COMPLETED;
 

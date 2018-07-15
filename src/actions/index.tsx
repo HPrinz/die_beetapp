@@ -16,10 +16,27 @@ export interface AddBedType {
     bedType: string;
   };
 }
+
 export interface RemoveBedType {
   type: constants.REMOVE_BED_TYPE;
   attributes: {
     bedType: string;
+  };
+}
+
+export interface SetBedSize {
+  type: constants.SET_BED_SIZE;
+  attributes: {
+    bedId: string;
+    size: string;
+  };
+}
+
+export interface SetBedSun {
+  type: constants.SET_BED_SUN;
+  attributes: {
+    bedId: string;
+    sunHours: number;
   };
 }
 
@@ -38,15 +55,12 @@ export interface LoadTasks {
 // ---------------------------------
 
 export function startSetup() : StartSetup {
-  console.log('&/%/(RFIS');
   return {
     type: constants.SETUP_STARTED
   }
 }
 
-export function SetOnboardingStepCompleted(
-  step: number
-): SetOnboardingStepCompleted {
+export function SetOnboardingStepCompleted(step: number): SetOnboardingStepCompleted {
   return {
     type: constants.ONBOARDING_STEP_COMPLETED,
     attributes: {
@@ -60,6 +74,26 @@ export function AddBedType(bedType: string): AddBedType {
     type: constants.ADD_BED_TYPE,
     attributes: {
       bedType
+    }
+  };
+}
+
+export function SetBedSize(bedId: string, size: string): SetBedSize {
+  return {
+    type: constants.SET_BED_SIZE,
+    attributes: {
+      bedId,
+      size
+    }
+  };
+}
+
+export function SetBedSun(bedId: string, sunHours: number): SetBedSun {
+  return {
+    type: constants.SET_BED_SUN,
+    attributes: {
+      bedId,
+      sunHours
     }
   };
 }

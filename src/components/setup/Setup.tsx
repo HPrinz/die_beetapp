@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, StyleSheet, Text, View } from "react-native";
+import { Button, StyleSheet, Text, View, ScrollView } from "react-native";
 import {
   RouteComponentProps,
   withRouter,
@@ -39,16 +39,18 @@ class Setup extends React.Component<SetupProps, SetupState> {
     return (
       <View style={styles.root}>
         <Header />
-        <Switch>
-          <Route path="/hello" component={Hello} exact />
-          <Route path="/bedtype" component={BedType} exact />
-          <Route path="/bedattributes" component={BedAttributes} exact />
-          <Route path="/bedposition" component={BedPosition} exact />
-          <Route path="/crops" component={Crops} exact />
-          <Route path="/finish" component={MainView} exact />
-          {/* TODO: more to come! */}
-          <Redirect to="/hello" />
-        </Switch>
+        <ScrollView>
+          <Switch>
+            <Route path="/hello" component={Hello} exact />
+            <Route path="/bedtype" component={BedType} exact />
+            <Route path="/bedattributes" component={BedAttributes} exact />
+            <Route path="/bedposition" component={BedPosition} exact />
+            <Route path="/crops" component={Crops} exact />
+            <Route path="/finish" component={MainView} exact />
+            {/* TODO: more to come! */}
+            <Redirect to="/hello" />
+          </Switch>
+        </ScrollView>
       </View>
     );
   }
@@ -58,8 +60,9 @@ export default withRouter(Setup);
 
 const styles = StyleSheet.create({
   root: {
-    alignItems: "center",
-    alignSelf: "center",
-    flex: 1,
+    height: '100%'
+  },
+  scroll: {
+    height: '100%'
   }
 });
