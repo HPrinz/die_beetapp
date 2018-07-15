@@ -13,13 +13,10 @@ class Header extends React.Component {
 
 const styles = StyleSheet.create({
   heading: {
-    fontSize: 35
+    fontSize: 35,
+    textAlign: 'center'
   },
   viewStyle: {
-    flex: 1,
-    flexDirection: "row",
-    alignItems: "flex-end",
-    justifyContent: "center",
     marginTop: 40
   }
 });

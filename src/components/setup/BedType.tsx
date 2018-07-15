@@ -1,8 +1,8 @@
 import React, { StatelessComponent, Component } from "react";
-import { StyleSheet, Text, View, Alert, Image } from "react-native";
+import { StyleSheet, Text, View, Alert, Image, ImageSourcePropType } from "react-native";
 import { RouteComponentProps, withRouter } from "react-router";
 import { Link } from "react-router-native";
-import { Tile, Button, Badge } from "react-native-elements";
+import { Tile, Button, Badge, Card } from "react-native-elements";
 import { AddBedType, RemoveBedType } from "../../actions";
 import { connect } from "react-redux";
 import { RootState } from "../../reducers";
@@ -14,7 +14,7 @@ type OwnProps = {
 };
 
 type StateToPropsType = {
-  bedTypes: {[bedType: string]: BedProps} ;
+  bedTypes: {[bedType: string]: BedProps};
 };
 
 interface DispatchToPropsType {
@@ -27,7 +27,7 @@ export type BedTypeProps = RouteComponentProps<{}> &
   DispatchToPropsType &
   OwnProps;
 
-const tileWidth: number = 150;
+const tileWidth: number = 130;
 
 type State = {};
 
@@ -43,21 +43,20 @@ class BedType extends React.Component<BedTypeProps, State> {
 
   render() {
     return (
-      <View style={styles.root}>
+      <View>
         <Text>Beetarten auswählen:</Text>
 
         <View style={styles.row}>
           {Object.values(this.props.bedTypes).map((bed: BedProps) => (
-            <View key={bed.type}>
-              <Tile imageSrc={bed.image} width={tileWidth} />
-              <View style={styles.hor} width={tileWidth}>
-                <Text>{bed.type}</Text>
-                <Badge value={bed.selected} textStyle={{ color: 'orange' }}/>
-              </View>
+            <View key={bed.type} style={styles.item} >
+              <Image style={{flex:1, height: tileWidth/2, width: tileWidth}} source={bed.image} resizeMode="contain" />
+              <Text style={styles.tileText}>{bed.type}</Text>
+  
               <View style={styles.hor}>
-                  <Button style={styles.plusminus} title="+" onPress={() => this.props.addBedType(bed.type)} />
-                  <Button style={styles.plusminus} title="-" onPress={() => this.props.removeBedType(bed.type)} />
-                </View>
+                <Button style={styles.plusminus} title="-" onPress={() => this.props.removeBedType(bed.type)} />
+                <Badge value={bed.selected} textStyle={{ color: 'orange' }}/>
+                <Button style={styles.plusminus} title="+" onPress={() => this.props.addBedType(bed.type)} />
+              </View>
             </View>
           ))};
         </View>
@@ -89,32 +88,36 @@ export { BedType as PureComponent };
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(BedType));
 
 const styles = StyleSheet.create({
-  root: {
+  tileText: {
     flex: 1,
+    justifyContent: "space-between",
+    flexDirection: "row",
     alignItems: "center",
-    alignSelf: "center"
+    alignSelf: "center",
+    width: tileWidth,
   },
   hor: {
     flex: 1,
     flexDirection: "row",
-    justifyContent: 'center',
-    alignItems: "stretch",
+    alignItems: "center",
+    alignSelf: "center",
   },
   plusminus: {
   },
   row: {
     flex: 1,
     flexDirection: "row",
-    justifyContent: "space-between",
-    margin: 10,
+    // justifyContent: "space-between",
+    // margin: 10,
     flexWrap: "wrap"
   },
-  tileBox: {
+  item: {
     borderWidth: 0.5,
-    borderColor: "#d6d7da"
+    borderColor: "#d6d7da",
+    padding: 10,
   },
   tileTitle: {
-    fontSize: 10,
-    marginTop: 0
+    // fontSize: 10,
+    // marginTop: 0
   }
 });

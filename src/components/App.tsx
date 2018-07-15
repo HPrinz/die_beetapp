@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { StatelessComponent } from "react";
 import MainView from "./MainView";
 import { RootState } from "../reducers";
-import { ScrollView } from "react-native";
+import { ScrollView, View } from "react-native";
 import Setup from "./setup/Setup";
 
 type OwnProps = RouteComponentProps<{}>;
@@ -20,7 +20,7 @@ export type AppProps = OwnProps & StateToPropsType & DispatchToPropsType;
 
 const App: StatelessComponent<AppProps> = ({ isSetUp }: AppProps) => (
   // show MainView if intro setup is finished, else go to hello
-  <ScrollView>{isSetUp ? <MainView /> : <Setup />}</ScrollView>
+  <View>{isSetUp ? <MainView /> : <Setup />}</View>
 );
 
 const mapStateToProps = (state: RootState): StateToPropsType => ({

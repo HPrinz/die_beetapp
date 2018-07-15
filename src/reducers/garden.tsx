@@ -1,14 +1,20 @@
-import { SetOnboardingStepCompleted, StartSetup, AddBedType, RemoveBedType } from "../actions";
-import { ONBOARDING_STEP_COMPLETED, SETUP_STARTED, ADD_BED_TYPE, REMOVE_BED_TYPE } from "../constants";
+import { SetOnboardingStepCompleted, StartSetup, AddBedType, RemoveBedType, SetBedSize, SetBedSun } from "../actions";
+import { ONBOARDING_STEP_COMPLETED, SETUP_STARTED, ADD_BED_TYPE, REMOVE_BED_TYPE, SET_BED_SIZE, SET_BED_SUN } from "../constants";
 import { LatLng } from "react-native-maps";
+import  uuidv1  from "uuid/v1";
 import { ImageSourcePropType } from "../../node_modules/@types/react-native";
 
 export type BedProps = {
   type: string;
-  image: string;
-  selected: number;
+  image: ImageSourcePropType;
+  selected : number
+};
+
+export type Bed = {
+  type: string;
+  id: string;
   sunHours?: number;
-  size?: number;
+  size?: string;
 };
 
 export type GardenState = {
@@ -17,6 +23,7 @@ export type GardenState = {
     bedTypes: {[bedType: string]: BedProps} ;
     location?: LatLng;
     crops: string[];
+    beds: {[bedId: string]: Bed};
   };
 };
 
@@ -55,13 +62,14 @@ export const defaultGardenState: GardenState = {
         selected: 0
       }
     },
-    crops: []
+    crops: [],
+    beds: {}
   }
 };
 
 export default (
   state: GardenState = defaultGardenState,
-  action: SetOnboardingStepCompleted | StartSetup | AddBedType | RemoveBedType
+  action: SetOnboardingStepCompleted | StartSetup | AddBedType | RemoveBedType | SetBedSize | SetBedSun
 ) => {
   switch (action.type) {
     case SETUP_STARTED:
@@ -76,15 +84,23 @@ export default (
       };
 
     case ADD_BED_TYPE:
+    const id = uuidv1();
       return {
         ...state,
         setup: {
           ...state.setup,
           bedTypes: {
             ...state.setup.bedTypes,
-            [action.attributes.bedType] : {
-              ...state.setup.bedTypes[action.attributes.bedType], 
+            [action.attributes.bedType]: {
+              ...state.setup.bedTypes[action.attributes.bedType],
               selected: state.setup.bedTypes[action.attributes.bedType].selected + 1,
+            },
+          },
+          beds: {
+            ...state.setup.beds,
+            [id] : {
+              type: [action.attributes.bedType],
+              id: id
             }
           }
         }
@@ -94,17 +110,52 @@ export default (
       if(state.setup.bedTypes[action.attributes.bedType].selected <= 0){
         return state;
       }
+      const bedsOfSameType = Object.entries(state.setup.beds).filter(([key, item]) => item.type === action.attributes.bedType);
+      const lastBedOfType = Object.keys(bedsOfSameType)[bedsOfSameType.length -1];
+
       return {
         ...state,
         setup: {
           ...state.setup,
           bedTypes: {
             ...state.setup.bedTypes,
-            [action.attributes.bedType] : {
-              ...state.setup.bedTypes[action.attributes.bedType], 
-              selected: state.setup.bedTypes[action.attributes.bedType].selected - 1,
-            }
+            [action.attributes.bedType]: {
+              ...state.setup.bedTypes[action.attributes.bedType],
+              selected: state.setup.bedTypes[action.attributes.bedType].selected -1,
+            },
+          },
+          beds: {
+            ...state.setup.beds,
+            items: Object.keys(state.setup.beds).filter((key) => key !== lastBedOfType),
           }
+        }
+      }
+    case SET_BED_SIZE:
+      return {
+        ...state,
+        setup: {
+          ...state.setup,
+          beds: {
+            ...state.setup.beds,
+            [action.attributes.bedId]: {
+              ...state.setup.beds[action.attributes.bedId],
+              size: action.attributes.size,
+            },
+          },
+        }
+      }
+    case SET_BED_SUN:
+      return {
+        ...state,
+        setup: {
+          ...state.setup,
+          beds: {
+            ...state.setup.beds,
+            [action.attributes.bedId]: {
+              ...state.setup.beds[action.attributes.bedId],
+              sunHours: action.attributes.sunHours,
+            },
+          },
         }
       }
 
