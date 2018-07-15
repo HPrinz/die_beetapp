@@ -10,10 +10,16 @@ export interface SetOnboardingStepCompleted {
   };
 }
 
-export interface SetBedTypes {
-  type: constants.SET_BED_TYPES;
+export interface AddBedType {
+  type: constants.ADD_BED_TYPE;
   attributes: {
-    bedTypes: BedProps[];
+    bedType: string;
+  };
+}
+export interface RemoveBedType {
+  type: constants.REMOVE_BED_TYPE;
+  attributes: {
+    bedType: string;
   };
 }
 
@@ -49,12 +55,20 @@ export function SetOnboardingStepCompleted(
   };
 }
 
-export function SetBedTypes(bedTypes: BedProps[]): SetBedTypes {
-  console.log('JKHG' + JSON.stringify(bedTypes));
+export function AddBedType(bedType: string): AddBedType {
   return {
-    type: constants.SET_BED_TYPES,
+    type: constants.ADD_BED_TYPE,
     attributes: {
-      bedTypes
+      bedType
+    }
+  };
+}
+
+export function RemoveBedType(bedType: string): RemoveBedType {
+  return {
+    type: constants.REMOVE_BED_TYPE,
+    attributes: {
+      bedType
     }
   };
 }
