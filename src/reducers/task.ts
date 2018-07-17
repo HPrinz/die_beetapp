@@ -1,6 +1,34 @@
 import { OtherActionResponse } from "../actions/action.type";
 import { SELECT_TASK } from "../constants";
-import { Task } from "../components/tasks/TaskList";
+
+export const tasktypes = [
+  {
+      label: 'Gießen',
+      value: 'giessen',
+  },
+  {
+      label: 'Pflanzen',
+      value: 'planzen',
+  },
+  {
+      label: 'Ernten',
+      value: 'ernten',
+  },
+  {
+      label: 'Ausgeizen',
+      value: 'ausgeizen',
+  }
+]
+
+export interface Task {
+  id: string;
+  name: string;
+  Description: string;
+  Bed: string;
+  AvatarUrl: string;
+  Done: boolean;
+  type: string
+}
 
 export type TaskState = {
   selectedTaskId: string | undefined;

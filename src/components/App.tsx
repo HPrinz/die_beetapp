@@ -12,6 +12,7 @@ import BedPosition from "./setup/BedPosition";
 import Crops from "./setup/Crops";
 import { Text } from "react-native-elements";
 import Header from "./Header";
+import TaskDetailItem from "./tasks/TaskDetailItem";
 
 type OwnProps = {};
 
@@ -42,7 +43,7 @@ class App extends React.Component<AppProps> {
           <Route path="/bedposition" component={BedPosition} exact />
           <Route path="/crops" component={Crops} exact />
           <Route path="/" component={MainView} exact />
-          <Route path="/taskdetail" component={MainView} exact />
+          <Route path="/taskdetail" component={TaskDetailItem} exact />
           
         </ScrollView>
       </View>

@@ -1,13 +1,14 @@
 import React from "react";
-import { StyleSheet, Text, View, Image, ScrollView } from "react-native";
+import { StyleSheet,  View, } from "react-native";
 import { RouteComponentProps, withRouter } from "react-router";
 import { Link } from "react-router-native";
-import { Button, Card, CheckBox, ListItem } from "react-native-elements";
+import { Button, Card, ListItem, Text } from "react-native-elements";
 import { connect } from "react-redux";
 import { OtherActionResponse } from "../../actions/action.type";
 import { Dispatch } from "../../../node_modules/redux";
 import { RootState } from "../../reducers";
 import { selectTask, markTaskResolved } from "../../actions";
+import { Task } from "../../reducers/task";
 
 type OwnProps = {};
 
@@ -34,12 +35,9 @@ class TaskList extends React.Component<Props, State> {
     render() {
         return (
             <View style={{ backgroundColor: 'red' }} >
-
+                <Text>LIST</Text>
                 <Card title="Tasks">
-                    {
-                        this.props.taskList
-                            .map((u, i) => {
-                                return (
+                    { this.props.taskList.map((u, i) => (
                                     <Link
                                     to="/taskdetail"
                                     onPress={() => this.props.onSelectTask(u.id)}
@@ -47,10 +45,8 @@ class TaskList extends React.Component<Props, State> {
                                     key={u.id}
                                     title={u.name}
                                     subtitle={u.Description}   
-                                    />
-                                );
-                            })
-                    }
+                                    />)
+                    )}
                 </Card>
                 <Link to="/MainView" component={Button} title='Fertig!' />
                 
