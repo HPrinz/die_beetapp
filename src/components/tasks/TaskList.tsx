@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, Text, View, Image, ScrollView } from "react-native";
 import { RouteComponentProps, withRouter } from "react-router";
 import { Link } from "react-router-native";
 import { Button, Card, CheckBox, ListItem } from "react-native-elements";
@@ -25,15 +25,6 @@ export type Props = RouteComponentProps<{}> &
     StateToPropsType &
     DispatchToPropsType & State;
 
-export interface Task {
-    id: string;
-    name: string;
-    Description: string;
-    Bed: string;
-    AvatarUrl: string;
-    Done: boolean;
-}
-
 class TaskList extends React.Component<Props, State> {
 
     constructor(props: Props) {
@@ -42,7 +33,7 @@ class TaskList extends React.Component<Props, State> {
 
     render() {
         return (
-            <View style={styles.root}>
+            <View style={{ backgroundColor: 'red' }} >
 
                 <Card title="Tasks">
                     {
@@ -89,8 +80,7 @@ export default withRouter(connect(
 
 const styles = StyleSheet.create({
     root: {
-        alignItems: "center",
-        alignSelf: "center",
         flex: 1,
+        justifyContent: "flex-start",
     }
 });

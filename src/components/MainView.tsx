@@ -5,8 +5,12 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import TaskList, { Task } from "./tasks/TaskList";
+<<<<<<< HEAD
 import { RootState } from "../reducers";
 import { Redirect } from "react-router-native";
+=======
+import TaskDetailItem from "./tasks/TaskDetailItem";
+>>>>>>> d78108fba1d391c038e32c3dc2196cdc30ae2c88
 
 type OwnPropsType = {
 };
@@ -27,17 +31,54 @@ class MainView extends React.Component<MainProps, MainState> {
 
   constructor(props: MainProps) {
     super(props);
+<<<<<<< HEAD
+=======
+    this.props = props;
+    this.state = {
+      TaskList
+        : [{
+          type: "giessen",
+          name: "Gießen",
+          Description: "",
+          AvatarUrl: "../../../assets/img/giessen.png",
+          Bed: "Beet",
+          Done: true,
+        } as Task,
+        {
+          type: "giessen",
+          name: "Gießen1",
+          Description: "",
+          AvatarUrl: "../../../assets/img/giessen.png",
+          Bed: "Gewächshaus",
+          Done: false,
+        } as Task,
+        {
+          type: "geizen",
+          name: "Tomaten ausgeizen",
+          Description: "",
+          AvatarUrl: "../../../assets/img/tomate.png",
+          Bed: "Gewächshaus",
+          Done: false,
+        } as Task]
+    }
+>>>>>>> d78108fba1d391c038e32c3dc2196cdc30ae2c88
   }
 
   componentDidMount() { }
 
   render() {
     return (
+
       <View style={styles.root}>
+<<<<<<< HEAD
         {this.props.isSetUp  === false ? <Redirect to="/hello" push /> : 
         this.props.selectedTask  === undefined ? <Redirect to="/taskdetail" push /> : 
         MainView }
 
+=======
+        <TaskList TaskList={this.state.TaskList} />
+        <TaskDetailItem Task={this.state.TaskList[0]} />
+>>>>>>> d78108fba1d391c038e32c3dc2196cdc30ae2c88
       </View>
     );
   }
@@ -62,8 +103,6 @@ export default connect(
 
 const styles = StyleSheet.create({
   root: {
-    alignItems: "center",
-    alignSelf: "center",
     flex: 1,
   },
 
