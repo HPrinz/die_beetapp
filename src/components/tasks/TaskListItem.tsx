@@ -37,7 +37,7 @@ class TaskListItem extends React.Component<Props, State> {
 
                 <View style={styles.textcontainer}>
                     <CheckBox
-                        key={this.item.name}
+                        key={this.item.id}
                         title={this.item.name}
                         checked={this.item.Done}
                         onPress={() => this.item.Done = !this.item.Done}

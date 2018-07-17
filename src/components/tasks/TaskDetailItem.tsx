@@ -9,7 +9,8 @@ import { connect } from "react-redux";
 type OwnProps = {};
 
 type StateToPropsType = {
-    task: Task
+    task: Task,
+    selectedId: string | undefined,
 };
 
 type DispatchToPropsType = {};
@@ -34,7 +35,7 @@ class TaskDetailItem extends React.Component<Props, State> {
 
         const {task} =  this.props
         if(!task){
-            // KAWUMM
+            return (<Text>NO ITEM {this.props.selectedId}</Text>)
         }
         return (
             <View style={styles.root}>
@@ -60,6 +61,7 @@ class TaskDetailItem extends React.Component<Props, State> {
 function mapStateToProps(state: RootState): StateToPropsType {
     return {
       task: state.task.tasks.find(x => x.id === state.task.selectedTaskId) as Task,
+      selectedId: state.task.selectedTaskId
     }
   }
 

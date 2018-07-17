@@ -71,7 +71,7 @@ export default (
     case SELECT_TASK:
       return {
         ...state,
-        selectedTask: action.attributes.taskId
+        selectedTaskId: action.attributes.taskId
       };
 
     default:

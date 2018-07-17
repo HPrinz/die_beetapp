@@ -48,7 +48,7 @@ class MainView extends React.Component<MainProps, MainState> {
 const mapStateToProps = (state: RootState): StateToPropsType => ({
   isSetUp: state.garden.setupStep == 5,
   taskList: state.task.tasks,
-  selectedTask : state.task.selectedTaskId,
+  selectedTask : state.task.selectedTask,
 });
 
 const mapDispatchToProps: DispatchToPropsType = {
