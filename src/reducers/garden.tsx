@@ -18,14 +18,14 @@ export type Bed = {
 };
 
 export type GardenState = {
-  setupStep: number;
+  setupStep: number,
   setup: {
-    bedTypes: {[bedType: string]: BedProps} ;
-    location?: LatLng;
-    crops: string[];
-    beds: {[bedId: string]: Bed};
-  };
-};
+    bedTypes: {[bedType: string]: BedProps} ,
+    location?: LatLng,
+    crops: string[],
+    beds: {[bedId: string]: Bed},
+  },
+}
 
 export const defaultGardenState: GardenState = {
   setupStep: 0,
@@ -61,7 +61,7 @@ export const defaultGardenState: GardenState = {
         image: require("../../assets/img/gewaechshaus_beheizt.png"),
         selected: 0
       }
-    },
+    } as {[bedType: string]: BedProps},
     crops: [],
     beds: {}
   }
@@ -158,7 +158,7 @@ export default (
           },
         }
       }
-
+   
     default:
       return state;
   }

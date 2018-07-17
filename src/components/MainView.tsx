@@ -5,50 +5,28 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import TaskList, { Task } from "./tasks/TaskList";
+import { RootState } from "../reducers";
+import { Redirect } from "react-router-native";
 
 type OwnPropsType = {
 };
 
-type StateToPropsType = {};
+type StateToPropsType = {
+  isSetUp: boolean;
+  selectedTask: string | undefined;
+  taskList: Task[];
+};
 
 type DispatchToPropsType = {};
 
 export type MainProps = StateToPropsType & DispatchToPropsType & OwnPropsType;
 
-type MainState = {
-  TaskList: Task[];
-};
+type MainState = {};
 
 class MainView extends React.Component<MainProps, MainState> {
-  public props: MainProps;
 
   constructor(props: MainProps) {
     super(props);
-    this.props = props;
-    this.state = {
-      TaskList
-        : [{
-          name: "Gießen",
-          Description: "",
-          AvatarUrl: "../../../assets/img/giessen.png",
-          Bed: "Beet",
-          Done: false,
-        } as Task,
-        {
-          name: "Gießen",
-          Description: "",
-          AvatarUrl: "../../../assets/img/giessen.png",
-          Bed: "Gewächshaus",
-          Done: false,
-        } as Task,
-        {
-          name: "Tomaten ausgeizen",
-          Description: "",
-          AvatarUrl: "../../../assets/img/tomate.png",
-          Bed: "Gewächshaus",
-          Done: false,
-        } as Task]
-    }
   }
 
   componentDidMount() { }
@@ -56,11 +34,31 @@ class MainView extends React.Component<MainProps, MainState> {
   render() {
     return (
       <View style={styles.root}>
-        <TaskList TaskList={this.state.TaskList} />
+        {this.props.isSetUp  === false ? <Redirect to="/hello" push /> : 
+        this.props.selectedTask  === undefined ? <Redirect to="/taskdetail" push /> : 
+        MainView }
+
       </View>
     );
   }
 }
+
+const mapStateToProps = (state: RootState): StateToPropsType => ({
+  isSetUp: state.garden.setupStep == 5,
+  taskList: state.task.tasks,
+  selectedTask : state.task.selectedTaskId,
+});
+
+const mapDispatchToProps: DispatchToPropsType = {
+  
+};
+
+export { MainView as PureComponent };
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(MainView);
+
 
 const styles = StyleSheet.create({
   root: {
@@ -112,11 +110,3 @@ const styles = StyleSheet.create({
     height: 26
   }
 });
-
-const mapDispatchToProps: DispatchToPropsType = {};
-
-export { MainView as PureComponent };
-export default connect(
-  null,
-  mapDispatchToProps
-)(MainView);

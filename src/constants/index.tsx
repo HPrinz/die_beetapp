@@ -24,3 +24,9 @@ export type LOCATION_SET = typeof LOCATION_SET;
 
 export const LOAD_TASKS = "LOAD_TASKS";
 export type LOAD_TASKS = typeof LOAD_TASKS;
+
+export const SELECT_TASK = "SELECT_TASK";
+export type SELECT_TASK = typeof SELECT_TASK;
+
+export const MARK_TASK_RESOLVED = "MARK_TASK_RESOLVED";
+export type MARK_TASK_RESOLVED = typeof MARK_TASK_RESOLVED;

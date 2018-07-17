@@ -3,12 +3,18 @@ import { StyleSheet, Text, View } from "react-native";
 import { RouteComponentProps, withRouter } from "react-router";
 import { Link } from "react-router-native";
 import { Button, Tile } from "react-native-elements";
+import { OtherActionResponse } from "../../actions/action.type";
+import { Dispatch } from "../../../node_modules/redux";
+import { SetOnboardingStepCompleted } from "../../actions";
+import { connect } from "react-redux";
 
 type OwnProps = {};
 
 type StateToPropsType = {};
 
-type DispatchToPropsType = {};
+type DispatchToPropsType = {
+  setSetupStep: () => void;
+};
 
 export type Props = RouteComponentProps<{}> &
   OwnProps &
@@ -46,13 +52,24 @@ class Crops extends React.Component<Props, State> {
           />
         </View>
 
-        <Link to="/finish" component={Button} title='Fertig!' />
+        <Link to="/" component={Button} title='Fertig!' onPress={() => this.props.setSetupStep()} />
       </View>
     );
   }
 }
+
+function mapDispatchToProps(dispatch: Dispatch<OtherActionResponse>): DispatchToPropsType {
+  return {
+    setSetupStep: () => dispatch(SetOnboardingStepCompleted(5))
+  }
+};
+
+
 export { Crops as PureComponent };
-export default withRouter(Crops);
+export default withRouter(connect(
+  null,
+  mapDispatchToProps
+)(Crops));
 
 const styles = StyleSheet.create({
   root: {
