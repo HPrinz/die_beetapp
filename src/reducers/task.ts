@@ -38,6 +38,7 @@ export type TaskState = {
 export const defaultState: TaskState = {
   selectedTaskId: undefined,
   tasks: [{
+    id: '1',
     name: "Gießen",
     Description: "",
     AvatarUrl: "../../../assets/img/giessen.png",
@@ -45,6 +46,7 @@ export const defaultState: TaskState = {
     Done: false,
   } as Task,
   {
+    id: '2',
     name: "Gießen",
     Description: "",
     AvatarUrl: "../../../assets/img/giessen.png",
@@ -52,6 +54,7 @@ export const defaultState: TaskState = {
     Done: false,
   } as Task,
   {
+    id: '3',
     name: "Tomaten ausgeizen",
     Description: "",
     AvatarUrl: "../../../assets/img/tomate.png",

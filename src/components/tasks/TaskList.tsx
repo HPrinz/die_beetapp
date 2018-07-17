@@ -38,14 +38,14 @@ class TaskList extends React.Component<Props, State> {
                 <Text>LIST</Text>
                 <Card title="Tasks">
                     { this.props.taskList.map((u, i) => (
-                                    <Link
-                                    to="/taskdetail"
-                                    onPress={() => this.props.onSelectTask(u.id)}
-                                    component={ListItem}
-                                    key={u.id}
-                                    title={u.name}
-                                    subtitle={u.Description}   
-                                    />)
+                        <Link
+                        to="/taskdetail"
+                        onPress={() => this.props.onSelectTask(u.id)}
+                        component={ListItem}
+                        key={u.id}
+                        title={u.name}
+                        subtitle={u.Description}   
+                        />)
                     )}
                 </Card>
                 <Link to="/MainView" component={Button} title='Fertig!' />
