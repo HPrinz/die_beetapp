@@ -1,34 +1,30 @@
 import React from "react";
-import { StyleSheet, Text, View, Image, ScrollView } from "react-native";
+import { StyleSheet,  View, } from "react-native";
 import { RouteComponentProps, withRouter } from "react-router";
 import { Link } from "react-router-native";
-import { Button, Card, CheckBox, ListItem } from "react-native-elements";
-import TaskListItem from "./TaskListItem";
-import TaskDetailItem, { Task } from "./TaskDetailItem";
+import { Button, Card, ListItem, Text } from "react-native-elements";
+import { connect } from "react-redux";
+import { OtherActionResponse } from "../../actions/action.type";
+import { Dispatch } from "../../../node_modules/redux";
+import { RootState } from "../../reducers";
+import { selectTask, markTaskResolved } from "../../actions";
+import { Task } from "../../reducers/task";
 
-type OwnProps = {
-    TaskList: Task[];
+type OwnProps = {};
+
+type StateToPropsType = {taskList: Task[];};
+
+type DispatchToPropsType = {
+    onSelectTask: (taskId : string) => void;
+    onMarkTaskResolved: (taskId : string) => void;
 };
 
-type StateToPropsType = {};
-
-type DispatchToPropsType = {};
-
-type State = {
-};
+type State = {};
 
 export type Props = RouteComponentProps<{}> &
     OwnProps &
     StateToPropsType &
     DispatchToPropsType & State;
-
-export interface Task {
-    name: string;
-    Description: string;
-    Bed: string;
-    AvatarUrl: string;
-    Done: boolean;
-}
 
 class TaskList extends React.Component<Props, State> {
 
@@ -38,24 +34,45 @@ class TaskList extends React.Component<Props, State> {
 
     render() {
         return (
-            <ScrollView style={{ backgroundColor: 'red' }} contentContainerStyle={styles.root}>
-
+            <View style={{ backgroundColor: 'red' }} >
+                <Text>LIST</Text>
                 <Card title="Tasks">
-                    {
-                        this.props.TaskList
-                            .map((u, i) => {
-                                return (
-                                    <TaskListItem Task={u} key={u.name} />
-                                );
-                            })
-                    }
+                    { this.props.taskList.map((u, i) => (
+                        <Link
+                        to="/taskdetail"
+                        onPress={() => this.props.onSelectTask(u.id)}
+                        component={ListItem}
+                        key={u.id}
+                        title={u.name}
+                        subtitle={u.Description}   
+                        />)
+                    )}
                 </Card>
-            </ScrollView>
+                <Link to="/MainView" component={Button} title='Fertig!' />
+                
+            </View>
         );
     }
 }
+
+function mapStateToProps(state: RootState): StateToPropsType {
+    return {
+      taskList: state.task.tasks,
+    }
+  }
+  
+  function mapDispatchToProps(dispatch: Dispatch<OtherActionResponse>): DispatchToPropsType {
+    return {
+        onSelectTask: (taskId : string) => dispatch(selectTask(taskId)),
+        onMarkTaskResolved: (taskId : string) => dispatch(markTaskResolved(taskId))
+    }
+  };
+
+  
 export { TaskList as PureComponent };
-export default withRouter(TaskList);
+export default withRouter(connect(
+    mapStateToProps,
+    mapDispatchToProps)(TaskList));
 
 const styles = StyleSheet.create({
     root: {

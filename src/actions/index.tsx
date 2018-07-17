@@ -52,6 +52,20 @@ export interface LoadTasks {
   type: constants.LOAD_TASKS;
 }
 
+export interface SelectTask {
+  type: constants.SELECT_TASK;
+  attributes: {
+    taskId: string;
+  }
+}
+
+export interface MarkTaskResolved {
+  type: constants.MARK_TASK_RESOLVED;
+  attributes: {
+    taskId: string;
+  }
+}
+
 // ---------------------------------
 
 export function startSetup() : StartSetup {
@@ -110,6 +124,24 @@ export function RemoveBedType(bedType: string): RemoveBedType {
 export function loadTasks(garden: GardenModel): LoadTasks {
   return {
     type: constants.LOAD_TASKS
+  };
+}
+
+
+export function selectTask(taskId: string): SelectTask {
+  return {
+    type: constants.SELECT_TASK,
+    attributes: {
+      taskId
+    }
+  };
+}
+export function markTaskResolved(taskId: string): MarkTaskResolved {
+  return {
+    type: constants.MARK_TASK_RESOLVED,
+    attributes: {
+      taskId
+    }
   };
 }
 

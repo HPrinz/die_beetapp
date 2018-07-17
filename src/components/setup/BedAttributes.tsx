@@ -39,7 +39,7 @@ class BedAttributes extends React.Component<Props, State> {
     return (
       <View>
         {Object.values(this.props.beds).map((bed: Bed) => (
-          <Card title={bed.type + " #" + bed.id.substr(0, 2)}>
+          <Card title={bed.type + " #" + bed.id.substr(0, 2)}  key={bed.id}>
 
             <View style={styles.hor}>
               <Text style={{width: '50%'}} >Beetgrößen einstellen:</Text>

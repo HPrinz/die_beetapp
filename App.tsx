@@ -11,10 +11,9 @@ const store = createStore(history);
 
 const app = () => (
   <Provider store={store}>
-    <Router history={history}>
       <App />
-    </Router>
   </Provider>
 );
 
 export default app;
+

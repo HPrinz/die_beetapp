@@ -4,55 +4,30 @@ import {
   StyleSheet,
 } from "react-native";
 import { connect } from "react-redux";
-import TaskList, { Task } from "./tasks/TaskList";
-import TaskDetailItem from "./tasks/TaskDetailItem";
+import { RootState } from "../reducers";
+import { Redirect } from "react-router-native";
+import { Task } from "../reducers/task";
+import TaskList from "./tasks/TaskList";
 
 type OwnPropsType = {
 };
 
-type StateToPropsType = {};
+type StateToPropsType = {
+  isSetUp: boolean;
+  selectedTask: string | undefined;
+  taskList: Task[];
+};
 
 type DispatchToPropsType = {};
 
 export type MainProps = StateToPropsType & DispatchToPropsType & OwnPropsType;
 
-type MainState = {
-  TaskList: Task[];
-};
+type MainState = {};
 
 class MainView extends React.Component<MainProps, MainState> {
-  public props: MainProps;
 
   constructor(props: MainProps) {
     super(props);
-    this.props = props;
-    this.state = {
-      TaskList
-        : [{
-          type: "giessen",
-          name: "Gießen",
-          Description: "",
-          AvatarUrl: "../../../assets/img/giessen.png",
-          Bed: "Beet",
-          Done: true,
-        } as Task,
-        {
-          type: "giessen",
-          name: "Gießen1",
-          Description: "",
-          AvatarUrl: "../../../assets/img/giessen.png",
-          Bed: "Gewächshaus",
-          Done: false,
-        } as Task,
-        {
-          type: "geizen",
-          name: "Tomaten ausgeizen",
-          Description: "",
-          AvatarUrl: "../../../assets/img/tomate.png",
-          Bed: "Gewächshaus",
-          Done: false,
-        } as Task]
-    }
   }
 
   componentDidMount() { }
@@ -61,12 +36,31 @@ class MainView extends React.Component<MainProps, MainState> {
     return (
 
       <View style={styles.root}>
-        <TaskList TaskList={this.state.TaskList} />
-        <TaskDetailItem Task={this.state.TaskList[0]} />
+        {this.props.isSetUp  === false ? <Redirect to="/hello" push /> : 
+        this.props.selectedTask !== undefined ? <Redirect to="/taskdetail" push /> : 
+        <TaskList/> }
+
       </View>
     );
   }
 }
+
+const mapStateToProps = (state: RootState): StateToPropsType => ({
+  isSetUp: state.garden.setupStep == 5,
+  taskList: state.task.tasks,
+  selectedTask : state.task.selectedTask,
+});
+
+const mapDispatchToProps: DispatchToPropsType = {
+  
+};
+
+export { MainView as PureComponent };
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(MainView);
+
 
 const styles = StyleSheet.create({
   root: {
@@ -116,11 +110,3 @@ const styles = StyleSheet.create({
     height: 26
   }
 });
-
-const mapDispatchToProps: DispatchToPropsType = {};
-
-export { MainView as PureComponent };
-export default connect(
-  null,
-  mapDispatchToProps
-)(MainView);
