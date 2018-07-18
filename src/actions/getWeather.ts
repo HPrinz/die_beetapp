@@ -1,6 +1,5 @@
 import { OtherActionResponse } from "./action.type";
 import { weatherApiUrl, weatherApiKey } from "../config";
-import { Alert } from "react-native";
 
 export type GetWeatherActionResponse = {
     location: string,

@@ -1,75 +1,95 @@
 import React from "react";
 import { StyleSheet, Text, View, Picker } from "react-native";
-import { RouteComponentProps, withRouter } from "react-router";
-import { Card, Input } from "react-native-elements";
-import { Task, tasktypes } from "../../reducers/task";
-import { RootState } from "../../reducers";
+import { Card, Button } from "react-native-elements";
 import { connect } from "react-redux";
+import { Dispatch } from "redux";
+import { RouteComponentProps, withRouter, Link } from "react-router-native";
+
+import { Task} from "../../reducers/task";
+import { RootState } from "../../reducers";
+import { Bed } from "../../reducers/garden";
+import { OtherActionResponse } from "../../actions/action.type";
+import { selectTask } from "../../actions";
 
 type OwnProps = {};
 
 type StateToPropsType = {
-    task: Task,
-    selectedId: string | undefined,
+  task: Task;
+  selectedId: string | undefined;
+  beds: Bed[];
 };
 
-type DispatchToPropsType = {};
+type DispatchToPropsType = {
+  onBack: () => void;
+};
 
 type State = {};
 
 export type Props = RouteComponentProps<{}> &
-    OwnProps &
-    StateToPropsType &
-    DispatchToPropsType & State;
-
-
+  OwnProps &
+  StateToPropsType &
+  DispatchToPropsType &
+  State;
 
 class TaskDetailItem extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+  }
 
-    constructor(props: Props) {
-        super(props);
+  render() {
+    const { task } = this.props;
+    if (!task) {
+      return <Text>NO ITEM {this.props.selectedId}</Text>;
     }
-
-    render() {
-        const buttons = ['Hello', 'World', 'Buttons']
-
-        const {task} =  this.props
-        if(!task){
-            return (<Text>NO ITEM {this.props.selectedId}</Text>)
-        }
-        return (
-            <View style={styles.root}>
-                <Card title="Task">
-                    <Text>Art</Text>
-                    <Picker
-                        selectedValue={task.type}
-                        onValueChange={itemValue => this.setState({ type: itemValue })}>
-                        {tasktypes.map((i, index) => (
-                            <Picker.Item key={index} label={i.label} value={i.value} />
-                        ))}
-                    </Picker>
-                    <Text>Ort</Text>
-                    <Input placeholder='TaskDescription' value={task.Bed} onChangeText={(text: any) => this.setState({ Bed: text })} />
-                    <Text>Beschreibung</Text>
-                    <Input placeholder='TaskDescription' value={task.Description} onChangeText={(text: any) => this.setState({ Description: text })} />
-                </Card>
-            </View>
-        );
-    }
+    return (
+      <View style={styles.root}>
+        <Card title={task.name}>
+          <Text>{task.description}</Text>
+          <Text>Beet:</Text>
+          <Picker
+            height={50}
+            selectedValue={task.bed}
+            onValueChange={itemValue => this.setState({ type: itemValue })}
+          >
+            {this.props.beds.map((i, index) => (
+              <Picker.Item key={index} label={i.type + i.id} value={i.id} />
+            ))}
+          </Picker>
+        </Card>
+        <Link to="/" component={Button} onPress={() => this.props.onBack()} title='zurück' />
+      </View>
+    );
+  }
 }
 
 function mapStateToProps(state: RootState): StateToPropsType {
-    return {
-      task: state.task.tasks.find(x => x.id === state.task.selectedTaskId) as Task,
-      selectedId: state.task.selectedTaskId
-    }
-  }
+  return {
+    beds: state.garden.setup.beds,
+    task: state.task.tasks.find(
+      x => x.id === state.task.selectedTaskId
+    ) as Task,
+    selectedId: state.task.selectedTaskId
+  };
+}
+
+function mapDispatchToProps(
+  dispatch: Dispatch<OtherActionResponse>
+): DispatchToPropsType {
+  return {
+    onBack: () => dispatch(selectTask(undefined))
+  };
+}
 
 export { TaskDetailItem as PureComponent };
-export default withRouter(connect(mapStateToProps)(TaskDetailItem));
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(TaskDetailItem)
+);
 
 const styles = StyleSheet.create({
-    root: {
-        flex: 1,
-    }
+  root: {
+    flex: 1
+  }
 });

@@ -1,5 +1,4 @@
 import React from "react";
-import { Route, Router } from "react-router";
 
 import createHistory from "history/createMemoryHistory";
 import createStore from "./src/store";

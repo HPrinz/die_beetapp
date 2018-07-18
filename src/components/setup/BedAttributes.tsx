@@ -1,25 +1,27 @@
 import React from "react";
-import { StyleSheet, Text, View, ScrollView } from "react-native";
-import { RouteComponentProps, withRouter } from "react-router";
-import { Link } from "react-router-native";
+import { StyleSheet, Text, View} from "react-native";
+import { RouteComponentProps, withRouter, Link } from "react-router-native";
 import { Slider, Input, Button, Card } from "react-native-elements";
-import { SetOnboardingStepCompleted, SetBedSize, SetBedSun } from "../../actions";
 import { connect } from "react-redux";
+import { Dispatch } from "redux";
+import { uniqueId } from "lodash-es";
+
+import { setBedSize, setBedSun, setOnboardingStepCompleted, setBedSetUp } from "../../actions";
 import { OtherActionResponse } from "../../actions/action.type";
-import { Dispatch } from "../../../node_modules/redux";
 import { Bed } from "../../reducers/garden";
 import { RootState } from "../../reducers";
 
 type OwnProps = {};
 
 type StateToPropsType = {
-  beds: { [bedId: string]: Bed };
+  bed: Bed;
 };
 
 interface DispatchToPropsType {
   setSetupStep: () => void;
-  setBedSize: (bedId : string, size : string) => void;
+  setBedSize: (bedId : string, size : number) => void;
   setBedSun: (bedId : string, sun : number) => void;
+  onBack: (bedId : string) => void;
 };
 
 export type Props = RouteComponentProps<{}> &
@@ -36,14 +38,19 @@ class BedAttributes extends React.Component<Props, State> {
   }
 
   render() {
+    const {bed} = this.props;
     return (
       <View>
-        {Object.values(this.props.beds).map((bed: Bed) => (
-          <Card title={bed.type + " #" + bed.id.substr(0, 2)}  key={bed.id}>
+          <Card title={bed.type}  key={bed.id}>
+
+          <View style={styles.hor}>
+            <Text style={{width: '50%'}} >Beetname:</Text>
+            <Input style={{width: '50%'}} placeholder={bed.type + 1}>{bed.id}</Input>
+          </View>
 
             <View style={styles.hor}>
-              <Text style={{width: '50%'}} >Beetgrößen einstellen:</Text>
-              <Input value={bed.size || ''} placeholder="3x3" onChangeText={(value) => this.props.setBedSize(bed.id, value)} />
+              <Text style={{width: '50%'}} >Beetgröße im m2:</Text>
+              <Input style={{width: '50%'}} keyboardType="numeric" placeholder="3" onChangeText={(value) => this.props.setBedSize(bed.id, +value)} >{bed.size}</Input>
             </View>
             
             <Text>Beetstandort einstellen:</Text>
@@ -58,14 +65,14 @@ class BedAttributes extends React.Component<Props, State> {
               <Text>Mindestens {bed.sunHours} Sonnenstunden</Text>
             </View>
           </Card>
-        ))};
-        <Link
-          to="/bedposition"
+
+           <Link
+          to="/bedtype"
           component={Button}
-          title="Gartenort zeigen"
-          onPress={() => this.props.setSetupStep()}
-          disabled={Object.values(this.props.beds).filter(bed => !bed.size || !bed.sunHours).length > 0}
+          title="zurück"
+          onPress={() => this.props.onBack(bed.id)}
         />
+
       </View>
     );
   }
@@ -73,15 +80,16 @@ class BedAttributes extends React.Component<Props, State> {
 
 function mapStateToProps(state: RootState): StateToPropsType {
   return {
-    beds: state.garden.setup.beds,
+    bed: state.garden.setup.beds.find(element => element.id === state.garden.selectedBedId) as Bed
   }
 }
 
 function mapDispatchToProps(dispatch: Dispatch<OtherActionResponse>): DispatchToPropsType {
   return {
-    setBedSize: (bedId : string, size : string) => dispatch(SetBedSize(bedId, size)),
-    setBedSun: (bedId : string, sunHours : number) => dispatch(SetBedSun(bedId, sunHours)),
-    setSetupStep: () => dispatch(SetOnboardingStepCompleted(3))
+    setBedSize: (bedId : string, size : number) => dispatch(setBedSize(bedId, size)),
+    setBedSun: (bedId : string, sunHours : number) => dispatch(setBedSun(bedId, sunHours)),
+    setSetupStep: () => dispatch(setOnboardingStepCompleted(4)),
+    onBack: (bedId: string) => dispatch(setBedSetUp(bedId))
   }
 };
 

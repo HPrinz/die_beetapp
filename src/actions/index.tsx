@@ -1,7 +1,5 @@
 import * as constants from "../constants";
-import { OtherActionResponse } from "./action.type";
 import { GardenModel } from "../models/Garden";
-import { BedProps } from "../reducers/garden";
 
 export interface SetOnboardingStepCompleted {
   type: constants.ONBOARDING_STEP_COMPLETED;
@@ -20,7 +18,7 @@ export interface AddBedType {
 export interface RemoveBedType {
   type: constants.REMOVE_BED_TYPE;
   attributes: {
-    bedType: string;
+    bedId: string;
   };
 }
 
@@ -28,7 +26,7 @@ export interface SetBedSize {
   type: constants.SET_BED_SIZE;
   attributes: {
     bedId: string;
-    size: string;
+    size: number;
   };
 }
 
@@ -39,13 +37,29 @@ export interface SetBedSun {
     sunHours: number;
   };
 }
+export interface SetBedSetUp {
+  type: constants.SET_BED_SET_UP;
+  attributes: {
+    bedId: string;
+  };
+}
+export interface AddCrops {
+  type: constants.ADD_CROPS;
+  attributes: {
+    cropsId: string;
+  };
+}
 
 export interface StartSetup {
   type: constants.SETUP_STARTED;
 }
 
-export interface LocationSet {
-  type: constants.LOCATION_SET;
+export interface SetLocation {
+  type: constants.SET_LOCATION;
+  attributes: {
+    lat: number;
+    lng: number;
+  }
 }
 
 export interface LoadTasks {
@@ -55,7 +69,7 @@ export interface LoadTasks {
 export interface SelectTask {
   type: constants.SELECT_TASK;
   attributes: {
-    taskId: string;
+    taskId: string | undefined;
   }
 }
 
@@ -74,7 +88,7 @@ export function startSetup() : StartSetup {
   }
 }
 
-export function SetOnboardingStepCompleted(step: number): SetOnboardingStepCompleted {
+export function setOnboardingStepCompleted(step: number): SetOnboardingStepCompleted {
   return {
     type: constants.ONBOARDING_STEP_COMPLETED,
     attributes: {
@@ -83,7 +97,7 @@ export function SetOnboardingStepCompleted(step: number): SetOnboardingStepCompl
   };
 }
 
-export function AddBedType(bedType: string): AddBedType {
+export function addBedType(bedType: string): AddBedType {
   return {
     type: constants.ADD_BED_TYPE,
     attributes: {
@@ -92,7 +106,7 @@ export function AddBedType(bedType: string): AddBedType {
   };
 }
 
-export function SetBedSize(bedId: string, size: string): SetBedSize {
+export function setBedSize(bedId: string, size: number): SetBedSize {
   return {
     type: constants.SET_BED_SIZE,
     attributes: {
@@ -102,7 +116,7 @@ export function SetBedSize(bedId: string, size: string): SetBedSize {
   };
 }
 
-export function SetBedSun(bedId: string, sunHours: number): SetBedSun {
+export function setBedSun(bedId: string, sunHours: number): SetBedSun {
   return {
     type: constants.SET_BED_SUN,
     attributes: {
@@ -111,12 +125,29 @@ export function SetBedSun(bedId: string, sunHours: number): SetBedSun {
     }
   };
 }
+export function setBedSetUp(bedId: string): SetBedSetUp {
+  return {
+    type: constants.SET_BED_SET_UP,
+    attributes: {
+      bedId,
+    }
+  };
+}
 
-export function RemoveBedType(bedType: string): RemoveBedType {
+export function addCrops(cropsId: string): AddCrops {
+  return {
+    type: constants.ADD_CROPS,
+    attributes: {
+      cropsId,
+    }
+  };
+}
+
+export function removeBedType(bedId: string): RemoveBedType {
   return {
     type: constants.REMOVE_BED_TYPE,
     attributes: {
-      bedType
+      bedId,
     }
   };
 }
@@ -128,7 +159,7 @@ export function loadTasks(garden: GardenModel): LoadTasks {
 }
 
 
-export function selectTask(taskId: string): SelectTask {
+export function selectTask(taskId: string | undefined): SelectTask {
   return {
     type: constants.SELECT_TASK,
     attributes: {
@@ -141,6 +172,15 @@ export function markTaskResolved(taskId: string): MarkTaskResolved {
     type: constants.MARK_TASK_RESOLVED,
     attributes: {
       taskId
+    }
+  };
+}
+export function setLocation(lat: number, lng: number): SetLocation {
+  return {
+    type: constants.SET_LOCATION,
+    attributes: {
+      lat,
+      lng
     }
   };
 }

@@ -1,8 +1,9 @@
-import React, { Component } from 'react';
-import { RouteComponentProps, withRouter } from "react-router";
+import React from 'react';
+import { RouteComponentProps, withRouter } from "react-router-native";
 import { StyleSheet, Text, View } from 'react-native';
 import { CheckBox, Button } from "react-native-elements";
 import { Link } from "react-router-native";
+
 import { Task } from '../../reducers/task';
 
 type OwnProps = {
@@ -39,10 +40,10 @@ class TaskListItem extends React.Component<Props, State> {
                     <CheckBox
                         key={this.item.id}
                         title={this.item.name}
-                        checked={this.item.Done}
-                        onPress={() => this.item.Done = !this.item.Done}
+                        checked={this.item.done}
+                        onPress={() => this.item.done = !this.item.done}
                     />
-                    <Text style={styles.idtext}>{this.item.Description}</Text>
+                    <Text style={styles.idtext}>{this.item.description}</Text>
                 </View>
                 <Link to="/taskdetail" component={Button} title='Details' />
             </View>

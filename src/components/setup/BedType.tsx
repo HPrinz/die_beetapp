@@ -1,12 +1,12 @@
-import React, { StatelessComponent, Component } from "react";
-import { StyleSheet, Text, View, Alert, Image, ImageSourcePropType } from "react-native";
-import { RouteComponentProps, withRouter } from "react-router";
-import { Link } from "react-router-native";
-import { Tile, Button, Badge, Card } from "react-native-elements";
-import { AddBedType, RemoveBedType } from "../../actions";
+import React from "react";
+import { StyleSheet, Text, View, Image } from "react-native";
+import { RouteComponentProps, withRouter , Link } from "react-router-native";
+import { Button, Badge } from "react-native-elements";
 import { connect } from "react-redux";
+import { Dispatch } from "redux";
+
+import { addBedType, removeBedType, setOnboardingStepCompleted } from "../../actions";
 import { RootState } from "../../reducers";
-import { Dispatch } from "../../../node_modules/redux";
 import { BedProps } from "../../reducers/garden";
 import { OtherActionResponse } from "../../actions/action.type";
 
@@ -20,6 +20,7 @@ type StateToPropsType = {
 interface DispatchToPropsType {
   addBedType: (bedType : string) => void;
   removeBedType: (bedType : string) => void;
+  setSetupStep: () => void;
 };
 
 export type BedTypeProps = RouteComponentProps<{}> &
@@ -55,17 +56,25 @@ class BedType extends React.Component<BedTypeProps, State> {
               <View style={styles.hor}>
                 <Button style={styles.plusminus} title="-" onPress={() => this.props.removeBedType(bed.type)} />
                 <Badge value={bed.selected} textStyle={{ color: 'orange' }}/>
-                <Button style={styles.plusminus} title="+" onPress={() => this.props.addBedType(bed.type)} />
+                <Link to="/bedattributes" component={Button}  style={styles.plusminus} title="+" onPress={() => this.props.addBedType(bed.type)} />
               </View>
             </View>
           ))};
         </View>
 
+
         <Link
+          to="/bedposition"
+          component={Button}
+          title="Gartenort zeigen"
+          onPress={() => this.props.setSetupStep()}
+        />
+        {/* <Link
           to="/bedattributes"
           component={Button}
           title="Beete konfigurieren"
-        />
+          onPress={() => this.props.setSetupStep()}
+        /> */}
       </View>
     );
   }
@@ -79,8 +88,9 @@ function mapStateToProps(state: RootState): StateToPropsType {
 
 function mapDispatchToProps(dispatch: Dispatch<OtherActionResponse>): DispatchToPropsType {
   return {
-    addBedType: (bedType : string) => dispatch(AddBedType(bedType)),
-    removeBedType: (bedType : string) => dispatch(RemoveBedType(bedType))
+    addBedType: (bedType : string) => dispatch(addBedType(bedType)),
+    removeBedType: (bedType : string) => dispatch(removeBedType(bedType)),
+    setSetupStep: () => dispatch(setOnboardingStepCompleted(3)),
   }
 };
 

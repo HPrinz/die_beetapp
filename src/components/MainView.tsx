@@ -4,8 +4,9 @@ import {
   StyleSheet,
 } from "react-native";
 import { connect } from "react-redux";
-import { RootState } from "../reducers";
 import { Redirect } from "react-router-native";
+
+import { RootState } from "../reducers";
 import { Task } from "../reducers/task";
 import TaskList from "./tasks/TaskList";
 
@@ -48,7 +49,7 @@ class MainView extends React.Component<MainProps, MainState> {
 const mapStateToProps = (state: RootState): StateToPropsType => ({
   isSetUp: state.garden.setupStep == 5,
   taskList: state.task.tasks,
-  selectedTask : state.task.selectedTask,
+  selectedTask : state.task.selectedTaskId,
 });
 
 const mapDispatchToProps: DispatchToPropsType = {

@@ -1,11 +1,11 @@
 import React from "react";
 import { StyleSheet,  View, } from "react-native";
-import { RouteComponentProps, withRouter } from "react-router";
-import { Link } from "react-router-native";
+import { RouteComponentProps, withRouter, Link } from "react-router-native";
 import { Button, Card, ListItem, Text } from "react-native-elements";
 import { connect } from "react-redux";
+import { Dispatch } from "redux";
+
 import { OtherActionResponse } from "../../actions/action.type";
-import { Dispatch } from "../../../node_modules/redux";
 import { RootState } from "../../reducers";
 import { selectTask, markTaskResolved } from "../../actions";
 import { Task } from "../../reducers/task";
@@ -34,8 +34,8 @@ class TaskList extends React.Component<Props, State> {
 
     render() {
         return (
-            <View style={{ backgroundColor: 'red' }} >
-                <Text>LIST</Text>
+            <View>
+
                 <Card title="Tasks">
                     { this.props.taskList.map((u, i) => (
                         <Link
@@ -44,7 +44,7 @@ class TaskList extends React.Component<Props, State> {
                         component={ListItem}
                         key={u.id}
                         title={u.name}
-                        subtitle={u.Description}   
+                        subtitle={u.description}   
                         />)
                     )}
                 </Card>

@@ -1,16 +1,14 @@
-import React, {ReactNode} from "react";
+import React from "react";
 import { connect } from "react-redux";
-import { StatelessComponent } from "react";
 import MainView from "./MainView";
 import { RootState } from "../reducers";
 import { ScrollView, View, StyleSheet } from "react-native";
-import { NativeRouter, Route, Link, Redirect, withRouter } from 'react-router-native'
+import { NativeRouter, Route } from 'react-router-native'
 import Hello from "./setup/Hello";
 import BedType from "./setup/BedType";
 import BedAttributes from "./setup/BedAttributes";
 import BedPosition from "./setup/BedPosition";
 import Crops from "./setup/Crops";
-import { Text } from "react-native-elements";
 import Header from "./Header";
 import TaskDetailItem from "./tasks/TaskDetailItem";
 
@@ -38,10 +36,10 @@ class App extends React.Component<AppProps> {
         <ScrollView>
 
           <Route path="/hello" component={Hello} exact />
+          <Route path="/crops" component={Crops} exact />
           <Route path="/bedtype" component={BedType} exact />
           <Route path="/bedattributes" component={BedAttributes} exact />
           <Route path="/bedposition" component={BedPosition} exact />
-          <Route path="/crops" component={Crops} exact />
           <Route path="/" component={MainView} exact />
           <Route path="/taskdetail" component={TaskDetailItem} exact />
           

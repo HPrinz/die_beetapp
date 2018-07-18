@@ -1,19 +1,24 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { RouteComponentProps, withRouter } from "react-router";
-import { Link } from "react-router-native";
-import { Button, Tile } from "react-native-elements";
-import { OtherActionResponse } from "../../actions/action.type";
-import { Dispatch } from "../../../node_modules/redux";
-import { SetOnboardingStepCompleted } from "../../actions";
+import { RouteComponentProps, withRouter, Link } from "react-router-native";
+import { Dispatch } from "redux";
 import { connect } from "react-redux";
+import { Button, Tile } from "react-native-elements";
+
+import { OtherActionResponse } from "../../actions/action.type";
+import { setOnboardingStepCompleted, addCrops } from "../../actions";
+import { Crop } from "../../reducers/garden";
+import { RootState } from "../../reducers";
 
 type OwnProps = {};
 
-type StateToPropsType = {};
+type StateToPropsType = {
+  crops: Crop[]
+};
 
 type DispatchToPropsType = {
   setSetupStep: () => void;
+  selectCrops: (cropsId: string) => void;
 };
 
 export type Props = RouteComponentProps<{}> &
@@ -34,25 +39,21 @@ class Crops extends React.Component<Props, State> {
         <Text>Kulturen auswählen</Text>
 
         <View style={styles.row}>
+        { this.props.crops.map((crop: Crop) => (
           <Tile
-            imageSrc={require("../../../assets/img/tomate.png")}
-            title="Tomate"
+            key={crop.id}
+            imageSrc={crop.image}
+            title={crop.name}
             width={150}
             height={150}
-            titleStyle={[styles.tileTitle]}
-            containerStyle={[styles.tileBox]}
+            titleStyle={styles.tileTitle}
+            containerStyle={crop.selected ? styles.tileBoxSelected : styles.tileBox}
+            onPress={() => this.props.selectCrops(crop.id)}
           />
-          <Tile
-            imageSrc={require("../../../assets/img/salat.png")}
-            title="Salat"
-            width={150}
-            height={150}
-            titleStyle={[styles.tileTitle]}
-            containerStyle={[styles.tileBox]}
-          />
+        ))}
         </View>
 
-        <Link to="/" component={Button} title='Fertig!' onPress={() => this.props.setSetupStep()} />
+        <Link to="/bedtype" component={Button} title='Beete einrichten' onPress={() => this.props.setSetupStep()} />
       </View>
     );
   }
@@ -60,14 +61,20 @@ class Crops extends React.Component<Props, State> {
 
 function mapDispatchToProps(dispatch: Dispatch<OtherActionResponse>): DispatchToPropsType {
   return {
-    setSetupStep: () => dispatch(SetOnboardingStepCompleted(5))
+    setSetupStep: () => dispatch(setOnboardingStepCompleted(2)),
+    selectCrops: (cropsId: string) => dispatch(addCrops(cropsId))
   }
-};
+}
 
+function mapStateToProps(state: RootState): StateToPropsType {
+  return {
+    crops: state.garden.setup.crops,
+  }
+}
 
 export { Crops as PureComponent };
 export default withRouter(connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(Crops));
 
@@ -86,6 +93,11 @@ const styles = StyleSheet.create({
   tileBox: {
     borderWidth: 0.5,
     borderColor: '#d6d7da',
+  },
+  tileBoxSelected: {
+    borderWidth: 0.5,
+    borderColor: '#d6d7da',
+    backgroundColor: 'green',
   },
   tileTitle: {
     fontSize: 10,

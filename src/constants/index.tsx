@@ -16,11 +16,17 @@ export type SET_BED_SIZE = typeof SET_BED_SIZE;
 export const SET_BED_SUN = "SET_BED_SUN";
 export type SET_BED_SUN = typeof SET_BED_SUN;
 
+export const SET_BED_SET_UP = "SET_BED_SET_UP";
+export type SET_BED_SET_UP = typeof SET_BED_SET_UP;
+
+export const ADD_CROPS = "ADD_CROPS";
+export type ADD_CROPS = typeof ADD_CROPS;
+
 export const ONBOARDING_STEP_COMPLETED = "ONBOARDING_STEP_COMPLETED";
 export type ONBOARDING_STEP_COMPLETED = typeof ONBOARDING_STEP_COMPLETED;
 
-export const LOCATION_SET = "LOCATION_SET";
-export type LOCATION_SET = typeof LOCATION_SET;
+export const SET_LOCATION = "SET_LOCATION";
+export type SET_LOCATION = typeof SET_LOCATION;
 
 export const LOAD_TASKS = "LOAD_TASKS";
 export type LOAD_TASKS = typeof LOAD_TASKS;

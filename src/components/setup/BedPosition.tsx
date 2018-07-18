@@ -1,17 +1,22 @@
 import React from "react";
-import { StyleSheet, Text, TextInput, View, Dimensions, Alert, Platform } from "react-native";
-import { RouteComponentProps, withRouter } from "react-router";
-import { Link } from "react-router-native";
-import MapView, { Region } from "react-native-maps";
-import { Marker } from "react-native-maps";
-import { getWeather } from "../../actions/getWeather";
+import { StyleSheet, Text, View, Dimensions, Alert } from "react-native";
+import { RouteComponentProps, withRouter, Link } from "react-router-native";
+import MapView, { Region, Marker } from "react-native-maps";
 import { Input, Button } from "react-native-elements";
+import { connect } from "react-redux";
+import { Dispatch } from "redux";
+
+import { getWeather } from "../../actions/getWeather";
+import { OtherActionResponse } from "../../actions/action.type";
+import { setOnboardingStepCompleted } from "../../actions";
 
 type OwnProps = {};
 
 type StateToPropsType = {};
 
-type DispatchToPropsType = {};
+type DispatchToPropsType = {
+  setSetupStep: () => void;
+};
 
 export type Props = RouteComponentProps<{}> &
   OwnProps &
@@ -141,15 +146,21 @@ class BedPostion extends React.Component<Props, State> {
           flex: 1, flexDirection: 'column', justifyContent: 'space-around', alignItems: 'stretch', 
         }}>
           <Text>Temperatur:{this.state.temperature || '...'}</Text>
-          <Link to="/crops" component={Button} title='Kulturen wählen' />
+          <Link to="/" component={Button} title='Fertig!' onPress={() => this.props.setSetupStep()}/>
         </View>
       </View>
     );
   }
 }
 
+function mapDispatchToProps(dispatch: Dispatch<OtherActionResponse>): DispatchToPropsType {
+  return {
+    setSetupStep: () => dispatch(setOnboardingStepCompleted(5)),
+  }
+}
+
 export { BedPostion as PureComponent };
-export default withRouter(BedPostion);
+export default withRouter(connect(null, mapDispatchToProps)(BedPostion));
 
 const styles = StyleSheet.create({
   fulscreen: {

@@ -1,11 +1,11 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { RouteComponentProps, withRouter } from "react-router";
-import { Link } from "react-router-native";
+import { RouteComponentProps, withRouter, Link } from "react-router-native";
 import { Button } from "react-native-elements";
+import { Dispatch } from "redux";
 import { connect } from "react-redux";
+
 import { startSetup, StartSetup } from "../../actions";
-import { Dispatch } from 'react-redux';
 
 type OwnProps = {};
 
@@ -31,7 +31,7 @@ class Hello extends React.Component<HelloProps, HelloState> {
     return (
       <View style={styles.root}>
         <Text>Hallo!</Text>
-        <Link to="/bedtype" component={Button} title='Beete einrichten' onPress={this.props.doStartSetup} />
+        <Link to="/crops" component={Button} title='Kulturen wählen' onPress={this.props.doStartSetup} />
       </View>
     );
   }

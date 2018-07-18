@@ -1,5 +1,5 @@
 import { OtherActionResponse } from "../actions/action.type";
-import { SELECT_TASK } from "../constants";
+import { SELECT_TASK, SETUP_STARTED } from "../constants";
 
 export const tasktypes = [
   {
@@ -23,10 +23,10 @@ export const tasktypes = [
 export interface Task {
   id: string;
   name: string;
-  Description: string;
-  Bed: string;
-  AvatarUrl: string;
-  Done: boolean;
+  description: string;
+  bed: string;
+  image: string;
+  done: boolean;
   type: string
 }
 
@@ -40,26 +40,26 @@ export const defaultState: TaskState = {
   tasks: [{
     id: '1',
     name: "Gießen",
-    Description: "",
-    AvatarUrl: "../../../assets/img/giessen.png",
-    Bed: "Beet",
-    Done: false,
+    description: "",
+    image: "../../../assets/img/giessen.png",
+    bed: "Beet",
+    done: false,
   } as Task,
   {
     id: '2',
     name: "Gießen",
-    Description: "",
-    AvatarUrl: "../../../assets/img/giessen.png",
-    Bed: "Gewächshaus",
-    Done: false,
+    description: "",
+    image: "../../../assets/img/giessen.png",
+    bed: "Gewächshaus",
+    done: false,
   } as Task,
   {
     id: '3',
     name: "Tomaten ausgeizen",
-    Description: "",
-    AvatarUrl: "../../../assets/img/tomate.png",
-    Bed: "Gewächshaus",
-    Done: false,
+    description: "",
+    image: "../../../assets/img/tomate.png",
+    bed: "Gewächshaus",
+    done: false,
   } as Task]
 }
 
