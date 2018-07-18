@@ -9,7 +9,7 @@ import FitImage from 'react-native-fit-image';
 import { Task} from "../../reducers/task";
 import { RootState } from "../../reducers";
 import { Bed } from "../../reducers/garden";
-import { selectTask, OtherActionResponse, setBedForTask } from "../../actions";
+import { selectTask, OtherActionResponse, setBedForTask, markTaskResolved } from "../../actions";
 
 type OwnProps = {};
 
@@ -22,6 +22,7 @@ type StateToPropsType = {
 type DispatchToPropsType = {
   onBack: () => void;
   setBedForTask: (taskId : string, bedId: string) => void;
+  onMarkTaskResolved: (taskId : string) => void;
 };
 
 type State = {};
@@ -43,19 +44,12 @@ class TaskDetailItem extends React.Component<Props, State> {
       return <Text>NO ITEM {this.props.selectedId}</Text>;
     }
     return (
-      <Card title={task.name} image={task.image} imageStyle={{height: 220, opacity: 0.4}}>
+      <Card title={task.name} image={task.image} imageStyle={{height: 20, width: 20, flex: 1, alignSelf: 'center'}} >
         <Text>{task.description}</Text>
         <Text>Beet:</Text>
-        <Picker
-          style={{ height: 50 }}
-          selectedValue={task.bed}
-          onValueChange={itemValue => this.props.setBedForTask(task.id, itemValue)}
-        >
-          {this.props.beds.map(i => (
-            <Picker.Item key={i.id} label={i.name} value={i.id} />
-          ))}
-        </Picker>
-      <Link to="/" component={Button} onPress={() => this.props.onBack()} title='zurück' />
+        <Text>{task.bed}</Text>
+        <Button onPress={() => this.props.onMarkTaskResolved(task.id)} title='erledigt'></Button>
+        <Link to="/" component={Button} onPress={() => this.props.onBack()} title='zurück' />
       </Card>
     );
   }
@@ -76,7 +70,8 @@ function mapDispatchToProps(
 ): DispatchToPropsType {
   return {
     onBack: () => dispatch(selectTask(undefined)),
-    setBedForTask: (taskId : string, bedId: string) => dispatch(setBedForTask(taskId, bedId))
+    setBedForTask: (taskId : string, bedId: string) => dispatch(setBedForTask(taskId, bedId)),
+    onMarkTaskResolved: (taskId : string) => dispatch(markTaskResolved(taskId)),
   };
 }
 

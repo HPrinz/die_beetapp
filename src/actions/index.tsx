@@ -78,6 +78,7 @@ export interface SetLocation {
 
 export interface LoadTasks {
   type: constants.LOAD_TASKS;
+  attributes: {}
 }
 
 export interface SelectTask {
@@ -182,7 +183,7 @@ export function removeBedType(bedId: string): RemoveBedType {
   };
 }
 
-export function loadTasks(garden: GardenModel): LoadTasks {
+export function loadTasks(): LoadTasks {
   return {
     type: constants.LOAD_TASKS
   };

@@ -7,16 +7,21 @@ import { Dispatch } from "redux";
 
 
 import { RootState } from "../../reducers";
-import { selectTask, markTaskResolved, OtherActionResponse } from "../../actions";
+import { selectTask, markTaskResolved, OtherActionResponse, loadTasks } from "../../actions";
 import { Task } from "../../reducers/task";
+import { Bed } from "../../reducers/garden";
 
 type OwnProps = {};
 
-type StateToPropsType = {taskList: Task[];};
+type StateToPropsType = {
+    taskList: Task[];
+    beds: Bed[];
+};
 
 type DispatchToPropsType = {
     onSelectTask: (taskId : string) => void;
     onMarkTaskResolved: (taskId : string) => void;
+    loadTasks: () => void;
 };
 
 type State = {};
@@ -36,15 +41,16 @@ class TaskList extends React.Component<Props, State> {
         return (
             <View>
 
+                <Button title='Tasks aktualisieren' onPress={() => this.props.loadTasks()}></Button>
                 <Card title="Tasks">
-                    { this.props.taskList.map((u, i) => (
+                    { this.props.taskList.map(u => (
                         <Link
                         to="/taskdetail"
                         onPress={() => this.props.onSelectTask(u.id)}
                         component={ListItem}
                         key={u.id}
                         title={u.name}
-                        subtitle={u.description}
+                        subtitle={'in ' + (this.props.beds.find(bed => bed.id === u.bed) ? (this.props.beds.find(bed => bed.id === u.bed) as Bed).name : '')}
                         leftAvatar={{source: u.image}}
                         />)
                     )}
@@ -59,13 +65,15 @@ class TaskList extends React.Component<Props, State> {
 function mapStateToProps(state: RootState): StateToPropsType {
     return {
       taskList: state.task.tasks,
+      beds: state.garden.setup.beds,
     }
   }
   
   function mapDispatchToProps(dispatch: Dispatch<OtherActionResponse>): DispatchToPropsType {
     return {
         onSelectTask: (taskId : string) => dispatch(selectTask(taskId)),
-        onMarkTaskResolved: (taskId : string) => dispatch(markTaskResolved(taskId))
+        onMarkTaskResolved: (taskId : string) => dispatch(markTaskResolved(taskId)),
+        loadTasks: () => dispatch(loadTasks()),
     }
   };
 
