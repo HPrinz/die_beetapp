@@ -7,8 +7,8 @@ import { connect } from "react-redux";
 import { Redirect } from "react-router-native";
 
 import { RootState } from "../reducers";
-import { Task } from "../reducers/task";
 import TaskList from "./tasks/TaskList";
+import { Task } from "../reducers/garden";
 
 type OwnPropsType = {
 };
@@ -48,8 +48,8 @@ class MainView extends React.Component<MainProps, MainState> {
 
 const mapStateToProps = (state: RootState): StateToPropsType => ({
   isSetUp: state.garden.setupStep == 5,
-  taskList: state.task.tasks,
-  selectedTask : state.task.selectedTaskId,
+  taskList: state.garden.tasks,
+  selectedTask : state.garden.selectedTaskId,
 });
 
 const mapDispatchToProps: DispatchToPropsType = {

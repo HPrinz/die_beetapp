@@ -6,13 +6,12 @@ import { connect } from "react-redux";
 import { Button, Tile } from "react-native-elements";
 
 import { setOnboardingStepCompleted, addCrops, OtherActionResponse } from "../../actions";
-import { Crop } from "../../reducers/garden";
+import { Crop, cropTypes } from "../../reducers/garden";
 import { RootState } from "../../reducers";
 
 type OwnProps = {};
 
 type StateToPropsType = {
-  crops: Crop[]
 };
 
 type DispatchToPropsType = {
@@ -38,7 +37,7 @@ class Crops extends React.Component<Props, State> {
         <Text>Kulturen auswählen</Text>
 
         <View style={styles.row}>
-        { this.props.crops.map((crop: Crop) => (
+        { cropTypes.map((crop: Crop) => (
           <Tile
             key={crop.id}
             imageSrc={crop.image}
@@ -46,7 +45,7 @@ class Crops extends React.Component<Props, State> {
             width={150}
             height={150}
             titleStyle={styles.tileTitle}
-            containerStyle={crop.selected ? styles.tileBoxSelected : styles.tileBox}
+            // containerStyle={crop.selected ? styles.tileBoxSelected : styles.tileBox} TODO
             onPress={() => this.props.selectCrops(crop.id)}
           />
         ))}
@@ -67,7 +66,6 @@ function mapDispatchToProps(dispatch: Dispatch<OtherActionResponse>): DispatchTo
 
 function mapStateToProps(state: RootState): StateToPropsType {
   return {
-    crops: state.garden.setup.crops,
   }
 }
 

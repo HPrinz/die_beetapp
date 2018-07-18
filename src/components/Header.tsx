@@ -16,7 +16,7 @@ class Header extends React.Component {
 
 const styles = StyleSheet.create({
   viewStyle: {
-    marginTop: 40,
+    marginTop: 30,
     width: '100%',
     height: 50
   },

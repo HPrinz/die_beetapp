@@ -8,8 +8,7 @@ import { Dispatch } from "redux";
 
 import { RootState } from "../../reducers";
 import { selectTask, markTaskResolved, OtherActionResponse, loadTasks } from "../../actions";
-import { Task } from "../../reducers/task";
-import { Bed } from "../../reducers/garden";
+import { Bed, Task, taskTypes } from "../../reducers/garden";
 
 type OwnProps = {};
 
@@ -38,10 +37,9 @@ class TaskList extends React.Component<Props, State> {
     }
 
     render() {
+        console.log(JSON.stringify(this.props));
         return (
             <View>
-
-                <Button title='Tasks aktualisieren' onPress={() => this.props.loadTasks()}></Button>
                 <Card title="Tasks">
                     {this.props.taskList.map(u => (
                         <Link
@@ -49,14 +47,15 @@ class TaskList extends React.Component<Props, State> {
                         onPress={() => this.props.onSelectTask(u.id)}
                         component={ListItem}
                         key={u.id}
-                        title={u.name}
-                        subtitle={'in ' + (this.props.beds.find(bed => bed.id === u.bed) ? (this.props.beds.find(bed => bed.id === u.bed) as Bed).name : '')}
-                        leftAvatar={{source: u.image}}
+                        title={taskTypes[u.taskType].name}
+                        subtitle={'in ' + (this.props.beds.find(bed => bed.id === u.bedId) ? (this.props.beds.find(bed => bed.id === u.bedId) as Bed).name : '')}
+                        leftAvatar={{source: taskTypes[u.taskType].icon}}
                         />)
                     )}
                 </Card>
-                <Link to="/hello" component={Button} title='Garten einrichten' />
                 
+                <Button title='Tasks aktualisieren' onPress={() => this.props.loadTasks()}  style={styles.button}/>
+                <Link to="/hello" component={Button} title='Garten einrichten' style={styles.button} />
             </View>
         );
     }
@@ -64,7 +63,7 @@ class TaskList extends React.Component<Props, State> {
 
 function mapStateToProps(state: RootState): StateToPropsType {
     return {
-      taskList: state.task.tasks,
+      taskList: state.garden.tasks,
       beds: state.garden.setup.beds,
     }
   }
@@ -84,8 +83,8 @@ export default withRouter(connect(
     mapDispatchToProps)(TaskList));
 
 const styles = StyleSheet.create({
-    root: {
-        flex: 1,
-        justifyContent: "flex-start",
+    button: {
+        margin: 10,
+        marginBottom: 0
     }
 });

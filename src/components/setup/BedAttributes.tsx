@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import { Dispatch } from "redux";
 
 import { setBedSize, setBedSun, setOnboardingStepCompleted, setBedSetUp, setBedName, OtherActionResponse } from "../../actions";
-import { Bed } from "../../reducers/garden";
+import { Bed, bedTypes } from "../../reducers/garden";
 import { RootState } from "../../reducers";
 
 type OwnProps = {};
@@ -40,12 +40,12 @@ class BedAttributes extends React.Component<Props, State> {
     const {bed} = this.props;
     return (
       <View>
-          <Card title={bed.type + ' | ' + bed.name}  key={bed.id}>
+          <Card title={bedTypes[bed.typeId].name + ' | ' + bed.name}  key={bed.id}>
 
-          <View style={styles.hor}>
-            <Text style={{width: '50%'}} >Beetname:</Text>
-            <Input style={{width: '50%'}} placeholder={bed.type + " " + 1} onChangeText={(value) => this.props.setBedName(bed.id, value)}>{bed.name}</Input>
-          </View>
+            <View style={styles.hor}>
+              <Text style={{width: '50%'}} >Beetname:</Text>
+              <Input style={{width: '50%'}} placeholder={bedTypes[bed.typeId].name + " " + 1} onChangeText={(value) => this.props.setBedName(bed.id, value)}>{bed.name}</Input>
+            </View>
 
             <View style={styles.hor}>
               <Text style={{width: '50%'}} >Beetgröße im m2:</Text>

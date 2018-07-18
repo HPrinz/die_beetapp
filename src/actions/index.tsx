@@ -185,7 +185,8 @@ export function removeBedType(bedId: string): RemoveBedType {
 
 export function loadTasks(): LoadTasks {
   return {
-    type: constants.LOAD_TASKS
+    type: constants.LOAD_TASKS,
+    attributes: {}
   };
 }
 

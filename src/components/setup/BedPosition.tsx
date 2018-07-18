@@ -7,14 +7,14 @@ import { connect } from "react-redux";
 import { Dispatch } from "redux";
 
 import { getWeather } from "../../actions/getWeather";
-import { setOnboardingStepCompleted, OtherActionResponse } from "../../actions";
+import { setOnboardingStepCompleted, OtherActionResponse, setLocation } from "../../actions";
 
 type OwnProps = {};
 
 type StateToPropsType = {};
 
 type DispatchToPropsType = {
-  setSetupStep: () => void;
+  setLocation: (latitude: number, longitude:number) => void;
 };
 
 export type Props = RouteComponentProps<{}> &
@@ -113,14 +113,14 @@ class BedPostion extends React.Component<Props, State> {
 
       <View style={styles.fulscreen}>
           <Text>Gartenort:</Text>
-          <View style={{
+          {/* <View style={{
             flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'stretch', 
           }}>
           <Input placeholder='Berlin' value={this.state.place} onChangeText={(text: any) => this.setState({ place: text })}/>
-        </View>
+        </View> */}
 
         <View style={{
-          flex: 5, flexDirection: 'row', justifyContent: 'center',
+          flex: 2, flexDirection: 'row', justifyContent: 'center',
         }}>
 
           <MapView
@@ -144,7 +144,7 @@ class BedPostion extends React.Component<Props, State> {
           flex: 1, flexDirection: 'column', justifyContent: 'space-around', alignItems: 'stretch', 
         }}>
           <Text>Temperatur:{this.state.temperature || '...'}</Text>
-          <Link to="/" component={Button} title='Fertig!' onPress={() => this.props.setSetupStep()}/>
+          <Link to="/" component={Button} title='Fertig!' onPress={() => this.props.setLocation(this.state.region.latitude, this.state.region.longitude)}/>
         </View>
       </View>
     );
@@ -153,7 +153,7 @@ class BedPostion extends React.Component<Props, State> {
 
 function mapDispatchToProps(dispatch: Dispatch<OtherActionResponse>): DispatchToPropsType {
   return {
-    setSetupStep: () => dispatch(setOnboardingStepCompleted(5)),
+    setLocation: (latitude: number, longitude: number) => {dispatch(setLocation(latitude, longitude)); dispatch(setOnboardingStepCompleted(5))}
   }
 }
 

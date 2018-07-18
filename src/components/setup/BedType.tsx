@@ -7,13 +7,13 @@ import { Dispatch } from "redux";
 
 import { addBedType, removeBedType, setOnboardingStepCompleted, OtherActionResponse } from "../../actions";
 import { RootState } from "../../reducers";
-import { BedProps } from "../../reducers/garden";
+import { BedProps, Bed, bedTypes } from "../../reducers/garden";
 
 type OwnProps = {
 };
 
 type StateToPropsType = {
-  bedTypes: {[bedType: string]: BedProps};
+  beds: Bed[];
 };
 
 interface DispatchToPropsType {
@@ -44,18 +44,18 @@ class BedType extends React.Component<BedTypeProps, State> {
   render() {
     return (
       <View>
-        <Text>Beetarten auswählen:</Text>
+        <Text style={ {textAlign: 'center'}} >Beetarten auswählen:</Text>
 
         <View style={styles.row}>
-          {Object.values(this.props.bedTypes).map((bed: BedProps) => (
-            <View key={bed.type} style={styles.item} >
+          {Object.values(bedTypes).map((bed: BedProps) => (
+            <View key={bed.id} style={styles.item} >
               <Image style={{flex:1, height: tileWidth/2, width: tileWidth}} source={bed.image} resizeMode="contain" />
-              <Text style={styles.tileText}>{bed.type}</Text>
+              <Text style={styles.tileText}>{bed.name}</Text>
   
               <View style={styles.hor}>
-                <Button style={styles.plusminus} title="-" onPress={() => this.props.removeBedType(bed.type)} />
-                <Badge value={bed.selected} textStyle={{ color: 'orange' }}/>
-                <Link to="/bedattributes" component={Button}  style={styles.plusminus} title="+" onPress={() => this.props.addBedType(bed.type)} />
+                <Button style={styles.plusminus} title="-" onPress={() => this.props.removeBedType(bed.id)} />
+                <Badge value={this.props.beds.filter(b => b.typeId === bed.id).length } textStyle={{ color: 'orange' }}/>
+                <Link to="/bedattributes" component={Button}  style={styles.plusminus} title="+" onPress={() => this.props.addBedType(bed.id)} />
               </View>
             </View>
           ))};
@@ -81,7 +81,7 @@ class BedType extends React.Component<BedTypeProps, State> {
 
 function mapStateToProps(state: RootState): StateToPropsType {
   return {
-    bedTypes: state.garden.setup.bedTypes
+    beds: state.garden.setup.beds
   }
 }
 

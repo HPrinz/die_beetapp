@@ -1,14 +1,12 @@
 import React from "react";
-import { StyleSheet, Text, View, Picker } from "react-native";
+import { StyleSheet, Text} from "react-native";
 import { Card, Button } from "react-native-elements";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
 import { RouteComponentProps, withRouter, Link } from "react-router-native";
-import FitImage from 'react-native-fit-image';
 
-import { Task} from "../../reducers/task";
 import { RootState } from "../../reducers";
-import { Bed } from "../../reducers/garden";
+import { Bed, Task, taskTypes } from "../../reducers/garden";
 import { selectTask, OtherActionResponse, setBedForTask, markTaskResolved } from "../../actions";
 
 type OwnProps = {};
@@ -44,10 +42,10 @@ class TaskDetailItem extends React.Component<Props, State> {
       return <Text>NO ITEM {this.props.selectedId}</Text>;
     }
     return (
-      <Card title={task.name} image={task.image} imageStyle={{height: 20, width: 20, flex: 1, alignSelf: 'center'}} >
-        <Text>{task.description}</Text>
+      <Card title={taskTypes[task.taskType].name} image={taskTypes[task.taskType].icon} imageStyle={{height: 20, width: 20, flex: 1, alignSelf: 'center'}} >
+        <Text>{taskTypes[task.taskType].description}</Text>
         <Text>Beet:</Text>
-        <Text>{task.bed}</Text>
+        <Text>(this.props.beds.find(bed => bed.id === u.bedId) ? (this.props.beds.find(bed => bed.id === u.bedId) as Bed).name : '')</Text>
         <Button onPress={() => this.props.onMarkTaskResolved(task.id)} title='erledigt'></Button>
         <Link to="/" component={Button} onPress={() => this.props.onBack()} title='zurück' />
       </Card>
@@ -58,10 +56,10 @@ class TaskDetailItem extends React.Component<Props, State> {
 function mapStateToProps(state: RootState): StateToPropsType {
   return {
     beds: state.garden.setup.beds,
-    task: state.task.tasks.find(
-      x => x.id === state.task.selectedTaskId
+    task: state.garden.tasks.find(
+      x => x.id === state.garden.selectedTaskId
     ) as Task,
-    selectedId: state.task.selectedTaskId
+    selectedId: state.garden.selectedTaskId
   };
 }
 

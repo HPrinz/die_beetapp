@@ -1,97 +1,148 @@
-import { SetOnboardingStepCompleted, StartSetup, AddBedType, RemoveBedType, SetBedSize, SetBedSun, AddCrops, SetBedSetUp, SetBedName } from "../actions";
-import { ONBOARDING_STEP_COMPLETED, SETUP_STARTED, ADD_BED_TYPE, REMOVE_BED_TYPE, SET_BED_SIZE, SET_BED_SUN, ADD_CROPS, SET_BED_SET_UP, SET_BED_NAME } from "../constants";
+import { SetOnboardingStepCompleted, StartSetup, AddBedType, RemoveBedType, SetBedSize, SetBedSun, AddCrops, SetBedSetUp, SetBedName, SelectTask, LoadTasks, OtherActionResponse } from "../actions";
+import { ONBOARDING_STEP_COMPLETED, SETUP_STARTED, ADD_BED_TYPE, REMOVE_BED_TYPE, SET_BED_SIZE, SET_BED_SUN, ADD_CROPS, SET_BED_SET_UP, SET_BED_NAME, SELECT_TASK, SET_BED_ID_FOR_TASK, LOAD_TASKS } from "../constants";
 import { LatLng } from "react-native-maps";
 import uniqueId from 'lodash-es/uniqueId';
 import uuidv1 from 'uuid/v1';
 import { ImageSourcePropType } from "react-native";
 
 export type BedProps = {
-  type: string;
+  name: string;
   image: ImageSourcePropType;
-  selected : number
+  id : string
 };
 
 export type Bed = {
   id: string;
   name: string;
-  type: string;
+  typeId: string;
   sunHours?: number;
   size?: number;
 };
-
-export type GardenState = {
-  setupStep: number,
-  setup: {
-    bedTypes: {[bedType: string]: BedProps} ,
-    location?: LatLng,
-    crops: Crop[],
-    beds: Bed[],
-  },
-  selectedBedId : string | undefined,
-}
 
 export type Crop = {
   id: string,
   name: string,
   image: string,
-  selected: boolean,
+}
+
+export type TaskType = {
+  id: string,
+  name: string,
+  image: any,
+  icon: any,
+  description: string,
+  metadata: {},
+}
+
+export interface Task {
+  id: string;
+  taskType: string;
+  done: boolean;
+  bedId: string;
+}
+
+export const bedTypes : {[bedTypeId: string] : BedProps}= {
+  'beet': {
+    id: 'beet',
+    name: "Beet",
+    image: require("../../assets/img/beet.jpg"),
+  },
+  'fruehbeet' : {
+    id: 'fruehbeet',
+    name: "Frühbeet",
+    image: require("../../assets/img/fruehbeet.png"),
+  },
+  'hochbeet' : {
+    id: 'hochbeet',
+    name: "Hochbeet",
+    image: require("../../assets/img/hochbeet.jpg"),
+  },
+  'kuebel_kasten': {
+    id: 'kuebel_kasten',
+    name: "Kübel/Kasten",
+    image: require("../../assets/img/kuebel.png"),
+  },
+  'gewaechshaus' : {
+    id: 'gewaechshaus',
+    name: "Gewächshaus",
+    image: require("../../assets/img/gewaechshaus.jpg"),
+  },
+  'gewaechshaus_beheizt' : {
+    id: 'gewaechshaus_beheizt',
+    name: "Gewächshaus (beheizt)",
+    image: require("../../assets/img/gewaechshaus_beheizt.png"),
+  }
+};
+
+export const cropTypes: Crop[] = [ {
+  id: 'tomato',
+  name: 'Tomate',
+  image: require("../../assets/img/tomate.png"),
+},
+{
+  id: 'lettuce',
+  name: 'Salat',
+  image: require("../../assets/img/salat.png"),
+}];
+
+export const taskTypes: {[id: string]: TaskType} = {
+  'saen': { 
+    id: "saen",
+    name: "Säen",
+    description: "",
+    icon: require("../../assets/img/saen.png"),
+    image: require("../../assets/img/saen.png"),
+    metadata: {}
+  },
+  'giessen': {
+    id: "giessen",
+    name: "Gießen",
+    description: "Zum Wässern von Gehölzen, Stauden, Hecken und Gemüsepflanzen sollte man besser nicht den Rasensprenger verwenden. Der ist nur ideal für größere freie Flächen. Ansonsten landet mit Sprinkleranlagen zu viel Wasser auf den Blättern. Dort verdunstet es ungenutzt oder begünstigt sogar Pilzkrankheiten, wenn es nicht schnell trocknet.\nMit Gießkanne und Gartenschlauch kommt man besser unter die Zweige und Blätter der Pflanzen. Wer eine automatische Bewässerungslösung bevorzugt, sollte ein Tropfrohrsystem verlegen. \n Als Faustregel für die Gießmenge gilt: Je größer die Blätter, desto höher der Wasserbedarf. Mediterrane Pflanzen sind es hingegen gewöhnt, mit wenig Feuchtigkeit auszukommen. Sie überstehen auch einige trockene Tage. Südländische Kräuter, wie Thymian und Rosmarin sollten ebenfalls nicht zu oft gegossen werden. Am besten wartet man, bis die Erde ausgetrocknet ist und gießt dann reichlich. \n Besser einmal richtig gießen heißt auch die Devise im Gemüsebeet: Die Experten der Bayerischen Gartenakademie raten, besser 14 Liter pro Woche an einem einzigen Tag ins Beet zu gießen. Und zwar verteilt auf mehrere Stunden, so dass das Wasser jeweils Zeit bekommt, einzusickern.",
+    icon: require("../../assets/img/giessen.png"),
+    image: require("../../assets/img/giessen.png"),
+    metadata: {}
+  },
+  'tomaten_ausgeizen': {
+    id: "tomaten_ausgeizen",
+    name: "Tomaten ausgeizen",
+    description:
+      "Zum Ausgeizen brauchen Sie normalerweise kein Werkzeug. Untersuchen Sie die Tomatenpflanze auf neue Triebe in den Achseln und prüfen Sie, welche von ihnen wachsen sollen und welche nicht. Tipp: Lassen Sie nur sehr wenige Triebe stehen, denn die klassische Stabtomate ist äußerst wüchsig und wird leicht zum Gestrüpp. Knipsen Sie dann einfach die noch sehr jungen, kleinen Achseltriebe mit den Fingernägeln von der Pflanze ab und genießen Sie den fantastischen Tomatengeruch an den Fingerspitzen. Etwas größere Triebe werden von einer zur anderen Seite geknickt bis sie von selbst abbrechen. Achtung: Die jungen Triebe dürfen nicht nach oben oder fransig abgerissen werden, denn das verursacht große Verletzungen an der Pflanze.\nHaben Sie beim Ausgeizen der Tomaten einen Trieb übersehen und er ist schon recht dick geworden, verwenden Sie zum Entfernen lieber ein scharfes Messer. Schneiden Sie den Zweig vorsichtig dicht am Haupttrieb ab, ohne diesen zu verletzen. Es ist natürlich zu beachten, dass beim Ausgeizvorgang viele kleine Risse und Wunden am Stängel der Tomate entstehen, welche Eintrittspforten für Krankheitserreger sind. Achten Sie deshalb darauf die Rissfläche so klein wie möglich zu halten. Optimalerweise waschen Sie sich die Hände oder reinigen kurz das Werkzeug, bevor Sie von einer zur nächsten Pflanze übergehen.",
+    icon: require("../../assets/img/tomate.png"),
+    image: require("../../assets/img/tomate.png"),
+    metadata: {}
+  }};
+
+export type GardenState = {
+  setupStep: number,
+  setup: {
+    beds: Bed[],
+    location?: LatLng,
+    crops: {[bedType: string]: boolean} ,
+  },
+  selectedBedId : string | undefined,
+  selectedTaskId: string | undefined;
+  tasks: Task[];
 }
 
 export const defaultGardenState: GardenState = {
   setupStep: 0,
   setup: {
-    bedTypes: {
-      "Beet" : {
-        type: "Beet",
-        image: require("../../assets/img/beet.jpg"),
-        selected: 0
-      },
-      "Frühbeet" : {
-        type: "Frühbeet",
-        image: require("../../assets/img/fruehbeet.png"),
-        selected: 0
-      },
-      "Hochbeet" : {
-        type: "Hochbeet",
-        image: require("../../assets/img/hochbeet.jpg"),
-        selected: 0
-      },
-      "Kübel/Kasten" : {
-        type: "Kübel/Kasten",
-        image: require("../../assets/img/kuebel.png"),
-        selected: 0
-      },
-      "Gewächshaus" : {
-        type: "Gewächshaus",
-        image: require("../../assets/img/gewaechshaus.jpg"),
-        selected: 0
-      },
-      "Gewächshaus (beheizt)" : {
-        type: "Gewächshaus (beheizt)",
-        image: require("../../assets/img/gewaechshaus_beheizt.png"),
-        selected: 0
-      }
-    } as {[bedType: string]: BedProps},
-    crops: [ {
-      id: 'tomato',
-      name: 'Tomate',
-      image: require("../../assets/img/tomate.png"),
-      selected: false
-    },
-    {
-      id: 'lettuce',
-      name: 'Salat',
-      image: require("../../assets/img/salat.png"),
-      selected: false
-    }],
+    crops: {},
     beds: [],
   },
+  selectedTaskId: undefined,
+  tasks: [{
+      id: '1',
+      taskType: "giessen",
+      bedId: "",
+      done: false
+    }],
   selectedBedId : undefined
 };
 
 export default (
   state: GardenState = defaultGardenState,
-  action: SetOnboardingStepCompleted | StartSetup | AddBedType | RemoveBedType | SetBedSize | SetBedSun | AddCrops | SetBedSetUp | SetBedName
+  action: OtherActionResponse
 ) => {
   switch (action.type) {
 
@@ -108,18 +159,11 @@ export default (
         ...state,
         setup: {
           ...state.setup,
-          bedTypes: {
-            ...state.setup.bedTypes,
-            [action.attributes.bedType]: {
-              ...state.setup.bedTypes[action.attributes.bedType],
-              selected: state.setup.bedTypes[action.attributes.bedType].selected + 1,
-            },
-          },
           beds: [...state.setup.beds,
             {
               id,
               name,
-              type: action.attributes.bedType,
+              typeId: action.attributes.bedType,
             }
           ]
         },
@@ -136,13 +180,6 @@ export default (
         ...state,
         setup: {
           ...state.setup,
-          bedTypes: {
-            ...state.setup.bedTypes,
-            [bed.type]: {
-              ...state.setup.bedTypes[bed.type],
-              selected: state.setup.bedTypes[bed.type].selected -1,
-            },
-          },
           beds: 
             state.setup.beds.filter((item : Bed) => {
               if(item.id !== action.attributes.bedId) {
@@ -216,19 +253,42 @@ export default (
         ...state,
         setup: {
           ...state.setup,
-          crops: 
-            state.setup.crops.map(item => {
-              if(item.id !== action.attributes.cropsId) {
-                  return item;
-              }
-              return {
-                  ...item,
-                  selected: !item.selected
-              };    
-            })
+          crops: { 
+            ...state.setup.crops,
+            [action.attributes.cropsId] : !state.setup.crops[action.attributes.cropsId]
+            }
           }
         };
    
+    case SELECT_TASK:
+      return {
+        ...state,
+        selectedTaskId: action.attributes.taskId
+      };
+
+    case SET_BED_ID_FOR_TASK:
+      return {
+        ...state,
+        tasks: state.tasks.map((item: Task) => {
+          if (item.id === action.attributes.taskId) {
+            return {
+              ...item,
+              bed: action.attributes.bedId
+            };
+          }
+          return item;
+        })
+      };
+
+    case LOAD_TASKS:
+      // state.setup.beds.forEach(element => {
+        
+      // });
+      // return {
+      //   ...state,
+      //   tasks: defaultState.tasks
+      // };
+
     default:
       return state;
   }
