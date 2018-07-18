@@ -1,8 +1,8 @@
 import React from "react";
-import { StyleSheet, Text, View, Dimensions, Alert } from "react-native";
+import { StyleSheet, View, Dimensions, Alert } from "react-native";
 import { RouteComponentProps, withRouter, Link } from "react-router-native";
 import MapView, { Region, Marker } from "react-native-maps";
-import { Input, Button } from "react-native-elements";
+import { Input, Button, Text } from "react-native-elements";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
 
@@ -112,7 +112,7 @@ class BedPostion extends React.Component<Props, State> {
     return (
 
       <View style={styles.fulscreen}>
-          <Text>Gartenort:</Text>
+          <Text h4>Gartenort</Text>
           {/* <View style={{
             flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'stretch', 
           }}>

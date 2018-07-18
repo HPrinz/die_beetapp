@@ -1,5 +1,5 @@
 import { SetOnboardingStepCompleted, StartSetup, AddBedType, RemoveBedType, SetBedSize, SetBedSun, AddCrops, SetBedSetUp, SetBedName, SelectTask, LoadTasks, OtherActionResponse } from "../actions";
-import { ONBOARDING_STEP_COMPLETED, SETUP_STARTED, ADD_BED_TYPE, REMOVE_BED_TYPE, SET_BED_SIZE, SET_BED_SUN, ADD_CROPS, SET_BED_SET_UP, SET_BED_NAME, SELECT_TASK, SET_BED_ID_FOR_TASK, LOAD_TASKS } from "../constants";
+import { ONBOARDING_STEP_COMPLETED, SETUP_STARTED, ADD_BED_TYPE, REMOVE_BED_TYPE, SET_BED_SIZE, SET_BED_SUN, ADD_CROPS, SET_BED_SET_UP, SET_BED_NAME, SELECT_TASK, SET_BED_ID_FOR_TASK, LOAD_TASKS, SET_LOCATION } from "../constants";
 import { LatLng } from "react-native-maps";
 import uniqueId from 'lodash-es/uniqueId';
 import uuidv1 from 'uuid/v1';
@@ -117,7 +117,7 @@ export type GardenState = {
   setup: {
     beds: Bed[],
     location?: LatLng,
-    crops: {[bedType: string]: boolean} ,
+    crops: {[cropsId: string]: boolean} ,
   },
   selectedBedId : string | undefined,
   selectedTaskId: string | undefined;
@@ -153,7 +153,7 @@ export default (
       };
 
     case ADD_BED_TYPE:
-    const name = uniqueId(action.attributes.bedType + " #");
+    const name = uniqueId(bedTypes[action.attributes.bedType].name + " #");
     const id = uuidv1();
       return {
         ...state,
@@ -280,14 +280,41 @@ export default (
         })
       };
 
+    case SET_LOCATION:
+      return {
+        ...state,
+        setup : {
+          ...state.setup,
+          location: {
+            latitude: action.attributes.lat,
+            longitude: action.attributes.lng,
+          } as LatLng
+        }
+      };
+
     case LOAD_TASKS:
-      // state.setup.beds.forEach(element => {
-        
-      // });
-      // return {
-      //   ...state,
-      //   tasks: defaultState.tasks
-      // };
+    let tasks : Task[] = []
+      state.setup.beds.filter(element => element.typeId !== 'gewaechshaus').forEach((element, index) => {
+        tasks.push({
+          bedId: element.id,
+          done: false,
+          id: uuidv1(),
+          taskType: taskTypes['giessen'].id
+        } as Task)
+      });
+      state.setup.beds.filter(element => element.typeId === 'gewaechshaus').forEach((element, index) => {
+        tasks.push({
+          bedId: element.id,
+          done: false,
+          id: uuidv1(),
+          taskType: taskTypes['tomaten_ausgeizen'].id
+        } as Task)
+      });
+
+      return {
+        ...state,
+        tasks
+      };
 
     default:
       return state;

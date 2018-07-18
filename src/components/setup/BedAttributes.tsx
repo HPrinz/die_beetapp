@@ -1,7 +1,7 @@
 import React from "react";
-import { StyleSheet, Text, View} from "react-native";
+import { StyleSheet, View} from "react-native";
 import { RouteComponentProps, withRouter, Link } from "react-router-native";
-import { Slider, Input, Button, Card } from "react-native-elements";
+import { Slider, Input, Button, Card, Text, Divider } from "react-native-elements";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
 
@@ -42,26 +42,28 @@ class BedAttributes extends React.Component<Props, State> {
       <View>
           <Card title={bedTypes[bed.typeId].name + ' | ' + bed.name}  key={bed.id}>
 
-            <View style={styles.hor}>
-              <Text style={{width: '50%'}} >Beetname:</Text>
-              <Input style={{width: '50%'}} placeholder={bedTypes[bed.typeId].name + " " + 1} onChangeText={(value) => this.props.setBedName(bed.id, value)}>{bed.name}</Input>
-            </View>
+            {/* <View style={styles.hor}> */}
+              <Text style={{fontSize: 16, color: '#0C6E5D'}}>Beetname:</Text>
+              <Input placeholder={bedTypes[bed.typeId].name + " " + 1} onChangeText={(value) => this.props.setBedName(bed.id, value)}>{bed.name}</Input>
+            {/* </View> */}
 
-            <View style={styles.hor}>
-              <Text style={{width: '50%'}} >Beetgröße im m2:</Text>
-              <Input style={{width: '50%'}} keyboardType="numeric" placeholder="3" onChangeText={(value) => this.props.setBedSize(bed.id, +value)} >{bed.size}</Input>
-            </View>
+            {/* <View style={styles.hor}> */}
+              <Text style={{marginTop: 15, fontSize: 16, color: '#0C6E5D'}}>Beetgröße im m2:</Text>
+              <Input keyboardType="numeric" placeholder="3" onChangeText={(value) => this.props.setBedSize(bed.id, +value)} >{bed.size}</Input>
+            {/* </View> */}
             
-            <Text>Beetstandort einstellen:</Text>
+            <Text style={{marginTop: 15, fontSize: 16, color: '#0C6E5D'}}>Beetstandort einstellen:</Text>
             <View >
               <Slider
                 value={bed.sunHours || 0}
                 minimumValue={0}
                 maximumValue={10}
                 step={1}
+                thumbTintColor='#0C6E5D'
                 onValueChange={value => this.props.setBedSun(bed.id, value)}
+                style={{width: '80%', flex: 1, alignSelf: 'center'}}
               />
-              <Text>Mindestens {bed.sunHours} Sonnenstunden</Text>
+              <Text style={{textAlign: 'center'}}>Mindestens {bed.sunHours} Sonnenstunden</Text>
             </View>
           </Card>
 
@@ -105,7 +107,8 @@ export default withRouter(
 const styles = StyleSheet.create({
   hor:{
     flex: 1,
-    flexDirection: 'row'
+    flexDirection: 'row',
+    alignItems: 'center'
   }
  
 });

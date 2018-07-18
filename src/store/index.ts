@@ -6,7 +6,7 @@ import reducers, { RootState } from "../reducers";
 import { defaultGardenState } from "../reducers/garden";
 
 const persistConfig = {
-  key: 'die_beetapp_1',
+  key: 'die_beetapp_4',
   storage,
 }
 

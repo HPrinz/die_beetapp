@@ -1,9 +1,9 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { RouteComponentProps, withRouter, Link } from "react-router-native";
 import { Dispatch } from "redux";
 import { connect } from "react-redux";
-import { Button, Tile } from "react-native-elements";
+import { Button, Tile, Text } from "react-native-elements";
 
 import { setOnboardingStepCompleted, addCrops, OtherActionResponse } from "../../actions";
 import { Crop, cropTypes } from "../../reducers/garden";
@@ -12,6 +12,7 @@ import { RootState } from "../../reducers";
 type OwnProps = {};
 
 type StateToPropsType = {
+  crops: {[cropsId: string]: boolean},
 };
 
 type DispatchToPropsType = {
@@ -34,7 +35,7 @@ class Crops extends React.Component<Props, State> {
   render() {
     return (
       <View style={styles.root}>
-        <Text>Kulturen auswählen</Text>
+        <Text h4>Kulturen auswählen</Text>
 
         <View style={styles.row}>
         { cropTypes.map((crop: Crop) => (
@@ -43,9 +44,9 @@ class Crops extends React.Component<Props, State> {
             imageSrc={crop.image}
             title={crop.name}
             width={150}
-            height={150}
+            height={170}
             titleStyle={styles.tileTitle}
-            // containerStyle={crop.selected ? styles.tileBoxSelected : styles.tileBox} TODO
+            containerStyle={this.props.crops[crop.id] ? styles.tileBoxSelected : styles.tileBox} 
             onPress={() => this.props.selectCrops(crop.id)}
           />
         ))}
@@ -66,6 +67,7 @@ function mapDispatchToProps(dispatch: Dispatch<OtherActionResponse>): DispatchTo
 
 function mapStateToProps(state: RootState): StateToPropsType {
   return {
+    crops: state.garden.setup.crops
   }
 }
 
@@ -88,16 +90,15 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   tileBox: {
-    borderWidth: 0.5,
-    borderColor: '#d6d7da',
   },
   tileBoxSelected: {
     borderWidth: 0.5,
-    borderColor: '#d6d7da',
-    backgroundColor: 'green',
+    borderColor: 'white',
+    backgroundColor: '#d6d7da',
   },
   tileTitle: {
-    fontSize: 10,
+    fontSize: 14,
+    textAlign: 'center',
     marginTop: 0
   },
 });

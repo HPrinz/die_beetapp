@@ -1,7 +1,7 @@
 import React from "react";
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, View, Image } from "react-native";
 import { RouteComponentProps, withRouter , Link } from "react-router-native";
-import { Button, Badge } from "react-native-elements";
+import { Button, Badge, Text } from "react-native-elements";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
 
@@ -44,7 +44,7 @@ class BedType extends React.Component<BedTypeProps, State> {
   render() {
     return (
       <View>
-        <Text style={ {textAlign: 'center'}} >Beetarten auswählen:</Text>
+        <Text h4 style={ {textAlign: 'center'}} >Beetarten auswählen</Text>
 
         <View style={styles.row}>
           {Object.values(bedTypes).map((bed: BedProps) => (
