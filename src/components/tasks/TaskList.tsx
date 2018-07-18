@@ -43,7 +43,7 @@ class TaskList extends React.Component<Props, State> {
 
                 <Button title='Tasks aktualisieren' onPress={() => this.props.loadTasks()}></Button>
                 <Card title="Tasks">
-                    { this.props.taskList.map(u => (
+                    {this.props.taskList.map(u => (
                         <Link
                         to="/taskdetail"
                         onPress={() => this.props.onSelectTask(u.id)}

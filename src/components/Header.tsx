@@ -1,24 +1,26 @@
 import React from "react";
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text, Image } from "react-native";
+import FitImage from "../../node_modules/react-native-fit-image";
+import { url } from "inspector";
 
 class Header extends React.Component {
   render() {
     return (
-      <View style={styles.viewStyle}>
-        <Text style={styles.heading}>die beetapp</Text>
-      </View>
+      // <View height='50' style={styles.fitImageWithSize}>
+        <Image  style={styles.viewStyle} source={require('../../assets/img/logo.png')} resizeMode="contain"/>
+      //   <FitImage source={{uri : "https://upload.wikimedia.org/wikipedia/commons/5/58/Toba_Landsat_satellite_image.jpg"}} style={styles.fitImage}></FitImage>
+      // </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  heading: {
-    fontSize: 35,
-    textAlign: 'center'
-  },
   viewStyle: {
-    marginTop: 40
-  }
+    marginTop: 40,
+    width: '100%',
+    height: 50
+  },
+
 });
 
 export { Header as PureComponent };

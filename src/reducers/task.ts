@@ -92,10 +92,10 @@ export default (
         })
       };
     case LOAD_TASKS:
+      
       return {
         ...state,
         tasks: defaultState.tasks
-        
       };
 
     default:

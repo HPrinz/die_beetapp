@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Image } from "react-native";
 import { RouteComponentProps, withRouter, Link } from "react-router-native";
 import { Button } from "react-native-elements";
 import { Dispatch } from "redux";
@@ -30,8 +30,8 @@ class Hello extends React.Component<HelloProps, HelloState> {
   render() {
     return (
       <View style={styles.root}>
-        <Text>Hallo!</Text>
-        <Link to="/crops" component={Button} title='Garten einrichten' onPress={this.props.doStartSetup} />
+        <Image style={styles.image} source={require('../../../assets/img/welcome.png')} resizeMode='contain'/>
+        <Link to="/crops" component={Button} title='Los' onPress={this.props.doStartSetup} />
       </View>
     );
   }
@@ -53,5 +53,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "center",
     flex: 1,
+  },
+  image: {
+    width: 200,
+    height: 400,
   }
 });
