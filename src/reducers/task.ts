@@ -1,5 +1,7 @@
-import { OtherActionResponse } from "../actions/action.type";
-import { SELECT_TASK, SETUP_STARTED } from "../constants";
+
+import { SELECT_TASK, SETUP_STARTED, SET_BED_ID_FOR_TASK } from "../constants";
+import { SetBedIdForTask, SelectTask } from "../actions";
+import { ImageSourcePropType } from "../../node_modules/@types/react-native";
 
 export const tasktypes = [
   {
@@ -25,7 +27,7 @@ export interface Task {
   name: string;
   description: string;
   bed: string;
-  image: string;
+  image: any;
   done: boolean;
   type: string
 }
@@ -41,38 +43,53 @@ export const defaultState: TaskState = {
     id: '1',
     name: "Gießen",
     description: "",
-    image: "../../../assets/img/giessen.png",
-    bed: "Beet",
+    image: require("../../assets/img/giessen.png"),
+    bed: "",
     done: false,
   } as Task,
   {
     id: '2',
     name: "Gießen",
     description: "",
-    image: "../../../assets/img/giessen.png",
-    bed: "Gewächshaus",
+    image: require("../../assets/img/giessen.png"),
+    bed: "",
     done: false,
   } as Task,
   {
     id: '3',
     name: "Tomaten ausgeizen",
     description: "",
-    image: "../../../assets/img/tomate.png",
-    bed: "Gewächshaus",
+    image: require("../../assets/img/tomate.png"),
+    bed: "",
     done: false,
   } as Task]
 }
 
 export default (
   state: TaskState = defaultState,
-  action: OtherActionResponse
+  action: SetBedIdForTask | SelectTask
 ) => {
   switch (action.type) {
+    
     case SELECT_TASK:
       return {
         ...state,
         selectedTaskId: action.attributes.taskId
-      };
+      }
+    
+    case SET_BED_ID_FOR_TASK:
+      return {
+        ...state,
+        tasks: state.tasks.map((item : Task) => {
+          if(item.id === action.attributes.taskId) {
+              return {
+                ...item, 
+                bed: action.attributes.bedId,
+              }
+          }
+          return item;        
+        })
+      }
 
     default:
       return state;

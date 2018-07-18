@@ -4,10 +4,8 @@ import { RouteComponentProps, withRouter, Link } from "react-router-native";
 import { Slider, Input, Button, Card } from "react-native-elements";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
-import { uniqueId } from "lodash-es";
 
-import { setBedSize, setBedSun, setOnboardingStepCompleted, setBedSetUp } from "../../actions";
-import { OtherActionResponse } from "../../actions/action.type";
+import { setBedSize, setBedSun, setOnboardingStepCompleted, setBedSetUp, setBedName, OtherActionResponse } from "../../actions";
 import { Bed } from "../../reducers/garden";
 import { RootState } from "../../reducers";
 
@@ -21,6 +19,7 @@ interface DispatchToPropsType {
   setSetupStep: () => void;
   setBedSize: (bedId : string, size : number) => void;
   setBedSun: (bedId : string, sun : number) => void;
+  setBedName: (bedId : string, name : string) => void;
   onBack: (bedId : string) => void;
 };
 
@@ -41,11 +40,11 @@ class BedAttributes extends React.Component<Props, State> {
     const {bed} = this.props;
     return (
       <View>
-          <Card title={bed.type}  key={bed.id}>
+          <Card title={bed.type + ' | ' + bed.name}  key={bed.id}>
 
           <View style={styles.hor}>
             <Text style={{width: '50%'}} >Beetname:</Text>
-            <Input style={{width: '50%'}} placeholder={bed.type + 1}>{bed.id}</Input>
+            <Input style={{width: '50%'}} placeholder={bed.type + " " + 1} onChangeText={(value) => this.props.setBedName(bed.id, value)}>{bed.name}</Input>
           </View>
 
             <View style={styles.hor}>
@@ -88,6 +87,7 @@ function mapDispatchToProps(dispatch: Dispatch<OtherActionResponse>): DispatchTo
   return {
     setBedSize: (bedId : string, size : number) => dispatch(setBedSize(bedId, size)),
     setBedSun: (bedId : string, sunHours : number) => dispatch(setBedSun(bedId, sunHours)),
+    setBedName: (bedId : string, name : string) => dispatch(setBedName(bedId, name)),
     setSetupStep: () => dispatch(setOnboardingStepCompleted(4)),
     onBack: (bedId: string) => dispatch(setBedSetUp(bedId))
   }

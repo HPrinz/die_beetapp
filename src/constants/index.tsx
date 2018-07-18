@@ -19,6 +19,9 @@ export type SET_BED_SUN = typeof SET_BED_SUN;
 export const SET_BED_SET_UP = "SET_BED_SET_UP";
 export type SET_BED_SET_UP = typeof SET_BED_SET_UP;
 
+export const SET_BED_NAME = "SET_BED_NAME";
+export type SET_BED_NAME = typeof SET_BED_NAME;
+
 export const ADD_CROPS = "ADD_CROPS";
 export type ADD_CROPS = typeof ADD_CROPS;
 
@@ -33,6 +36,9 @@ export type LOAD_TASKS = typeof LOAD_TASKS;
 
 export const SELECT_TASK = "SELECT_TASK";
 export type SELECT_TASK = typeof SELECT_TASK;
+
+export const SET_BED_ID_FOR_TASK = "SET_BED_ID_FOR_TASK";
+export type SET_BED_ID_FOR_TASK = typeof SET_BED_ID_FOR_TASK;
 
 export const MARK_TASK_RESOLVED = "MARK_TASK_RESOLVED";
 export type MARK_TASK_RESOLVED = typeof MARK_TASK_RESOLVED;

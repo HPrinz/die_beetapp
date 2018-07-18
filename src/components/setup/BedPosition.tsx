@@ -7,8 +7,7 @@ import { connect } from "react-redux";
 import { Dispatch } from "redux";
 
 import { getWeather } from "../../actions/getWeather";
-import { OtherActionResponse } from "../../actions/action.type";
-import { setOnboardingStepCompleted } from "../../actions";
+import { setOnboardingStepCompleted, OtherActionResponse } from "../../actions";
 
 type OwnProps = {};
 
@@ -122,7 +121,6 @@ class BedPostion extends React.Component<Props, State> {
 
         <View style={{
           flex: 5, flexDirection: 'row', justifyContent: 'center',
-          backgroundColor: 'steelblue'
         }}>
 
           <MapView

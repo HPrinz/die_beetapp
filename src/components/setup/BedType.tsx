@@ -5,10 +5,9 @@ import { Button, Badge } from "react-native-elements";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
 
-import { addBedType, removeBedType, setOnboardingStepCompleted } from "../../actions";
+import { addBedType, removeBedType, setOnboardingStepCompleted, OtherActionResponse } from "../../actions";
 import { RootState } from "../../reducers";
 import { BedProps } from "../../reducers/garden";
-import { OtherActionResponse } from "../../actions/action.type";
 
 type OwnProps = {
 };

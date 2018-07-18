@@ -5,8 +5,7 @@ import { Dispatch } from "redux";
 import { connect } from "react-redux";
 import { Button, Tile } from "react-native-elements";
 
-import { OtherActionResponse } from "../../actions/action.type";
-import { setOnboardingStepCompleted, addCrops } from "../../actions";
+import { setOnboardingStepCompleted, addCrops, OtherActionResponse } from "../../actions";
 import { Crop } from "../../reducers/garden";
 import { RootState } from "../../reducers";
 

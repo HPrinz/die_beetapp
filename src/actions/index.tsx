@@ -1,6 +1,13 @@
 import * as constants from "../constants";
 import { GardenModel } from "../models/Garden";
 
+export interface OtherActionResponse { 
+  type: string;
+  attributes : any 
+}
+
+export const OtherActionResponse: OtherActionResponse = { type: "", attributes: {} };
+
 export interface SetOnboardingStepCompleted {
   type: constants.ONBOARDING_STEP_COMPLETED;
   attributes: {
@@ -35,6 +42,13 @@ export interface SetBedSun {
   attributes: {
     bedId: string;
     sunHours: number;
+  };
+}
+export interface SetBedName {
+  type: constants.SET_BED_NAME;
+  attributes: {
+    bedId: string;
+    name: string;
   };
 }
 export interface SetBedSetUp {
@@ -77,6 +91,13 @@ export interface MarkTaskResolved {
   type: constants.MARK_TASK_RESOLVED;
   attributes: {
     taskId: string;
+  }
+}
+export interface SetBedIdForTask {
+  type: constants.SET_BED_ID_FOR_TASK;
+  attributes: {
+    taskId: string;
+    bedId: string;
   }
 }
 
@@ -133,6 +154,15 @@ export function setBedSetUp(bedId: string): SetBedSetUp {
     }
   };
 }
+export function setBedName(bedId: string, name : string): SetBedName {
+  return {
+    type: constants.SET_BED_NAME,
+    attributes: {
+      bedId,
+      name
+    }
+  };
+}
 
 export function addCrops(cropsId: string): AddCrops {
   return {
@@ -167,6 +197,16 @@ export function selectTask(taskId: string | undefined): SelectTask {
     }
   };
 }
+export function setBedForTask(taskId: string, bedId : string): SetBedIdForTask {
+  return {
+    type: constants.SET_BED_ID_FOR_TASK,
+    attributes: {
+      taskId,
+      bedId
+    }
+  };
+}
+
 export function markTaskResolved(taskId: string): MarkTaskResolved {
   return {
     type: constants.MARK_TASK_RESOLVED,

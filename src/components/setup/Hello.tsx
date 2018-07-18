@@ -31,7 +31,7 @@ class Hello extends React.Component<HelloProps, HelloState> {
     return (
       <View style={styles.root}>
         <Text>Hallo!</Text>
-        <Link to="/crops" component={Button} title='Kulturen wählen' onPress={this.props.doStartSetup} />
+        <Link to="/crops" component={Button} title='Garten einrichten' onPress={this.props.doStartSetup} />
       </View>
     );
   }

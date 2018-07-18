@@ -1,13 +1,13 @@
 import React from "react";
-import { StyleSheet,  View, } from "react-native";
+import { StyleSheet,  View, ImageSourcePropType, } from "react-native";
 import { RouteComponentProps, withRouter, Link } from "react-router-native";
 import { Button, Card, ListItem, Text } from "react-native-elements";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
 
-import { OtherActionResponse } from "../../actions/action.type";
+
 import { RootState } from "../../reducers";
-import { selectTask, markTaskResolved } from "../../actions";
+import { selectTask, markTaskResolved, OtherActionResponse } from "../../actions";
 import { Task } from "../../reducers/task";
 
 type OwnProps = {};
@@ -44,11 +44,12 @@ class TaskList extends React.Component<Props, State> {
                         component={ListItem}
                         key={u.id}
                         title={u.name}
-                        subtitle={u.description}   
+                        subtitle={u.description}
+                        leftAvatar={{source: u.image}}
                         />)
                     )}
                 </Card>
-                <Link to="/MainView" component={Button} title='Fertig!' />
+                <Link to="/hello" component={Button} title='Garten einrichten' />
                 
             </View>
         );

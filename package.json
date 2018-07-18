@@ -35,10 +35,12 @@
     "react-dom": "^16.3.2",
     "react-native": "~0.55.2",
     "react-native-elements": "^1.0.0-beta5",
+    "react-native-fit-image": "^1.5.4",
     "react-native-maps": "^0.21.0",
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.2.2",
     "react-router-native": "^4.3.0",
-    "redux": "^4.0.0"
+    "redux": "^4.0.0",
+    "redux-persist": "^5.10.0"
   }
 }

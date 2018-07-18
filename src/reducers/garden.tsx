@@ -1,7 +1,8 @@
-import { SetOnboardingStepCompleted, StartSetup, AddBedType, RemoveBedType, SetBedSize, SetBedSun, AddCrops, SetBedSetUp } from "../actions";
-import { ONBOARDING_STEP_COMPLETED, SETUP_STARTED, ADD_BED_TYPE, REMOVE_BED_TYPE, SET_BED_SIZE, SET_BED_SUN, ADD_CROPS, SET_BED_SET_UP } from "../constants";
+import { SetOnboardingStepCompleted, StartSetup, AddBedType, RemoveBedType, SetBedSize, SetBedSun, AddCrops, SetBedSetUp, SetBedName } from "../actions";
+import { ONBOARDING_STEP_COMPLETED, SETUP_STARTED, ADD_BED_TYPE, REMOVE_BED_TYPE, SET_BED_SIZE, SET_BED_SUN, ADD_CROPS, SET_BED_SET_UP, SET_BED_NAME } from "../constants";
 import { LatLng } from "react-native-maps";
 import uniqueId from 'lodash-es/uniqueId';
+import uuidv1 from 'uuid/v1';
 import { ImageSourcePropType } from "react-native";
 
 export type BedProps = {
@@ -11,8 +12,9 @@ export type BedProps = {
 };
 
 export type Bed = {
-  type: string;
   id: string;
+  name: string;
+  type: string;
   sunHours?: number;
   size?: number;
 };
@@ -89,13 +91,9 @@ export const defaultGardenState: GardenState = {
 
 export default (
   state: GardenState = defaultGardenState,
-  action: SetOnboardingStepCompleted | StartSetup | AddBedType | RemoveBedType | SetBedSize | SetBedSun | AddCrops | SetBedSetUp
+  action: SetOnboardingStepCompleted | StartSetup | AddBedType | RemoveBedType | SetBedSize | SetBedSun | AddCrops | SetBedSetUp | SetBedName
 ) => {
   switch (action.type) {
-    case SETUP_STARTED:
-      return {
-        ...defaultGardenState
-      };
 
     case ONBOARDING_STEP_COMPLETED:
       return {
@@ -104,7 +102,8 @@ export default (
       };
 
     case ADD_BED_TYPE:
-    const id = uniqueId(action.attributes.bedType);
+    const name = uniqueId(action.attributes.bedType + " #");
+    const id = uuidv1();
       return {
         ...state,
         setup: {
@@ -118,8 +117,9 @@ export default (
           },
           beds: [...state.setup.beds,
             {
+              id,
+              name,
               type: action.attributes.bedType,
-              id: id
             }
           ]
         },
@@ -163,6 +163,23 @@ export default (
                   return {
                     ...item, 
                     size: action.attributes.size as number,
+                  }
+              }
+              return item;        
+          })
+        }
+    };
+    case SET_BED_NAME:
+      return {
+        ...state,
+        setup: {
+          ...state.setup,
+          beds: 
+            state.setup.beds.map((item : Bed) => {
+              if(item.id === action.attributes.bedId) {
+                  return {
+                    ...item, 
+                    name: action.attributes.name,
                   }
               }
               return item;        
