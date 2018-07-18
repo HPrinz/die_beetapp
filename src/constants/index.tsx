@@ -7,6 +7,9 @@ export type SET_BED_TYPES = typeof SET_BED_TYPES;
 export const ADD_BED_TYPE = "ADD_BED_TYPE";
 export type ADD_BED_TYPE = typeof ADD_BED_TYPE;
 
+export const SELECT_BED = "SELECT_BED";
+export type SELECT_BED = typeof SELECT_BED;
+
 export const REMOVE_BED_TYPE = "REMOVE_BED_TYPE";
 export type REMOVE_BED_TYPE = typeof REMOVE_BED_TYPE;
 

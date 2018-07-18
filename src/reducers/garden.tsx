@@ -1,5 +1,5 @@
 import { SetOnboardingStepCompleted, StartSetup, AddBedType, RemoveBedType, SetBedSize, SetBedSun, AddCrops, SetBedSetUp, SetBedName, SelectTask, LoadTasks, OtherActionResponse } from "../actions";
-import { ONBOARDING_STEP_COMPLETED, SETUP_STARTED, ADD_BED_TYPE, REMOVE_BED_TYPE, SET_BED_SIZE, SET_BED_SUN, ADD_CROPS, SET_BED_SET_UP, SET_BED_NAME, SELECT_TASK, SET_BED_ID_FOR_TASK, LOAD_TASKS, SET_LOCATION } from "../constants";
+import { ONBOARDING_STEP_COMPLETED, SETUP_STARTED, ADD_BED_TYPE, REMOVE_BED_TYPE, SET_BED_SIZE, SET_BED_SUN, ADD_CROPS, SET_BED_SET_UP, SET_BED_NAME, SELECT_TASK, SET_BED_ID_FOR_TASK, LOAD_TASKS, SET_LOCATION, SELECT_BED } from "../constants";
 import { LatLng } from "react-native-maps";
 import uniqueId from 'lodash-es/uniqueId';
 import uuidv1 from 'uuid/v1';
@@ -45,7 +45,7 @@ export const bedTypes : {[bedTypeId: string] : BedProps}= {
   'beet': {
     id: 'beet',
     name: "Beet",
-    image: require("../../assets/img/beet.jpg"),
+    image: require("../../assets/img/beet.png"),
   },
   'fruehbeet' : {
     id: 'fruehbeet',
@@ -55,7 +55,7 @@ export const bedTypes : {[bedTypeId: string] : BedProps}= {
   'hochbeet' : {
     id: 'hochbeet',
     name: "Hochbeet",
-    image: require("../../assets/img/hochbeet.jpg"),
+    image: require("../../assets/img/hochbeet.png"),
   },
   'kuebel_kasten': {
     id: 'kuebel_kasten',
@@ -65,7 +65,7 @@ export const bedTypes : {[bedTypeId: string] : BedProps}= {
   'gewaechshaus' : {
     id: 'gewaechshaus',
     name: "Gewächshaus",
-    image: require("../../assets/img/gewaechshaus.jpg"),
+    image: require("../../assets/img/gewaechshaus.png"),
   },
   'gewaechshaus_beheizt' : {
     id: 'gewaechshaus_beheizt',
@@ -168,6 +168,12 @@ export default (
           ]
         },
         selectedBedId: id
+      };
+      
+    case SELECT_BED:
+      return {
+        ...state,
+        selectedBedId: action.attributes.bedId
       };
 
     case REMOVE_BED_TYPE:

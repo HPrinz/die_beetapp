@@ -37,7 +37,6 @@ class TaskList extends React.Component<Props, State> {
     }
 
     render() {
-        console.log(JSON.stringify(this.props));
         return (
             <View>
                 <Card title="Tasks">

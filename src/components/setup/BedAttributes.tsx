@@ -70,7 +70,7 @@ class BedAttributes extends React.Component<Props, State> {
            <Link
           to="/bedtype"
           component={Button}
-          title="zurück"
+          title="fertig"
           onPress={() => this.props.onBack(bed.id)}
         />
 

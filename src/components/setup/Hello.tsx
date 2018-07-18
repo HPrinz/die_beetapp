@@ -31,7 +31,7 @@ class Hello extends React.Component<HelloProps, HelloState> {
     return (
       <View style={styles.root}>
         <Image style={styles.image} source={require('../../../assets/img/welcome.png')} resizeMode='contain'/>
-        <Link to="/crops" component={Button} title='Los' onPress={this.props.doStartSetup} />
+        <Link to="/bedtype" component={Button} title='Los' onPress={this.props.doStartSetup} />
       </View>
     );
   }

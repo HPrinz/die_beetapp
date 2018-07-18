@@ -21,6 +21,12 @@ export interface AddBedType {
     bedType: string;
   };
 }
+export interface SelectBed {
+  type: constants.SELECT_BED;
+  attributes: {
+    bedId: string;
+  };
+}
 
 export interface RemoveBedType {
   type: constants.REMOVE_BED_TYPE;
@@ -124,6 +130,15 @@ export function addBedType(bedType: string): AddBedType {
     type: constants.ADD_BED_TYPE,
     attributes: {
       bedType
+    }
+  };
+}
+
+export function selectBed(bedId: string): SelectBed {
+  return {
+    type: constants.SELECT_BED,
+    attributes: {
+      bedId
     }
   };
 }

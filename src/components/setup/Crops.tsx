@@ -52,7 +52,7 @@ class Crops extends React.Component<Props, State> {
         ))}
         </View>
 
-        <Link to="/bedtype" component={Button} title='Beete einrichten' onPress={() => this.props.setSetupStep()} />
+        <Link to="/" component={Button} title='Beete einrichten' onPress={() => this.props.setSetupStep()} />
       </View>
     );
   }
@@ -60,7 +60,7 @@ class Crops extends React.Component<Props, State> {
 
 function mapDispatchToProps(dispatch: Dispatch<OtherActionResponse>): DispatchToPropsType {
   return {
-    setSetupStep: () => dispatch(setOnboardingStepCompleted(2)),
+    setSetupStep: () => dispatch(setOnboardingStepCompleted(5)),
     selectCrops: (cropsId: string) => dispatch(addCrops(cropsId))
   }
 }

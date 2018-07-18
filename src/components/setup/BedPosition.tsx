@@ -144,7 +144,7 @@ class BedPostion extends React.Component<Props, State> {
           flex: 1, flexDirection: 'column', justifyContent: 'space-around', alignItems: 'stretch', 
         }}>
           <Text>Temperatur:{this.state.temperature || '...'}</Text>
-          <Link to="/" component={Button} title='Fertig!' onPress={() => this.props.setLocation(this.state.region.latitude, this.state.region.longitude)}/>
+          <Link to="/crops" component={Button} title='Fertig!' onPress={() => this.props.setLocation(this.state.region.latitude, this.state.region.longitude)}/>
         </View>
       </View>
     );
@@ -153,7 +153,7 @@ class BedPostion extends React.Component<Props, State> {
 
 function mapDispatchToProps(dispatch: Dispatch<OtherActionResponse>): DispatchToPropsType {
   return {
-    setLocation: (latitude: number, longitude: number) => {dispatch(setLocation(latitude, longitude)); dispatch(setOnboardingStepCompleted(5))}
+    setLocation: (latitude: number, longitude: number) => {dispatch(setLocation(latitude, longitude)); dispatch(setOnboardingStepCompleted(4))}
   }
 }
 
