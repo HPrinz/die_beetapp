@@ -135,12 +135,7 @@ export const defaultGardenState: GardenState = {
     beds: [],
   },
   selectedTaskId: undefined,
-  tasks: [{
-    id: '1',
-    taskType: "giessen",
-    bedId: "",
-    done: false
-  }],
+  tasks: [],
   selectedBedId: undefined
 };
 

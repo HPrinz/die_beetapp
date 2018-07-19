@@ -52,7 +52,7 @@ class Crops extends React.Component<Props, State> {
         ))}
         </View>
 
-        <Link to="/" component={Button} title='Beete einrichten' onPress={() => this.props.setSetupStep()} />
+        <Link to="/" component={Button} title='Fertig!' onPress={() => this.props.setSetupStep()} />
       </View>
     );
   }
