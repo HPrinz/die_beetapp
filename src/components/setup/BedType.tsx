@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View, Image } from "react-native";
+import { StyleSheet, View, Image, FlatList, ListView } from "react-native";
 import { RouteComponentProps, withRouter , Link } from "react-router-native";
 import { Button, Badge, Text, ListItem } from "react-native-elements";
 import { connect } from "react-redux";
@@ -50,23 +50,21 @@ class BedType extends React.Component<BedTypeProps, State> {
         <View style={styles.row}>
           {Object.values(bedTypes).map((bed: BedProps) => (
             <View key={bed.id} style={styles.item} >
-              <Image style={{flex:1, height: tileWidth/2, width: tileWidth}} source={bed.image} resizeMode="contain" />
               <Text style={styles.tileText}>{bed.name}</Text>
+              <Image style={{flex:1, height: tileWidth/2, width: tileWidth}} source={bed.image} resizeMode="contain" />
 
-               {/* <Card title="Tasks"> */}
-                    {this.props.beds.filter(b => b.typeId === bed.id).map(u => (
-                        <Link
-                        key={u.id}
-                        to="/bedattributes"
-                        onPress={() => this.props.selectBed(u.id)}
-                        component={ListItem}
-                        title={u.name}
-                        titleStyle={{ fontSize: 12 }}
-                        bottomDivider
-                        />)
-                    )}
-                {/* </Card> */}
-  
+              {this.props.beds.filter(b => b.typeId === bed.id).map(u => (
+                  <Link
+                  key={u.id}
+                  to="/bedattributes"
+                  onPress={() => this.props.selectBed(u.id)}
+                  component={ListItem}
+                  title={u.name}
+                  titleStyle={{ fontSize: 12 }}
+                  bottomDivider
+                  chevron
+                  />)
+              )}
               
               {/* <View style={styles.hor}> */}
                 {/* <Badge containerStyle={{borderRadius: 0, height: '100%'}} value={.length } textStyle={{ color: 'orange' }}/> */}

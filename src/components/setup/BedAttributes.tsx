@@ -72,6 +72,7 @@ class BedAttributes extends React.Component<Props, State> {
           component={Button}
           title="fertig"
           onPress={() => this.props.onBack(bed.id)}
+          style={{margin: 10}}
         />
 
       </View>
