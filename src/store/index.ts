@@ -6,13 +6,13 @@ import reducers, { RootState } from "../reducers";
 import { defaultGardenState } from "../reducers/garden";
 
 const persistConfig = {
-  key: 'die_beetapp_4',
+  key: 'die_beetapp_5',
   storage,
 }
 
 export const persistedReducer = persistReducer(persistConfig, reducers)
 
-export default (initialState = { garden: defaultGardenState} as RootState ) => {
+export default (initialState = { garden: defaultGardenState } as RootState) => {
   const middlewares: Middleware[] = [];
 
   const store = createStore(

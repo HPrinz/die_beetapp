@@ -1,46 +1,52 @@
-import { OtherActionResponse } from "./action.type";
-import { weatherApiUrl, weatherApiKey } from "../config";
 
-export type GetWeatherActionResponse = {
-    location: string,
-    forecast: any,
-    feelsLike: any,
-    current: any,
-    low: string,
-    high: string,
-    icon: string
-    };
+import { weatherApiUrl, weatherApiKey } from "../config";
+import * as constants from "../constants";
+import Weather from "../reducers/weather";
+import { LatLng } from "react-native-maps";
+import { OtherActionResponse } from ".";
+
+export interface GetWeatherActionResponse {
+  type: constants.GET_WEATHER,
+  attributes: {
+    weather: Weather
+  }
+};
 
 export type LocationActionResponse = GetWeatherActionResponse | OtherActionResponse;
 
 export type GetWeatherAction = (location: string) => GetWeatherActionResponse;
 
-export async function getWeather(lat: number, lon :number) {
-    const url = `${weatherApiUrl}/weather?lat=${lat}&lon=${lon}&units=metric&appid=${weatherApiKey}`;
-    
-    try {
-      let response = await fetch(url);
+export function getWeather(): GetWeatherActionResponse {
+  const url = `${weatherApiUrl}/weather?lat=${100}&lon=${100}&units=metric&appid=${weatherApiKey}`;
 
-      return await response.json();
+  try {
+    let response = fetch(url);
 
-      // return {
-      //   location: result.name,
-      //   forecast: result.weather[0].main,
-      //   feelsLike: (result.main.temp_min | 0),
-      //   current: (result.main.temp | 0),
-      // };
-    } catch(error) {
-      console.log(error);
-      return {
-        location: '',
-        forecast: '',
-        feelsLike: '',
-        current: '',
-        low: '',
-        high: '',
-        icon: ''
-      };
-    }
+    return {
+      type: constants.GET_WEATHER,
+      attributes: {
+        weather: {
+          temp_max: 10,
+        }
+      }
+    } as GetWeatherActionResponse;
+
+    // return {
+    //   location: result.name,
+    //   forecast: result.weather[0].main,
+    //   feelsLike: (result.main.temp_min | 0),
+    //   current: (result.main.temp | 0),
+    // };
+  } catch (error) {
+    console.log(error);
+    return {
+      type: constants.GET_WEATHER,
+      attributes: {
+        weather: {
+        }
+      }
+    } as GetWeatherActionResponse;
+  }
 }
 
 

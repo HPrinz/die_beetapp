@@ -6,7 +6,6 @@ import { Input, Button, Text } from "react-native-elements";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
 
-import { getWeather } from "../../actions/getWeather";
 import { setOnboardingStepCompleted, OtherActionResponse, setLocation } from "../../actions";
 
 type OwnProps = {};
@@ -14,7 +13,7 @@ type OwnProps = {};
 type StateToPropsType = {};
 
 type DispatchToPropsType = {
-  setLocation: (latitude: number, longitude:number) => void;
+  setLocation: (latitude: number, longitude: number) => void;
 };
 
 export type Props = RouteComponentProps<{}> &
@@ -70,10 +69,6 @@ class BedPostion extends React.Component<Props, State> {
 
   setRegion(region: Region) {
     this.setState({ ...this.state, region });
-    getWeather(region.latitude, region.longitude).then((weather) => {
-      // Alert.alert(JSON.stringify(weather));
-      this.setState({...this.state, temperature: weather.main.temp})
-    });
   }
 
   componentDidMount() {
@@ -96,8 +91,8 @@ class BedPostion extends React.Component<Props, State> {
           //TODO: better design
           switch (error.code) {
             case 1:
-            Alert.alert("", "ERROR 1");
-            break;
+              Alert.alert("", "ERROR 1");
+              break;
             default:
               Alert.alert("", "ERROR DEFAULT");
           }
@@ -112,8 +107,8 @@ class BedPostion extends React.Component<Props, State> {
     return (
 
       <View style={styles.fulscreen}>
-          <Text h4>Gartenort</Text>
-          {/* <View style={{
+        <Text h4>Gartenort</Text>
+        {/* <View style={{
             flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'stretch', 
           }}>
           <Input placeholder='Berlin' value={this.state.place} onChangeText={(text: any) => this.setState({ place: text })}/>
@@ -125,11 +120,11 @@ class BedPostion extends React.Component<Props, State> {
 
           <MapView
             showsUserLocation
-            ref={map => { if(this.state.map == null) this.setState({...this.state, map })}}
+            ref={map => { if (this.state.map == null) this.setState({ ...this.state, map }) }}
             initialRegion={initialRegion}
             showsMyLocationButton={false}
             style={{ flex: 1 }}
-            onMapReady={() => {this.setState({...this.state, ready: true}); this.getCurrentPosition();}}
+            onMapReady={() => { this.setState({ ...this.state, ready: true }); this.getCurrentPosition(); }}
             onRegionChange={this.setRegion}>
 
             {!!this.state.region.latitude && !!this.state.region.longitude && <Marker
@@ -138,14 +133,13 @@ class BedPostion extends React.Component<Props, State> {
             />}
 
           </MapView>
-                    
+
         </View>
         <View style={{
-          flex: 1, flexDirection: 'column', justifyContent: 'space-around', alignItems: 'stretch', 
+          flex: 1, flexDirection: 'column', justifyContent: 'space-around', alignItems: 'stretch',
         }}>
-          <Text>Temperatur:{this.state.temperature || '...'}</Text>
-          <Link to="/crops" component={Button} title='Fertig!' onPress={() => this.props.setLocation(this.state.region.latitude, this.state.region.longitude)}/>
         </View>
+        <Link to="/crops" component={Button} title='Fertig!' onPress={() => this.props.setLocation(this.state.region.latitude, this.state.region.longitude)} />
       </View>
     );
   }
@@ -153,7 +147,7 @@ class BedPostion extends React.Component<Props, State> {
 
 function mapDispatchToProps(dispatch: Dispatch<OtherActionResponse>): DispatchToPropsType {
   return {
-    setLocation: (latitude: number, longitude: number) => {dispatch(setLocation(latitude, longitude)); dispatch(setOnboardingStepCompleted(4))}
+    setLocation: (latitude: number, longitude: number) => { dispatch(setLocation(latitude, longitude)); dispatch(setOnboardingStepCompleted(4)) }
   }
 }
 
@@ -165,7 +159,7 @@ const styles = StyleSheet.create({
     width: window.width,
     height: window.height - 60,
     alignItems: "center",
-    justifyContent: 'flex-start', 
+    justifyContent: 'flex-start',
     flex: 1,
   },
   root: {

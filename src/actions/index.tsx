@@ -1,9 +1,9 @@
 import * as constants from "../constants";
-import { GardenModel } from "../models/Garden";
+import { LatLng } from "react-native-maps";
 
-export interface OtherActionResponse { 
+export interface OtherActionResponse {
   type: string;
-  attributes : any 
+  attributes: any
 }
 
 export const OtherActionResponse: OtherActionResponse = { type: "", attributes: {} };
@@ -110,7 +110,7 @@ export interface SetBedIdForTask {
 
 // ---------------------------------
 
-export function startSetup() : StartSetup {
+export function startSetup(): StartSetup {
   return {
     type: constants.SETUP_STARTED
   }
@@ -170,7 +170,7 @@ export function setBedSetUp(bedId: string): SetBedSetUp {
     }
   };
 }
-export function setBedName(bedId: string, name : string): SetBedName {
+export function setBedName(bedId: string, name: string): SetBedName {
   return {
     type: constants.SET_BED_NAME,
     attributes: {
@@ -214,7 +214,7 @@ export function selectTask(taskId: string | undefined): SelectTask {
     }
   };
 }
-export function setBedForTask(taskId: string, bedId : string): SetBedIdForTask {
+export function setBedForTask(taskId: string, bedId: string): SetBedIdForTask {
   return {
     type: constants.SET_BED_ID_FOR_TASK,
     attributes: {

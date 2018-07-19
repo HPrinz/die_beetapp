@@ -1,14 +1,16 @@
 import { SetOnboardingStepCompleted, StartSetup, AddBedType, RemoveBedType, SetBedSize, SetBedSun, AddCrops, SetBedSetUp, SetBedName, SelectTask, LoadTasks, OtherActionResponse } from "../actions";
-import { ONBOARDING_STEP_COMPLETED, SETUP_STARTED, ADD_BED_TYPE, REMOVE_BED_TYPE, SET_BED_SIZE, SET_BED_SUN, ADD_CROPS, SET_BED_SET_UP, SET_BED_NAME, SELECT_TASK, SET_BED_ID_FOR_TASK, LOAD_TASKS, SET_LOCATION, SELECT_BED } from "../constants";
+import { ONBOARDING_STEP_COMPLETED, SETUP_STARTED, ADD_BED_TYPE, REMOVE_BED_TYPE, SET_BED_SIZE, SET_BED_SUN, ADD_CROPS, SET_BED_SET_UP, SET_BED_NAME, SELECT_TASK, SET_BED_ID_FOR_TASK, LOAD_TASKS, SET_LOCATION, SELECT_BED, GET_WEATHER } from "../constants";
 import { LatLng } from "react-native-maps";
 import uniqueId from 'lodash-es/uniqueId';
 import uuidv1 from 'uuid/v1';
 import { ImageSourcePropType } from "react-native";
+import Weather, { WeatherModel } from "./weather";
+import getWeather from "../actions/getWeather";
 
 export type BedProps = {
   name: string;
   image: ImageSourcePropType;
-  id : string
+  id: string
 };
 
 export type Bed = {
@@ -41,18 +43,18 @@ export interface Task {
   bedId: string;
 }
 
-export const bedTypes : {[bedTypeId: string] : BedProps}= {
+export const bedTypes: { [bedTypeId: string]: BedProps } = {
   'beet': {
     id: 'beet',
     name: "Beet",
     image: require("../../assets/img/beet.png"),
   },
-  'fruehbeet' : {
+  'fruehbeet': {
     id: 'fruehbeet',
     name: "Frühbeet",
     image: require("../../assets/img/fruehbeet.png"),
   },
-  'hochbeet' : {
+  'hochbeet': {
     id: 'hochbeet',
     name: "Hochbeet",
     image: require("../../assets/img/hochbeet.png"),
@@ -62,19 +64,19 @@ export const bedTypes : {[bedTypeId: string] : BedProps}= {
     name: "Kübel/Kasten",
     image: require("../../assets/img/kuebel.png"),
   },
-  'gewaechshaus' : {
+  'gewaechshaus': {
     id: 'gewaechshaus',
     name: "Gewächshaus",
     image: require("../../assets/img/gewaechshaus.png"),
   },
-  'gewaechshaus_beheizt' : {
+  'gewaechshaus_beheizt': {
     id: 'gewaechshaus_beheizt',
     name: "Gewächshaus (beheizt)",
     image: require("../../assets/img/gewaechshaus_beheizt.png"),
   }
 };
 
-export const cropTypes: Crop[] = [ {
+export const cropTypes: Crop[] = [{
   id: 'tomato',
   name: 'Tomate',
   image: require("../../assets/img/tomate.png"),
@@ -85,8 +87,8 @@ export const cropTypes: Crop[] = [ {
   image: require("../../assets/img/salat.png"),
 }];
 
-export const taskTypes: {[id: string]: TaskType} = {
-  'saen': { 
+export const taskTypes: { [id: string]: TaskType } = {
+  'saen': {
     id: "saen",
     name: "Säen",
     description: "",
@@ -110,18 +112,20 @@ export const taskTypes: {[id: string]: TaskType} = {
     icon: require("../../assets/img/tomate.png"),
     image: require("../../assets/img/tomate.png"),
     metadata: {}
-  }};
+  }
+};
 
 export type GardenState = {
   setupStep: number,
   setup: {
     beds: Bed[],
     location?: LatLng,
-    crops: {[cropsId: string]: boolean} ,
+    crops: { [cropsId: string]: boolean },
   },
-  selectedBedId : string | undefined,
+  selectedBedId: string | undefined,
   selectedTaskId: string | undefined;
   tasks: Task[];
+  weather?: Weather;
 }
 
 export const defaultGardenState: GardenState = {
@@ -132,12 +136,12 @@ export const defaultGardenState: GardenState = {
   },
   selectedTaskId: undefined,
   tasks: [{
-      id: '1',
-      taskType: "giessen",
-      bedId: "",
-      done: false
-    }],
-  selectedBedId : undefined
+    id: '1',
+    taskType: "giessen",
+    bedId: "",
+    done: false
+  }],
+  selectedBedId: undefined
 };
 
 export default (
@@ -153,23 +157,23 @@ export default (
       };
 
     case ADD_BED_TYPE:
-    const name = uniqueId(bedTypes[action.attributes.bedType].name + " #");
-    const id = uuidv1();
+      const name = uniqueId(bedTypes[action.attributes.bedType].name + " #");
+      const id = uuidv1();
       return {
         ...state,
         setup: {
           ...state.setup,
           beds: [...state.setup.beds,
-            {
-              id,
-              name,
-              typeId: action.attributes.bedType,
-            }
+          {
+            id,
+            name,
+            typeId: action.attributes.bedType,
+          }
           ]
         },
         selectedBedId: id
       };
-      
+
     case SELECT_BED:
       return {
         ...state,
@@ -178,7 +182,7 @@ export default (
 
     case REMOVE_BED_TYPE:
       const bed = state.setup.beds.find(x => x.id === action.attributes.bedId)
-      if(!bed){
+      if (!bed) {
         return state;
       }
 
@@ -186,12 +190,12 @@ export default (
         ...state,
         setup: {
           ...state.setup,
-          beds: 
-            state.setup.beds.filter((item : Bed) => {
-              if(item.id !== action.attributes.bedId) {
-                  return item;
+          beds:
+            state.setup.beds.filter((item: Bed) => {
+              if (item.id !== action.attributes.bedId) {
+                return item;
               }
-          })
+            })
         }
       };
 
@@ -200,51 +204,51 @@ export default (
         ...state,
         setup: {
           ...state.setup,
-          beds: 
-            state.setup.beds.map((item : Bed) => {
-              if(item.id === action.attributes.bedId) {
-                  return {
-                    ...item, 
-                    size: action.attributes.size as number,
-                  }
+          beds:
+            state.setup.beds.map((item: Bed) => {
+              if (item.id === action.attributes.bedId) {
+                return {
+                  ...item,
+                  size: action.attributes.size as number,
+                }
               }
-              return item;        
-          })
+              return item;
+            })
         }
-    };
+      };
     case SET_BED_NAME:
       return {
         ...state,
         setup: {
           ...state.setup,
-          beds: 
-            state.setup.beds.map((item : Bed) => {
-              if(item.id === action.attributes.bedId) {
-                  return {
-                    ...item, 
-                    name: action.attributes.name,
-                  }
+          beds:
+            state.setup.beds.map((item: Bed) => {
+              if (item.id === action.attributes.bedId) {
+                return {
+                  ...item,
+                  name: action.attributes.name,
+                }
               }
-              return item;        
-          })
+              return item;
+            })
         }
-    };
+      };
 
     case SET_BED_SUN:
       return {
         ...state,
         setup: {
           ...state.setup,
-          beds: 
-            state.setup.beds.map((item : Bed) => {
-              if(item.id === action.attributes.bedId) {
-                  return {
-                    ...item, 
-                    sunHours: action.attributes.sunHours
-                  }
+          beds:
+            state.setup.beds.map((item: Bed) => {
+              if (item.id === action.attributes.bedId) {
+                return {
+                  ...item,
+                  sunHours: action.attributes.sunHours
+                }
               }
-              return item;     
-          })
+              return item;
+            })
         }
       };
 
@@ -259,13 +263,13 @@ export default (
         ...state,
         setup: {
           ...state.setup,
-          crops: { 
+          crops: {
             ...state.setup.crops,
-            [action.attributes.cropsId] : !state.setup.crops[action.attributes.cropsId]
-            }
+            [action.attributes.cropsId]: !state.setup.crops[action.attributes.cropsId]
           }
-        };
-   
+        }
+      };
+
     case SELECT_TASK:
       return {
         ...state,
@@ -289,7 +293,7 @@ export default (
     case SET_LOCATION:
       return {
         ...state,
-        setup : {
+        setup: {
           ...state.setup,
           location: {
             latitude: action.attributes.lat,
@@ -299,7 +303,7 @@ export default (
       };
 
     case LOAD_TASKS:
-    let tasks : Task[] = []
+      let tasks: Task[] = []
       state.setup.beds.filter(element => element.typeId !== 'gewaechshaus').forEach((element, index) => {
         tasks.push({
           bedId: element.id,
@@ -321,6 +325,12 @@ export default (
         ...state,
         tasks
       };
+
+    case GET_WEATHER:
+      return {
+        ...state,
+        weather: action.attributes,
+      }
 
     default:
       return state;

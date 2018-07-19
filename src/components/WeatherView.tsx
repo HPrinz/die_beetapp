@@ -1,51 +1,71 @@
-import React from 'react';
-import { RouteComponentProps, withRouter } from "react-router-native";
-import { StyleSheet, Text, View } from 'react-native';
-import { CheckBox, Button, Card } from "react-native-elements";
-import { Link } from "react-router-native";
+import React from "react";
+import { StyleSheet, View, ImageSourcePropType, } from "react-native";
+import { RouteComponentProps, withRouter, Link } from "react-router-native";
+import { Button, Card, ListItem, Text } from "react-native-elements";
+import { connect } from "react-redux";
+import { Dispatch } from "redux";
 
-import Weather from '../models/Weather';
+import Weather from '../reducers/weather';
+import { getWeather } from "../actions/getWeather";
+import { RootState } from '../reducers';
+import { LatLng } from 'react-native-maps';
+import { OtherActionResponse, selectTask } from '../actions';
 
 type OwnProps = {
-    Weather: Weather
+
 };
 
-type StateToPropsType = {};
+type StateToPropsType = {
+    location: LatLng | undefined;
+    weather: Weather | undefined
+};
 
-type DispatchToPropsType = {};
+type DispatchToPropsType = {
+    getWeather: () => void;
+};
 
 type State = {
 };
 
-export type Props = RouteComponentProps<{}> &
-    OwnProps &
+export type Props = OwnProps &
     StateToPropsType &
-    DispatchToPropsType & State;
+    DispatchToPropsType;
 
 class WeatherView extends React.Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
+
+
     }
 
-    get item() {
-        return this.props.Weather;
-    }
+
 
     render() {
         return (
             <Card title="Wetter">
                 <Text>Hier die Wetterdaten</Text>
-                <Link to="/" component={Button} title='zurück' />
+                <Text>Temperatur:{this.props.weather !== undefined ? JSON.stringify(this.props.weather) : '...'}</Text>
             </Card>
         );
     }
 
 }
 
+function mapStateToProps(state: RootState): StateToPropsType {
+    return {
+        location: state.garden.setup.location,
+        weather: state.garden.weather
+    }
+}
+
+function mapDispatchToProps(dispatch: Dispatch<OtherActionResponse>): DispatchToPropsType {
+    return {
+        getWeather: () => dispatch(getWeather()),
+    }
+};
+
 export { WeatherView as PureComponent };
-export default withRouter(WeatherView);
-
-const styles = StyleSheet.create({
-
-});
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps)(WeatherView);
