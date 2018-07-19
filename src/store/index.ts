@@ -12,7 +12,7 @@ const persistConfig = {
 
 export const persistedReducer = persistReducer(persistConfig, reducers)
 
-export default (initialState = { garden: defaultGardenState} as RootState ) => {
+export default (initialState = { garden: defaultGardenState } as RootState) => {
   const middlewares: Middleware[] = [];
 
   const store = createStore(

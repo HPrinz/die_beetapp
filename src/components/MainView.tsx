@@ -4,11 +4,13 @@ import {
   StyleSheet,
 } from "react-native";
 import { connect } from "react-redux";
-import { Redirect } from "react-router-native";
+import { Redirect, Link } from "react-router-native";
 
 import { RootState } from "../reducers";
 import TaskList from "./tasks/TaskList";
 import { Task } from "../reducers/garden";
+import { Button } from "react-native-elements";
+import WeatherView from "./WeatherView";
 
 type OwnPropsType = {
 };
@@ -37,10 +39,10 @@ class MainView extends React.Component<MainProps, MainState> {
     return (
 
       <View style={styles.root}>
-        {this.props.isSetUp  === false ? <Redirect to="/hello" push /> : 
-        this.props.selectedTask !== undefined ? <Redirect to="/taskdetail" push /> : 
-        <TaskList/> }
-
+        {this.props.isSetUp === false ? <Redirect to="/hello" push /> :
+          this.props.selectedTask !== undefined ? <Redirect to="/taskdetail" push /> :
+            <TaskList />}
+        <WeatherView />
       </View>
     );
   }
@@ -49,11 +51,11 @@ class MainView extends React.Component<MainProps, MainState> {
 const mapStateToProps = (state: RootState): StateToPropsType => ({
   isSetUp: state.garden.setupStep == 5,
   taskList: state.garden.tasks,
-  selectedTask : state.garden.selectedTaskId,
+  selectedTask: state.garden.selectedTaskId,
 });
 
 const mapDispatchToProps: DispatchToPropsType = {
-  
+
 };
 
 export { MainView as PureComponent };

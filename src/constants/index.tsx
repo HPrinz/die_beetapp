@@ -45,3 +45,6 @@ export type SET_BED_ID_FOR_TASK = typeof SET_BED_ID_FOR_TASK;
 
 export const MARK_TASK_RESOLVED = "MARK_TASK_RESOLVED";
 export type MARK_TASK_RESOLVED = typeof MARK_TASK_RESOLVED;
+
+export const GET_WEATHER = "GET_WEATHER";
+export type GET_WEATHER = typeof GET_WEATHER;
