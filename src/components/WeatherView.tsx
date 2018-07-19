@@ -16,7 +16,7 @@ type OwnProps = {
 };
 
 type StateToPropsType = {
-    location: LatLng | undefined;
+    bedLocation: LatLng | undefined;
     weather: Weather | undefined
 };
 
@@ -27,7 +27,8 @@ type DispatchToPropsType = {
 type State = {
 };
 
-export type Props = OwnProps &
+export type Props = RouteComponentProps<{}> &
+    OwnProps &
     StateToPropsType &
     DispatchToPropsType;
 
@@ -54,7 +55,7 @@ class WeatherView extends React.Component<Props, State> {
 
 function mapStateToProps(state: RootState): StateToPropsType {
     return {
-        location: state.garden.setup.location,
+        bedLocation: state.garden.setup.location,
         weather: state.garden.weather
     }
 }
@@ -66,6 +67,6 @@ function mapDispatchToProps(dispatch: Dispatch<OtherActionResponse>): DispatchTo
 };
 
 export { WeatherView as PureComponent };
-export default connect(
+export default withRouter(connect(
     mapStateToProps,
-    mapDispatchToProps)(WeatherView);
+    mapDispatchToProps)(WeatherView));

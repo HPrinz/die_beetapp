@@ -8,9 +8,10 @@ import { Dispatch } from "redux";
 
 import { RootState } from "../../reducers";
 import { selectTask, markTaskResolved, OtherActionResponse, loadTasks } from "../../actions";
-import { Bed, Task, taskTypes } from "../../reducers/garden";
+import { Bed, Task } from "../../reducers/garden";
 import { LatLng } from "react-native-maps";
 import { getWeather } from "../../actions/getWeather";
+import { taskTypes } from "../../data/tasks";
 
 type OwnProps = {};
 
@@ -60,7 +61,7 @@ class TaskList extends React.Component<Props, State> {
                 <Button title='Tasks aktualisieren' onPress={() => this.props.loadTasks()} style={styles.button} />
                 <Button title='Tasks aktualisieren' onPress={() => this.props.getWeather(this.props.bedLocation)} style={styles.button} />
                 <Link to="/hello" component={Button} title='Garten einrichten' style={styles.button} />
-            </View>
+            </View >
         );
     }
 }

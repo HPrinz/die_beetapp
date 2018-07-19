@@ -1,13 +1,14 @@
 import React from "react";
-import { StyleSheet, Text} from "react-native";
+import { StyleSheet, Text, Image} from "react-native";
 import { Card, Button } from "react-native-elements";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
 import { RouteComponentProps, withRouter, Link } from "react-router-native";
 
 import { RootState } from "../../reducers";
-import { Bed, Task, taskTypes } from "../../reducers/garden";
+import { Bed, Task, cropTypes, Crop } from "../../reducers/garden";
 import { selectTask, OtherActionResponse, setBedForTask, markTaskResolved } from "../../actions";
+import { taskTypes } from "../../data/tasks";
 
 type OwnProps = {};
 
@@ -43,9 +44,10 @@ class TaskDetailItem extends React.Component<Props, State> {
     }
     return (
       <Card title={taskTypes[task.taskType].name} image={taskTypes[task.taskType].icon} imageStyle={{height: 20, width: 20, flex: 1, alignSelf: 'center'}} >
+        <Image style={{flex: 1, width: 250, height: 200}} source={taskTypes[task.taskType].image} resizeMode="contain" />
         <Text>{taskTypes[task.taskType].description}</Text>
-        <Text>Beet:</Text>
-        <Text>(this.props.beds.find(bed => bed.id === u.bedId) ? (this.props.beds.find(bed => bed.id === u.bedId) as Bed).name : '')</Text>
+        <Text>Beet: {task.bedId && this.props.beds.find(bed => bed.id === task.bedId) ? (this.props.beds.find(bed => bed.id === task.bedId) as Bed).name : ''}</Text>
+        <Text>Kultur: {task.cropId && cropTypes.find(crop => crop.id === (task.cropId as string)) ? (cropTypes.find(crop => crop.id === (task.cropId as string)) as Crop).name : ''}</Text>
         <Button onPress={() => this.props.onMarkTaskResolved(task.id)} title='erledigt'></Button>
         <Link to="/" component={Button} onPress={() => this.props.onBack()} title='zurück' />
       </Card>
