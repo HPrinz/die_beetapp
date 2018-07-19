@@ -31,10 +31,22 @@ export type Props = RouteComponentProps<{}> &
 type State = {
 };
 
+function getSunAsName(sunHours: number) : string{
+  if(sunHours < 3){
+    return 'schattig';
+   }
+   if(sunHours > 5){
+     return  'sonnig';
+    }
+    return 'halbschattig'
+}
+
 class BedAttributes extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
   }
+
+ 
 
   render() {
     const {bed} = this.props;
@@ -55,7 +67,7 @@ class BedAttributes extends React.Component<Props, State> {
             <Text style={{marginTop: 15, fontSize: 16, color: '#0C6E5D'}}>Beetstandort einstellen:</Text>
             <View >
               <Slider
-                value={bed.sunHours || 0}
+                value={bed.sunHours || 4}
                 minimumValue={0}
                 maximumValue={10}
                 step={1}
@@ -63,7 +75,7 @@ class BedAttributes extends React.Component<Props, State> {
                 onValueChange={value => this.props.setBedSun(bed.id, value)}
                 style={{width: '80%', flex: 1, alignSelf: 'center'}}
               />
-              <Text style={{textAlign: 'center'}}>Mindestens {bed.sunHours} Sonnenstunden</Text>
+              <Text style={{textAlign: 'center'}}>{bed.sunHours} Sonnenstunden - {getSunAsName(bed.sunHours || 4)}}</Text>
             </View>
           </Card>
 

@@ -8,7 +8,8 @@ import { Dispatch } from "redux";
 
 import { RootState } from "../../reducers";
 import { selectTask, markTaskResolved, OtherActionResponse, loadTasks } from "../../actions";
-import { Bed, Task, taskTypes } from "../../reducers/garden";
+import { Bed, Task } from "../../reducers/garden";
+import { taskTypes } from "../../data/tasks";
 
 type OwnProps = {};
 
