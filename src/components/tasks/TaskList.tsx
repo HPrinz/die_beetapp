@@ -17,7 +17,7 @@ type OwnProps = {};
 type StateToPropsType = {
     taskList: Task[];
     beds: Bed[];
-    location: LatLng | undefined;
+    bedLocation: LatLng;
 };
 
 type DispatchToPropsType = {
@@ -58,7 +58,7 @@ class TaskList extends React.Component<Props, State> {
                 </Card>
 
                 <Button title='Tasks aktualisieren' onPress={() => this.props.loadTasks()} style={styles.button} />
-                <Button title='Tasks aktualisieren' onPress={() => this.props.getWeather(this.props.location)} style={styles.button} />
+                <Button title='Tasks aktualisieren' onPress={() => this.props.getWeather(this.props.bedLocation)} style={styles.button} />
                 <Link to="/hello" component={Button} title='Garten einrichten' style={styles.button} />
             </View>
         );
@@ -69,7 +69,7 @@ function mapStateToProps(state: RootState): StateToPropsType {
     return {
         taskList: state.garden.tasks,
         beds: state.garden.setup.beds,
-        location: state.garden.setup.location,
+        bedLocation: state.garden.setup.location as LatLng,
     }
 }
 
@@ -84,9 +84,9 @@ function mapDispatchToProps(dispatch: Dispatch<OtherActionResponse>): DispatchTo
 
 
 export { TaskList as PureComponent };
-export default connect(
+export default withRouter(connect(
     mapStateToProps,
-    mapDispatchToProps)(TaskList);
+    mapDispatchToProps)(TaskList));
 
 const styles = StyleSheet.create({
     button: {

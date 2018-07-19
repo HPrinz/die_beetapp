@@ -16,28 +16,74 @@ export type LocationActionResponse = GetWeatherActionResponse | OtherActionRespo
 
 export type GetWeatherAction = (location: string) => GetWeatherActionResponse;
 
-export function getWeather(): GetWeatherActionResponse {
-  const url = `${weatherApiUrl}/weather?lat=${100}&lon=${100}&units=metric&appid=${weatherApiKey}`;
+type OpenWeatherType = {
+  main:
+  {
+    //Temperature. Unit Default: Kelvin, Metric: Celsius, Imperial: Fahrenheit. 
+    temp: number,
+    //Humidity, %
+    humidity: number,
+    //Minimum temperature at the moment. This is deviation from current temp that is possible for large cities and megalopolises geographically expanded (use these parameter optionally). Unit Default: Kelvin, Metric: Celsius, Imperial: Fahrenheit.
+    temp_min: number,
+    //Maximum temperature at the moment. This is deviation from current temp that is possible for large cities and megalopolises geographically expanded (use these parameter optionally). Unit Default: Kelvin, Metric: Celsius, Imperial: Fahrenheit.
+    temp_max: number
+    clouds:
+    {
+      //Cloudiness, percent
+      all: number,
+    },
+    rain:
+    {
+      //Rain volume for the last 3 hours
+      "3h": number,
+    },
+    //Time of data calculation, unix, UTC 
+    dt: number,
+    sys: {
+      //time, unix, UTC
+      sunrise: number,
+      //time, unix, UTC
+      sunset: number,
+    },
+  }
+};
+
+export function getWeather(location: LatLng): GetWeatherActionResponse {
+  const url = `${weatherApiUrl}/weather?lat=${location.latitude}&lon=${location.longitude}&units=metric&appid=${weatherApiKey}`;
 
   try {
-    let response = fetch(url);
+    var openweather: OpenWeatherType;
+
+    const request = async () => {
+      const response = await fetch(url);
+      const json = await response.json();
+
+      console.log(json);
+
+      openweather = json as OpenWeatherType;
+
+      return {
+        type: constants.GET_WEATHER,
+        attributes: {
+          weather: {
+            temp: openweather.main.temp
+          }
+        }
+      } as GetWeatherActionResponse;
+
+    };
 
     return {
       type: constants.GET_WEATHER,
       attributes: {
         weather: {
-          temp_max: 10,
+          temp: 42
         }
       }
     } as GetWeatherActionResponse;
 
-    // return {
-    //   location: result.name,
-    //   forecast: result.weather[0].main,
-    //   feelsLike: (result.main.temp_min | 0),
-    //   current: (result.main.temp | 0),
-    // };
-  } catch (error) {
+  }
+  catch (error) {
     console.log(error);
     return {
       type: constants.GET_WEATHER,
@@ -47,6 +93,7 @@ export function getWeather(): GetWeatherActionResponse {
       }
     } as GetWeatherActionResponse;
   }
+
 }
 
 
