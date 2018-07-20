@@ -48,3 +48,6 @@ export type MARK_TASK_RESOLVED = typeof MARK_TASK_RESOLVED;
 
 export const GET_WEATHER = "GET_WEATHER";
 export type GET_WEATHER = typeof GET_WEATHER;
+
+export const SET_WEATHER = "SET_WEATHER";
+export type SET_WEATHER = typeof SET_WEATHER;

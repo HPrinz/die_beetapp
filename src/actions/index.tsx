@@ -1,5 +1,6 @@
 import * as constants from "../constants";
 import { LatLng } from "react-native-maps";
+import Weather from "../reducers/weather";
 
 export interface OtherActionResponse {
   type: string;
@@ -105,6 +106,13 @@ export interface SetBedIdForTask {
   attributes: {
     taskId: string;
     bedId: string;
+  }
+}
+
+export interface SetWeather {
+  type: constants.SET_WEATHER;
+  attributes: {
+    weather: Weather;
   }
 }
 
@@ -238,6 +246,15 @@ export function setLocation(lat: number, lng: number): SetLocation {
     attributes: {
       lat,
       lng
+    }
+  };
+}
+
+export function setWeather(weather: Weather): SetWeather {
+  return {
+    type: constants.SET_WEATHER,
+    attributes: {
+      weather
     }
   };
 }

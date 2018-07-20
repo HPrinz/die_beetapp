@@ -21,7 +21,6 @@ type StateToPropsType = {
 };
 
 type DispatchToPropsType = {
-    getWeather: (location: LatLng) => void;
 };
 
 type State = {
@@ -62,7 +61,6 @@ function mapStateToProps(state: RootState): StateToPropsType {
 
 function mapDispatchToProps(dispatch: Dispatch<OtherActionResponse>): DispatchToPropsType {
     return {
-        getWeather: (location: LatLng) => dispatch(getWeather(location))
     }
 };
 

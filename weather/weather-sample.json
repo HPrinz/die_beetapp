@@ -1,1 +1,41 @@
-{"coord":{"lon":139,"lat":35},"weather":[{"id":802,"main":"Clouds","description":"scattered clouds","icon":"03n"}],"base":"stations","main":{"temp":26.11,"pressure":1016.43,"humidity":95,"temp_min":26.11,"temp_max":26.11,"sea_level":1025.58,"grnd_level":1016.43},"wind":{"speed":4.02,"deg":228},"clouds":{"all":44},"dt":1532029119,"sys":{"message":0.0147,"country":"JP","sunrise":1531943051,"sunset":1531994167},"id":1851632,"name":"Shuzenji","cod":200}
+{
+    "coord": {
+        "lon": 139,
+        "lat": 35
+    },
+    "weather": [
+        {
+            "id": 802,
+            "main": "Clouds",
+            "description": "scattered clouds",
+            "icon": "03n"
+        }
+    ],
+    "base": "stations",
+    "main": {
+        "temp": 26.11,
+        "pressure": 1016.43,
+        "humidity": 95,
+        "temp_min": 26.11,
+        "temp_max": 26.11,
+        "sea_level": 1025.58,
+        "grnd_level": 1016.43
+    },
+    "wind": {
+        "speed": 4.02,
+        "deg": 228
+    },
+    "clouds": {
+        "all": 44
+    },
+    "dt": 1532029119,
+    "sys": {
+        "message": 0.0147,
+        "country": "JP",
+        "sunrise": 1531943051,
+        "sunset": 1531994167
+    },
+    "id": 1851632,
+    "name": "Shuzenji",
+    "cod": 200
+}

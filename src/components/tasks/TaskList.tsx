@@ -7,11 +7,12 @@ import { Dispatch } from "redux";
 
 
 import { RootState } from "../../reducers";
-import { selectTask, markTaskResolved, OtherActionResponse, loadTasks } from "../../actions";
+import { selectTask, markTaskResolved, OtherActionResponse, loadTasks, setWeather } from "../../actions";
 import { Bed, Task } from "../../reducers/garden";
 import { LatLng } from "react-native-maps";
 import { getWeather } from "../../actions/getWeather";
 import { taskTypes } from "../../data/tasks";
+import Weather from "../../reducers/weather";
 
 type OwnProps = {};
 
@@ -23,9 +24,9 @@ type StateToPropsType = {
 
 type DispatchToPropsType = {
     onSelectTask: (taskId: string) => void;
+    setWeather: (weather: Weather) => void;
     onMarkTaskResolved: (taskId: string) => void;
     loadTasks: () => void;
-    getWeather: (location: LatLng) => void;
 };
 
 type State = {};
@@ -40,6 +41,13 @@ class TaskList extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
     }
+
+    getweather(location: LatLng) {
+        getWeather(location).then((weather) => {
+            this.props.setWeather(weather);
+        });
+    }
+
 
     render() {
         return (
@@ -59,8 +67,9 @@ class TaskList extends React.Component<Props, State> {
                 </Card>
 
                 <Button title='Tasks aktualisieren' onPress={() => this.props.loadTasks()} style={styles.button} />
-                <Button title='Tasks aktualisieren' onPress={() => this.props.getWeather(this.props.bedLocation)} style={styles.button} />
                 <Link to="/hello" component={Button} title='Garten einrichten' style={styles.button} />
+
+                <Button title='Wetter laden' onPress={() => this.getweather(this.props.bedLocation)} style={styles.button} />
             </View >
         );
     }
@@ -77,9 +86,9 @@ function mapStateToProps(state: RootState): StateToPropsType {
 function mapDispatchToProps(dispatch: Dispatch<OtherActionResponse>): DispatchToPropsType {
     return {
         onSelectTask: (taskId: string) => dispatch(selectTask(taskId)),
+        setWeather: (weather: Weather) => dispatch(setWeather(weather)),
         onMarkTaskResolved: (taskId: string) => dispatch(markTaskResolved(taskId)),
-        loadTasks: () => dispatch(loadTasks()),
-        getWeather: (location: LatLng) => dispatch(getWeather(location)),
+        loadTasks: () => dispatch(loadTasks())
     }
 };
 
