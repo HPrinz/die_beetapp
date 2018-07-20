@@ -48,7 +48,6 @@ class TaskList extends React.Component<Props, State> {
         });
     }
 
-
     render() {
         return (
             <View>

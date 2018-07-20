@@ -1,5 +1,5 @@
 import { OtherActionResponse } from "../actions";
-import { ONBOARDING_STEP_COMPLETED, ADD_BED_TYPE, REMOVE_BED_TYPE, SET_BED_SIZE, SET_BED_SUN, ADD_CROPS, SET_BED_SET_UP, SET_BED_NAME, SELECT_TASK, SET_BED_ID_FOR_TASK, LOAD_TASKS, SET_LOCATION, SELECT_BED, GET_WEATHER, SET_WEATHER } from "../constants";
+import { ONBOARDING_STEP_COMPLETED, ADD_BED_TYPE, REMOVE_BED_TYPE, SET_BED_SIZE, SET_BED_SUN, ADD_CROPS, SET_BED_SET_UP, SET_BED_NAME, SELECT_TASK, SET_BED_ID_FOR_TASK, LOAD_TASKS, SET_LOCATION, SELECT_BED, SET_WEATHER } from "../constants";
 import { LatLng } from "react-native-maps";
 import uniqueId from 'lodash-es/uniqueId';
 import uuidv1 from 'uuid/v1';
@@ -311,12 +311,6 @@ export default (
         ...state,
         tasks
       };
-
-    case GET_WEATHER:
-      return {
-        ...state,
-        weather: action.attributes,
-      }
 
     case SET_WEATHER:
       return {

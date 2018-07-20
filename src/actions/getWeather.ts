@@ -1,44 +1,31 @@
 import { weatherApiUrl, weatherApiKey } from "../config";
 import { LatLng } from "react-native-maps";
-import { OtherActionResponse } from ".";
-import Weather from "../reducers/weather";
-
-export type GetWeatherActionResponse = {
-  location: string,
-  forecast: any,
-  feelsLike: any,
-  current: any,
-  low: string,
-  high: string,
-  icon: string
-};
-
-export type LocationActionResponse = GetWeatherActionResponse | OtherActionResponse;
-
-export type GetWeatherAction = (location: string) => GetWeatherActionResponse;
+import Weather, { OpenWeather, OpenWeatherForecast } from "../reducers/weather";
+import { getOpenWeather } from "./getOpenWeather";
+import { getOpenWeatherForecast } from "./getOpenWeatherForecast";
+import weather from "../components/weather";
 
 export async function getWeather(location: LatLng) {
-  const url = `${weatherApiUrl}/weather?lat=${location.latitude}&lon=${location.longitude}&units=metric&appid=${weatherApiKey}`;
+  let currentWeather = await getOpenWeather(location);
+  let currentForecast = await getOpenWeatherForecast(location);
 
   try {
-    let response = await fetch(url);
 
-    let json = await response.json();
+    if (currentWeather && currentForecast) {
+      return {
+        waether: currentWeather as OpenWeather,
+        forecast: currentForecast as OpenWeatherForecast,
+      } as Weather;
+    }
 
-    let openweather = json as OpenWeather;
-
-    return {
-      temp: openweather.main.temp
-    } as Weather;
 
   } catch (error) {
     console.log(error);
     return {
-      temp: 0
     } as Weather;
   }
 }
-
-
-
 export default getWeather;
+
+
+

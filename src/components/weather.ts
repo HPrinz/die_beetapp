@@ -1,193 +1,193 @@
-import { StatelessComponent } from "react";
-import { RootState } from "../reducers";
+// import { StatelessComponent } from "react";
+// import { RootState } from "../reducers";
 
-type OwnProps = {};
+// type OwnProps = {};
 
-type StateToPropsType = {
-  //Did the user the intro/setup of the app?
-  isSetUp: boolean;
-};
+// type StateToPropsType = {
+//   //Did the user the intro/setup of the app?
+//   isSetUp: boolean;
+// };
 
-type DispatchToPropsType = {};
+// type DispatchToPropsType = {};
 
-export type AppProps = OwnProps & StateToPropsType & DispatchToPropsType;
+// export type AppProps = OwnProps & StateToPropsType & DispatchToPropsType;
 
-const WeatherService: StatelessComponent<AppProps> = ({ isSetUp }: AppProps) => (
+// const WeatherService: StatelessComponent<AppProps> = ({ isSetUp }: AppProps) => (
 
-);
+// );
 
-const mapStateToProps = (state: RootState): StateToPropsType => ({
-  isSetUp: state.garden.setupStep == 5
-});
+// const mapStateToProps = (state: RootState): StateToPropsType => ({
+//   isSetUp: state.garden.setupStep == 5
+// });
 
-export { WeatherService as PureComponent };
-export default connect(mapStateToProps)(WeatherService);
-
-
+// export { WeatherService as PureComponent };
+// export default connect(mapStateToProps)(WeatherService);
 
 
-module WeatherService {
-  async getAllWeather(forceUpdate: boolean) {
 
-    var data = [];
-    try {
-      let locations = context.objects('Location');
 
-      for (var i = 0; i < locations.length; i++) {
-        var location = locations[i];
+// module WeatherService {
+//   async getAllWeather(forceUpdate: boolean) {
 
-        var result;
-        if (forceUpdate === false && location.weather) {
-          result = this.getWeatherFromContext(location);
-        } else {
-          result = await this.getWeatherFromApiAsync(location.openWeatherId);
-          this.updateWeatherInContext(location, result, context)
-        }
+//     var data = [];
+//     try {
+//       let locations = context.objects('Location');
 
-        data.push(result);
-      }
-    } finally {
-      context.close();
-    }
+//       for (var i = 0; i < locations.length; i++) {
+//         var location = locations[i];
 
-    return data;
-  }
+//         var result;
+//         if (forceUpdate === false && location.weather) {
+//           result = this.getWeatherFromContext(location);
+//         } else {
+//           result = await this.getWeatherFromApiAsync(location.openWeatherId);
+//           this.updateWeatherInContext(location, result, context)
+//         }
 
-  getWeatherFromContext(location: any) {
-    return {
-      id: location.openWeatherId,
-      freshness: location.weather.freshness,
-      observation: {
-        location: location.name,
-        forecast: location.weather.observation.forecast,
-        feelsLike: location.weather.observation.feelsLike,
-        current: location.weather.observation.current,
-        low: location.weather.observation.low,
-        high: location.weather.observation.high,
-        icon: location.weather.observation.icon
-      },
-      forecast: location.weather.forecast.map((item) => {
-        return {
-          day: item.day,
-          forecast: item.forecast,
-          low: item.low,
-          high: item.high,
-          icon: item.icon
-        }
-      })
-    }
-  }
+//         data.push(result);
+//       }
+//     } finally {
+//       context.close();
+//     }
 
-  updateWeatherInContext(location: any, weather: any, context: any) {
-    context.write(() => {
-      location.weather = {
-        freshness: weather.freshness,
-        observation: {
-          forecast: weather.observation.forecast,
-          feelsLike: weather.observation.feelsLike.toString(),
-          current: weather.observation.current.toString(),
-          low: weather.observation.low.toString(),
-          high: weather.observation.high.toString(),
-          icon: weather.observation.icon
-        }
-      }
+//     return data;
+//   }
 
-      while(location.weather.forecast.length > 0) {
-        location.weather.forecast.pop();
-      }
+//   getWeatherFromContext(location: any) {
+//     return {
+//       id: location.openWeatherId,
+//       freshness: location.weather.freshness,
+//       observation: {
+//         location: location.name,
+//         forecast: location.weather.observation.forecast,
+//         feelsLike: location.weather.observation.feelsLike,
+//         current: location.weather.observation.current,
+//         low: location.weather.observation.low,
+//         high: location.weather.observation.high,
+//         icon: location.weather.observation.icon
+//       },
+//       forecast: location.weather.forecast.map((item) => {
+//         return {
+//           day: item.day,
+//           forecast: item.forecast,
+//           low: item.low,
+//           high: item.high,
+//           icon: item.icon
+//         }
+//       })
+//     }
+//   }
 
-      weather.forecast.forEach((item) => {
-        location.weather.forecast.push({
-          day: item.day,
-          forecast: item.forecast,
-          low: item.low.toString(),
-          high: item.high.toString(),
-          icon: item.icon
-        })
-      });
-    });
-  }
+//   updateWeatherInContext(location: any, weather: any, context: any) {
+//     context.write(() => {
+//       location.weather = {
+//         freshness: weather.freshness,
+//         observation: {
+//           forecast: weather.observation.forecast,
+//           feelsLike: weather.observation.feelsLike.toString(),
+//           current: weather.observation.current.toString(),
+//           low: weather.observation.low.toString(),
+//           high: weather.observation.high.toString(),
+//           icon: weather.observation.icon
+//         }
+//       }
 
-  async getWeatherArrayFromApiAsync(locationIds: Array<string>) {
-    var data = [];
-    for (var index = 0; index < locationIds.length; ++index) {
-      var locationId = locationIds[index];
-      var result = await this.getWeatherFromApiAsync(locationId);
+//       while(location.weather.forecast.length > 0) {
+//         location.weather.forecast.pop();
+//       }
 
-      data.push(result);
-    }
+//       weather.forecast.forEach((item) => {
+//         location.weather.forecast.push({
+//           day: item.day,
+//           forecast: item.forecast,
+//           low: item.low.toString(),
+//           high: item.high.toString(),
+//           icon: item.icon
+//         })
+//       });
+//     });
+//   }
 
-    return data;
-  }
+//   async getWeatherArrayFromApiAsync(locationIds: Array<string>) {
+//     var data = [];
+//     for (var index = 0; index < locationIds.length; ++index) {
+//       var locationId = locationIds[index];
+//       var result = await this.getWeatherFromApiAsync(locationId);
 
-  async getWeatherFromApiAsync(locationId: string) {
-    var observation = await this.getWeatherObservationFromApiAsync(locationId);
-    var forecast = await this.getWeatherForecastFromApiAsync(locationId);
+//       data.push(result);
+//     }
 
-    if (observation && forecast) {
-      observation.low = forecast[0].low;
-      observation.high = forecast[0].high;
-      observation.icon = forecast[0].icon;
-    }
+//     return data;
+//   }
 
-    var result = {
-      id: locationId,
-      freshness: new Date(),
-      observation: observation,
-      forecast: forecast
-    };
+//   async getWeatherFromApiAsync(locationId: string) {
+//     var observation = await this.getWeatherObservationFromApiAsync(locationId);
+//     var forecast = await this.getWeatherForecastFromApiAsync(locationId);
 
-    return result;
-  }
+//     if (observation && forecast) {
+//       observation.low = forecast[0].low;
+//       observation.high = forecast[0].high;
+//       observation.icon = forecast[0].icon;
+//     }
 
-  async getWeatherObservationFromApiAsync(locationId: string) {
-    var url = `${weatherApiUrl}/weather?id=${locationId}&units=metric&appid=${weatherApiKey}`;
+//     var result = {
+//       id: locationId,
+//       freshness: new Date(),
+//       observation: observation,
+//       forecast: forecast
+//     };
 
-    try {
-      let response = await fetch(url);
-      const result = await response.json();
+//     return result;
+//   }
 
-      return {
-        location: result.name,
-        forecast: result.weather[0].main,
-        feelsLike: (result.main.temp_min | 0),
-        current: (result.main.temp | 0),
-        low: '',
-        high: '',
-        icon: ''
-      };
-    } catch(error) {
-      global.log(error);
-    }
-  }
+//   async getWeatherObservationFromApiAsync(locationId: string) {
+//     var url = `${weatherApiUrl}/weather?id=${locationId}&units=metric&appid=${weatherApiKey}`;
 
-  async getWeatherForecastFromApiAsync(locationId: string) {
-    var url = `${weatherApiUrl}/forecast/daily?id=${locationId}&cnt=7&units=metric&appid=${weatherApiKey}`;
+//     try {
+//       let response = await fetch(url);
+//       const result = await response.json();
 
-    try {
-      let response = await fetch(url);
-      const result = await response.json();
+//       return {
+//         location: result.name,
+//         forecast: result.weather[0].main,
+//         feelsLike: (result.main.temp_min | 0),
+//         current: (result.main.temp | 0),
+//         low: '',
+//         high: '',
+//         icon: ''
+//       };
+//     } catch(error) {
+//       global.log(error);
+//     }
+//   }
 
-      return result.list.map((item, index) => {
-        return {
-          day: this.getDayFromUtcDate(item.dt),
-          forecast: item.weather[0].main,
-          low: (item.temp.min | 0),
-          high: (item.temp.max | 0),
-          icon: item.weather[0].icon
-        }
-      });
-    } catch(error) {
-      global.log(error);
-    }
-  }
+//   async getWeatherForecastFromApiAsync(locationId: string) {
+//     var url = `${weatherApiUrl}/forecast/daily?id=${locationId}&cnt=7&units=metric&appid=${weatherApiKey}`;
 
-  getDayFromUtcDate(date: number): string {
-    var value = new Date(date * 1000);
-    var day = dateFormat(value, 'dddd');
+//     try {
+//       let response = await fetch(url);
+//       const result = await response.json();
 
-    return day;
-  }
-};
+//       return result.list.map((item, index) => {
+//         return {
+//           day: this.getDayFromUtcDate(item.dt),
+//           forecast: item.weather[0].main,
+//           low: (item.temp.min | 0),
+//           high: (item.temp.max | 0),
+//           icon: item.weather[0].icon
+//         }
+//       });
+//     } catch(error) {
+//       global.log(error);
+//     }
+//   }
 
-export default WeatherService;
+//   getDayFromUtcDate(date: number): string {
+//     var value = new Date(date * 1000);
+//     var day = dateFormat(value, 'dddd');
+
+//     return day;
+//   }
+// };
+
+// export default WeatherService;
