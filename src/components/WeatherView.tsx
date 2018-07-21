@@ -7,7 +7,7 @@ import { RouteComponentProps, withRouter } from "react-router-native";
 import { Dispatch } from "redux";
 import { OtherActionResponse } from '../actions';
 import { RootState } from '../reducers';
-import Weather, { getHimmel, getIcon, OpenWeather } from '../reducers/weather';
+import Weather, { OpenWeather, getConditionIcon, getCondition, getRainTotalAmount } from '../reducers/weather';
 
 
 type OwnProps = {
@@ -45,21 +45,27 @@ class WeatherView extends React.Component<Props, State> {
 
         return (
             <Card title="Wetter">
-                <Text>{getIcon(this.props.weather.waether as OpenWeather)}</Text>
-                <Image resizeMode='contain' style={{ width: 50, height: 50 }}
-                    source={{ uri: getIcon(this.props.weather.waether as OpenWeather) }}
-                />
 
+                <Image resizeMode='contain' style={{ width: 50, height: 50 }}
+                    source={{ uri: getConditionIcon(this.props.weather.now as OpenWeather) }}
+                />
+                <Text>Condition: {getCondition(this.props.weather.now as OpenWeather)}</Text>
+                <Text>Temperatur: {this.props.weather.now.main.temp}</Text>
+                <Text>---------------------------</Text>
+                <Text>Vorhersage</Text>
+                <Text>Regen: {getRainTotalAmount(this.props.weather as Weather, 3)}</Text>
+                <Text>---------------------------</Text>
+                <Text>---------------------------</Text>
                 {
                     this.props.weather.forecast.list.map(u => (
                         <Image resizeMode='contain' style={{ width: 50, height: 50 }}
-                            source={{ uri: getIcon(u as OpenWeather) }}
+                            source={{ uri: getConditionIcon(u as OpenWeather) }}
                         />)
 
                     )
                 }
 
-                <Text>Temperatur: {this.props.weather !== undefined ? this.props.weather.waether.main.temp : '...'}</Text>
+                <Text>Temperatur: {this.props.weather !== undefined ? this.props.weather.now.main.temp : '...'}</Text>
                 <Text>---------------------------</Text>
                 <Text>Hier die Wetterdaten</Text>
                 <Text>Temperatur:{this.props.weather !== undefined ? JSON.stringify(this.props.weather, null, 4) : '...'}</Text>

@@ -1,5 +1,6 @@
 
 import { weatherApiIconUrl } from "../config";
+import { NumericDictionary } from "../../node_modules/@types/lodash";
 
 export type OpenWeather = {
     //Time of data calculation, unix, UTC 
@@ -46,52 +47,100 @@ export type OpenWeatherForecast = {
 };
 
 export interface WeatherModel {
-    waether: OpenWeather,
+    now: OpenWeather,
     forecast: OpenWeatherForecast
 }
 
-export type BedWeatherReport = {
-    temperatur: number,
-    himmel: "SONNE" | "BEWÖLKT" | "REGEN" | "VIEL_REGEN",
-};
+//https://openweathermap.org/weather-conditions
+export enum WeatherCondition {
+    Unkown = 0,
+    //Thunderstorm 
+    /// ...
+    // Drizzle
+    //...
+    //Rain
+    LightRain = 500,
+    ModerateRain = 501,
+    HeavyIntensityRain = 502,
+    VeryHeavyRain = 503,
+    ExtremeRain = 504,
+    FreezingRain = 511,
+    LightIntensityShowerRain = 520,
+    ShowerRain = 521,
+    HeavyIntensityShowerRain = 522,
+    RaggedShowerRain = 531,
+    //Snow
+    // ...
+    //Atmosphere
+    //...
+    //Clear
+    ClearSky = 800,
+    //Clouds
+    FewClouds = 801,
+    ScatteredClouds = 802,
+    BrokenClouds = 803,
+    OvercastClouds = 804
+}
 
 export default class Weather implements WeatherModel {
-    public waether: OpenWeather;
+    public now: OpenWeather;
     public forecast: OpenWeatherForecast;
 
-    constructor(waether: OpenWeather, forecast: OpenWeatherForecast) {
-        this.waether = waether;
+    constructor(now: OpenWeather, forecast: OpenWeatherForecast) {
+        this.now = now;
         this.forecast = forecast;
     }
 }
 
-export function getReport(waether: OpenWeather): BedWeatherReport {
-    return {
-        temperatur: waether.main.temp,
-        himmel: getHimmel(waether)
-    } as BedWeatherReport;
+export function getCondition(weather: OpenWeather | undefined): WeatherCondition {
+    if (weather == undefined) {
+        return WeatherCondition.Unkown;
+    }
+    return weather.weather[0].id as WeatherCondition;
 }
 
-export function getHimmel(waether: OpenWeather): string {
-    if (waether.clouds.all == 0) {
-        return "SONNE";
-    }
-    if (waether.rain["3h"] == 0 && waether.clouds.all > 0) {
-        return "BEWÖLKT";
+export function getRainTotalAmount(weather: Weather | undefined, days: number): number {
+    if (weather == undefined) {
+        return 0;
     }
 
-    if (waether.rain["3h"] == 0 && waether.clouds.all > 0) {
-        return "BEWÖLKT";
+    var rainAmount: number = 0.0;
+    rainAmount = rainAmount + getRain(weather.now);
+
+    if (weather.forecast == undefined) {
+        return rainAmount;
     }
 
-    return "";
+    if (weather.forecast.list == undefined) {
+        return rainAmount;
+    }
+
+    for (let entry of weather.forecast.list) {
+        let rain = getRain(entry);
+        if (rain != undefined) {
+            //console.log(rain);
+            rainAmount = rainAmount + rain;
+        }
+    }
+
+    return rainAmount;
 }
 
-export function getIcon(waether: OpenWeather | undefined): string {
-    if (waether == undefined) {
+export function getRain(weather: OpenWeather | undefined): number {
+    if (weather == undefined) {
+        return 0.0;
+    }
+    if (weather.rain == undefined) {
+        return 0.0;
+    }
+    return weather.rain["3h"];
+}
+
+export function getConditionIcon(weather: OpenWeather | undefined): string {
+    if (weather == undefined) {
         return "";
     }
-    return weatherApiIconUrl + waether.weather[0].icon + ".png";
+    return weatherApiIconUrl + weather.weather[0].icon + ".png";
 }
 
 

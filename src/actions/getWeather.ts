@@ -3,7 +3,6 @@ import { LatLng } from "react-native-maps";
 import Weather, { OpenWeather, OpenWeatherForecast } from "../reducers/weather";
 import { getOpenWeather } from "./getOpenWeather";
 import { getOpenWeatherForecast } from "./getOpenWeatherForecast";
-import weather from "../components/weather";
 
 export async function getWeather(location: LatLng) {
   let currentWeather = await getOpenWeather(location);
@@ -13,7 +12,7 @@ export async function getWeather(location: LatLng) {
 
     if (currentWeather && currentForecast) {
       return {
-        waether: currentWeather as OpenWeather,
+        now: currentWeather as OpenWeather,
         forecast: currentForecast as OpenWeatherForecast,
       } as Weather;
     }
