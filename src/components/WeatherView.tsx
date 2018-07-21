@@ -1,5 +1,5 @@
 import React from "react";
-import { Image } from "react-native";
+import { Image, View } from "react-native";
 import { Card, Text } from "react-native-elements";
 import { LatLng } from 'react-native-maps';
 import { connect } from "react-redux";
@@ -7,7 +7,7 @@ import { RouteComponentProps, withRouter } from "react-router-native";
 import { Dispatch } from "redux";
 import { OtherActionResponse } from '../actions';
 import { RootState } from '../reducers';
-import Weather, { OpenWeather, getConditionIcon, getCondition, getRainTotalAmount } from '../reducers/weather';
+import Weather, { OpenWeather, getConditionIcon, getCondition, getRainTotalAmount, getDateString } from '../reducers/weather';
 
 
 type OwnProps = {
@@ -45,24 +45,30 @@ class WeatherView extends React.Component<Props, State> {
 
         return (
             <Card title="Wetter">
-
+                <Text>Aktuell</Text>
+                <Text>---------------------------</Text>
+                <Text>Daten von: {getDateString(this.props.weather.now as OpenWeather)}</Text>
                 <Image resizeMode='contain' style={{ width: 50, height: 50 }}
                     source={{ uri: getConditionIcon(this.props.weather.now as OpenWeather) }}
                 />
                 <Text>Condition: {getCondition(this.props.weather.now as OpenWeather)}</Text>
                 <Text>Temperatur: {this.props.weather.now.main.temp}</Text>
-                <Text>---------------------------</Text>
+                <Text></Text>
+                <Text></Text>
                 <Text>Vorhersage</Text>
-                <Text>Regen: {getRainTotalAmount(this.props.weather as Weather, 3)}</Text>
                 <Text>---------------------------</Text>
-                <Text>---------------------------</Text>
+                <Text>Regen insg.: {getRainTotalAmount(this.props.weather as Weather, 3)}</Text>
+                <Text></Text>
                 {
                     this.props.weather.forecast.list.map(u => (
-                        <Image resizeMode='contain' style={{ width: 50, height: 50 }}
-                            source={{ uri: getConditionIcon(u as OpenWeather) }}
-                        />)
+                        <View>
 
-                    )
+                            <Text>Zu: {getDateString(u as OpenWeather)}</Text>
+                            <Image resizeMode='contain' style={{ width: 50, height: 50 }}
+                                source={{ uri: getConditionIcon(u as OpenWeather) }}
+                            />
+                        </View>
+                    ))
                 }
 
                 <Text>Temperatur: {this.props.weather !== undefined ? this.props.weather.now.main.temp : '...'}</Text>

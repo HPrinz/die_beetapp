@@ -1,6 +1,7 @@
 
 import { weatherApiIconUrl } from "../config";
 import { NumericDictionary } from "../../node_modules/@types/lodash";
+import { Moment } from 'moment'
 
 export type OpenWeather = {
     //Time of data calculation, unix, UTC 
@@ -107,6 +108,14 @@ export function getRainTotalAmount(weather: Weather | undefined, days: number): 
     var rainAmount: number = 0.0;
     rainAmount = rainAmount + getRain(weather.now);
 
+    var moment = require('moment');
+
+    var now = moment(new Date());
+    var nowString = now.format("DD-MM-YYYY HH:mm:ss");
+
+    var dateTimeString = moment.unix(weather.now.dt).format("DD-MM-YYYY HH:mm:ss");
+    console.log(nowString + ":" + weather.now.dt + " - " + dateTimeString);
+
     if (weather.forecast == undefined) {
         return rainAmount;
     }
@@ -114,6 +123,9 @@ export function getRainTotalAmount(weather: Weather | undefined, days: number): 
     if (weather.forecast.list == undefined) {
         return rainAmount;
     }
+
+
+
 
     for (let entry of weather.forecast.list) {
         let rain = getRain(entry);
@@ -143,5 +155,10 @@ export function getConditionIcon(weather: OpenWeather | undefined): string {
     return weatherApiIconUrl + weather.weather[0].icon + ".png";
 }
 
-
-
+export function getDateString(weather: OpenWeather | undefined): string {
+    if (weather == undefined) {
+        return "";
+    }
+    var moment = require('moment');
+    return moment.unix(weather.dt).format("DD-MM-YYYY HH:mm:ss");
+}
