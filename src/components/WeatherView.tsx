@@ -37,15 +37,29 @@ class WeatherView extends React.Component<Props, State> {
     }
 
     render() {
+        if (this.props.weather == undefined) {
+            return (
+                <Text>Kein Wetter</Text>
+            );
+        }
+
         return (
             <Card title="Wetter">
-                <Text>{getIcon(this.props.weather as Weather)}</Text>
+                <Text>{getIcon(this.props.weather.waether as OpenWeather)}</Text>
                 <Image resizeMode='contain' style={{ width: 50, height: 50 }}
-                    source={{ uri: getIcon(this.props.weather as Weather) }}
-                // source={{ uri: 'http://openweathermap.org/img/w/10d.png' }}
+                    source={{ uri: getIcon(this.props.weather.waether as OpenWeather) }}
                 />
+
+                {
+                    this.props.weather.forecast.list.map(u => (
+                        <Image resizeMode='contain' style={{ width: 50, height: 50 }}
+                            source={{ uri: getIcon(u as OpenWeather) }}
+                        />)
+
+                    )
+                }
+
                 <Text>Temperatur: {this.props.weather !== undefined ? this.props.weather.waether.main.temp : '...'}</Text>
-                <Text>Himmel: {this.props.weather !== undefined ? getHimmel(this.props.weather.waether as OpenWeather) : '...'}</Text>
                 <Text>---------------------------</Text>
                 <Text>Hier die Wetterdaten</Text>
                 <Text>Temperatur:{this.props.weather !== undefined ? JSON.stringify(this.props.weather, null, 4) : '...'}</Text>

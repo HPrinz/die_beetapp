@@ -87,8 +87,11 @@ export function getHimmel(waether: OpenWeather): string {
     return "";
 }
 
-export function getIcon(waether: Weather): string {
-    return weatherApiIconUrl + waether.waether.weather[0].icon + ".png";
+export function getIcon(waether: OpenWeather | undefined): string {
+    if (waether == undefined) {
+        return "";
+    }
+    return weatherApiIconUrl + waether.weather[0].icon + ".png";
 }
 
 
