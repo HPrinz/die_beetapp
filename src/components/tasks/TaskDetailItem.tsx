@@ -54,7 +54,7 @@ class TaskDetailItem extends React.Component<Props, State> {
     const cropText = !crop ? '' : ' bei den ' + crop.name + 'n';   
     const shareContent = {
       message: 'Kannst du vielleicht das ' + taskType.name + bedText + cropText + ' übernehmen?',
-      url: 'http://beetapp.de',
+      // url: 'http://beetapp.de',
       title: 'die beetapp Aufgabe teilen'
     } as ShareContent
     const shareOpts = {
