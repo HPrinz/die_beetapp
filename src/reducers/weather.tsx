@@ -145,7 +145,17 @@ export function getRain(weather: OpenWeather | undefined): number {
     if (weather.rain == undefined) {
         return 0.0;
     }
+    if (weather.rain['3h'] == undefined) {
+        return 0.0;
+    }
     return weather.rain["3h"];
+}
+
+export function getRainAsString(weather: OpenWeather | undefined): string {
+    const rain = getRain(weather)
+    if (rain === 0.0) return '';
+    if (rain < 0.5) return '<0.5mm';
+    return Math.round(rain * 10) / 10 + 'mm';
 }
 
 export function getConditionIcon(weather: OpenWeather | undefined): string {
@@ -156,7 +166,7 @@ export function getConditionIcon(weather: OpenWeather | undefined): string {
 }
 
 export function getDateString(weather: OpenWeather | undefined): string {
-    if (weather == undefined) {
+    if (!weather) {
         return "";
     }
     var moment = require('moment');

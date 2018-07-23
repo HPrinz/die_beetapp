@@ -8,7 +8,7 @@ import { Dispatch } from "redux";
 
 import { RootState } from "../../reducers";
 import { selectTask, markTaskResolved, OtherActionResponse, loadTasks, setWeather } from "../../actions";
-import { Bed, Task } from "../../reducers/garden";
+import { Bed, Task, cropTypes, Crop } from "../../reducers/garden";
 import { LatLng } from "react-native-maps";
 import { getWeather } from "../../actions/getWeather";
 import { taskTypes } from "../../data/tasks";
@@ -42,6 +42,7 @@ class TaskList extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this._onUpdateTasks = this._onUpdateTasks.bind(this);
+        this._getSubtitle = this._getSubtitle.bind(this);
     }
 
     getweather(location: LatLng) {
@@ -54,7 +55,15 @@ class TaskList extends React.Component<Props, State> {
         this.getweather(this.props.bedLocation);
         return () => this.props.loadTasks();
     }
+
+    private _getSubtitle(task : Task) {
+        const bed = task.bedId && this.props.beds.find(bed => bed.id === task.bedId) ? (this.props.beds.find(bed => bed.id === task.bedId) as Bed) : undefined;
+        const crop = task.cropId && cropTypes.find(crop => crop.id === (task.cropId as string)) ? (cropTypes.find(crop => crop.id === (task.cropId as string)) as Crop) : undefined;
+        const bedText = !bed ? '' : ' im ' + bed.name + '';   
+        const cropText = !crop ? '' : 'bei den ' + crop.name + 'n';   
     
+        return bedText + cropText;
+    }
 
     render() {
         return (
@@ -68,8 +77,10 @@ class TaskList extends React.Component<Props, State> {
                             component={ListItem}
                             key={u.id}
                             title={taskTypes[u.taskType].name}
-                            subtitle={'in ' + (this.props.beds.find(bed => bed.id === u.bedId) ? (this.props.beds.find(bed => bed.id === u.bedId) as Bed).name : '')}
-                            leftAvatar={{ source: taskTypes[u.taskType].icon }}
+                            subtitle={this._getSubtitle(u)}
+                            leftAvatar={{ source: taskTypes[u.taskType].icon, overlayContainerStyle:{backgroundColor: '#cce8e2'} }}
+                            titleStyle={{ fontSize: '14', fontWeight: 'light' }}
+                            subtitleStyle={{ fontSize: '12', color: 'grey' }}
                         />)
                     )}
                 </Card>
