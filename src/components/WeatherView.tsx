@@ -73,7 +73,6 @@ class WeatherView extends React.Component<Props, State> {
             );
         }
 
-
         return (
             <View>
                  <ScrollView horizontal={true} style={styles.hor}>
@@ -185,10 +184,10 @@ export default withRouter(connect(
             paddingTop: 0,
         },
         weekday:{
+            fontWeight: 'bold',
             textAlign: 'center',
             fontSize: 12,
-            marginTop: 0,
-            paddingTop: 0,
+            marginBottom: 3,
         },
         textCenterSmall:{
             textAlign: 'center',

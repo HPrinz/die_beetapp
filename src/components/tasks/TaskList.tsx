@@ -21,6 +21,7 @@ type StateToPropsType = {
     taskList: Task[];
     beds: Bed[];
     bedLocation: LatLng;
+    weather: Weather | undefined;
 };
 
 type DispatchToPropsType = {
@@ -43,16 +44,22 @@ class TaskList extends React.Component<Props, State> {
         super(props);
         this._onUpdateTasks = this._onUpdateTasks.bind(this);
         this._getSubtitle = this._getSubtitle.bind(this);
+        this._fetchWeather = this._fetchWeather.bind(this);
     }
 
-    getweather(location: LatLng) {
+    componentDidMount(){
+        if(!this.props.weather) this._fetchWeather(this.props.bedLocation);
+        if(!this.props.taskList || this.props.taskList.length == 0) this.props.loadTasks();
+    }
+
+    private _fetchWeather(location: LatLng) {
         getWeather(location).then((weather) => {
             if(weather) this.props.setWeather(weather);
         });
     }
 
     private _onUpdateTasks() {
-        this.getweather(this.props.bedLocation);
+        this._fetchWeather(this.props.bedLocation);
         return () => this.props.loadTasks();
     }
 
@@ -81,11 +88,12 @@ class TaskList extends React.Component<Props, State> {
                             leftAvatar={{ source: taskTypes[u.taskType].icon, overlayContainerStyle:{backgroundColor: '#cce8e2'} }}
                             titleStyle={{ fontSize: '14', fontWeight: 'light' }}
                             subtitleStyle={{ fontSize: '12', color: 'grey' }}
+                            containerStyle={{paddingTop: 5, paddingBottom :10}}
                         />)
                     )}
                 </Card>
 
-                <Button title='Tasks aktualisieren' onPress={this._onUpdateTasks()} style={styles.button} />
+                {/* <Button title='Tasks aktualisieren' onPress={this._onUpdateTasks()} style={styles.button} /> */}
                 <Link to="/hello" component={Button} title='Garten einrichten' style={styles.button} />
 
                 {/* <Button title='Wetter laden' onPress={() => this.getweather(this.props.bedLocation)} style={styles.button} /> */}
@@ -100,6 +108,7 @@ function mapStateToProps(state: RootState): StateToPropsType {
         taskList: state.garden.tasks,
         beds: state.garden.setup.beds,
         bedLocation: state.garden.setup.location as LatLng,
+        weather: state.garden.weather,
     }
 }
 

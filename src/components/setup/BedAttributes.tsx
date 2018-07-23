@@ -75,7 +75,7 @@ class BedAttributes extends React.Component<Props, State> {
                 onValueChange={value => this.props.setBedSun(bed.id, value)}
                 style={{width: '80%', flex: 1, alignSelf: 'center'}}
               />
-              <Text style={{textAlign: 'center'}}>{bed.sunHours} Sonnenstunden - {getSunAsName(bed.sunHours || 4)}}</Text>
+              <Text style={{textAlign: 'center'}}>{bed.sunHours} Sonnenstunden - {getSunAsName(bed.sunHours || 4)}</Text>
             </View>
           </Card>
 
