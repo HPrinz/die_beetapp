@@ -13,6 +13,7 @@ import { LatLng } from "react-native-maps";
 import { getWeather } from "../../actions/getWeather";
 import { taskTypes } from "../../data/tasks";
 import Weather from "../../reducers/weather";
+import WeatherView from "../WeatherView";
 
 type OwnProps = {};
 
@@ -40,17 +41,25 @@ class TaskList extends React.Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
+        this._onUpdateTasks = this._onUpdateTasks.bind(this);
     }
 
     getweather(location: LatLng) {
         getWeather(location).then((weather) => {
-            this.props.setWeather(weather);
+            if(weather) this.props.setWeather(weather);
         });
     }
+
+    private _onUpdateTasks() {
+        this.getweather(this.props.bedLocation);
+        return () => this.props.loadTasks();
+    }
+    
 
     render() {
         return (
             <View>
+                <WeatherView />
                 <Card title="Tasks">
                     {this.props.taskList.map(u => (
                         <Link
@@ -65,14 +74,15 @@ class TaskList extends React.Component<Props, State> {
                     )}
                 </Card>
 
-                <Button title='Tasks aktualisieren' onPress={() => this.props.loadTasks()} style={styles.button} />
+                <Button title='Tasks aktualisieren' onPress={this._onUpdateTasks()} style={styles.button} />
                 <Link to="/hello" component={Button} title='Garten einrichten' style={styles.button} />
 
-                <Button title='Wetter laden' onPress={() => this.getweather(this.props.bedLocation)} style={styles.button} />
+                {/* <Button title='Wetter laden' onPress={() => this.getweather(this.props.bedLocation)} style={styles.button} /> */}
             </View >
         );
     }
 }
+
 
 function mapStateToProps(state: RootState): StateToPropsType {
     return {

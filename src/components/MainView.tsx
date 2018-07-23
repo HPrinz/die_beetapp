@@ -41,8 +41,7 @@ class MainView extends React.Component<MainProps, MainState> {
       <View style={styles.root}>
         {this.props.isSetUp === false ? <Redirect to="/hello" push /> :
           this.props.selectedTask !== undefined ? <Redirect to="/taskdetail" push /> :
-            <TaskList />}
-        <WeatherView />
+          <TaskList />}
       </View>
     );
   }

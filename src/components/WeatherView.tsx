@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, View } from "react-native";
+import { Image, View, StyleSheet, ScrollView } from "react-native";
 import { Card, Text } from "react-native-elements";
 import { LatLng } from 'react-native-maps';
 import { connect } from "react-redux";
@@ -37,14 +37,37 @@ class WeatherView extends React.Component<Props, State> {
     }
 
     render() {
+        const debug = false;
+
         if (this.props.weather == undefined) {
             return (
-                <Text>Kein Wetter</Text>
+                <Text>Keien Wetterdaten</Text>
             );
         }
 
         return (
-            <Card title="Wetter">
+            <View>
+                 <ScrollView horizontal={true} style={styles.hor}>
+                    <View>
+                        <Text style={styles.textCenterSmall}>jetzt</Text>
+                        <Image resizeMode='contain' style={{ width: 50, height: 50 }}
+                            source={{ uri: getConditionIcon(this.props.weather.now as OpenWeather) }}
+                        />
+                        <Text style={styles.textCenter}>{Math.round(this.props.weather.now.main.temp)}&#8451;</Text>
+                    </View>
+
+                    {this.props.weather.forecast.list.slice(0, 8).map((u : OpenWeather)=> (
+                        <View>
+                            <Text style={styles.textCenterSmall}>{getDateString(u).slice(11, 16)}</Text>
+                            <Image resizeMode='contain' style={{ width: 50, height: 50 }}
+                                source={{ uri: getConditionIcon(u as OpenWeather) }}
+                            />
+                            <Text style={styles.textCenter}>{Math.round(u.main.temp)}&#8451;</Text>
+                        </View>
+                    ))}
+                </ScrollView>
+
+            { debug && <Card title="Wetter">
                 <Text>Aktuell</Text>
                 <Text>---------------------------</Text>
                 <Text>Daten von: {getDateString(this.props.weather.now as OpenWeather)}</Text>
@@ -74,8 +97,9 @@ class WeatherView extends React.Component<Props, State> {
                 <Text>Temperatur: {this.props.weather !== undefined ? this.props.weather.now.main.temp : '...'}</Text>
                 <Text>---------------------------</Text>
                 <Text>Hier die Wetterdaten</Text>
-                <Text>Temperatur:{this.props.weather !== undefined ? JSON.stringify(this.props.weather, null, 4) : '...'}</Text>
-            </Card >
+                {/* <Text>Temperatur:{this.props.weather !== undefined ? JSON.stringify(this.props.weather, null, 4) : '...'}</Text> */}
+            </Card > }
+            </View>
         );
     }
 
@@ -97,3 +121,22 @@ export { WeatherView as PureComponent };
 export default withRouter(connect(
     mapStateToProps,
     mapDispatchToProps)(WeatherView));
+
+    const styles = StyleSheet.create({
+        hor:{
+          flex: 1,
+          flexDirection: 'row',
+          alignItems: 'center'
+        },
+        textCenter:{
+            textAlign: 'center',
+            fontSize: 12,
+            marginTop: 0,
+            paddingTop: 0,
+        },
+        textCenterSmall:{
+            textAlign: 'center',
+            fontSize: 10,
+        }
+       
+      });
