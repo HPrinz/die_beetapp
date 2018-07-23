@@ -1,11 +1,14 @@
 import { OtherActionResponse } from "../actions";
-import { ONBOARDING_STEP_COMPLETED, ADD_BED_TYPE, REMOVE_BED_TYPE, SET_BED_SIZE, SET_BED_SUN, ADD_CROPS, SET_BED_SET_UP, SET_BED_NAME, SELECT_TASK, SET_BED_ID_FOR_TASK, LOAD_TASKS, SET_LOCATION, SELECT_BED, SET_WEATHER } from "../constants";
+import { ONBOARDING_STEP_COMPLETED, ADD_BED_TYPE, REMOVE_BED_TYPE, SET_BED_SIZE, SET_BED_SUN, ADD_CROPS, SET_BED_SET_UP, SET_BED_NAME, SELECT_TASK, SET_BED_ID_FOR_TASK, LOAD_TASKS, SET_LOCATION, SELECT_BED, SET_WEATHER, MARK_TASK_RESOLVED } from "../constants";
 import { LatLng } from "react-native-maps";
 import uniqueId from 'lodash-es/uniqueId';
 import uuidv1 from 'uuid/v1';
 import { ImageSourcePropType } from "react-native";
-import { taskTypes } from "../data/tasks";
+import { taskTypes, TaskType } from "../data/tasks";
 import Weather from "./weather";
+import moment, { Moment, isMoment } from 'moment' 
+import 'moment/min/moment-with-locales';
+import 'moment/locale/de';
 
 export type BedProps = {
   name: string;
@@ -30,7 +33,7 @@ export type Crop = {
 export interface Task {
   id: string;
   taskType: string;
-  done: boolean;
+  done: boolean | Moment;
   bedId?: string;
   cropId?: string;
 }
@@ -235,6 +238,20 @@ export default (
         selectedTaskId: action.attributes.taskId
       };
 
+    case MARK_TASK_RESOLVED:
+      return {
+        ...state,
+        tasks: state.tasks.map((task: Task) => {
+          if (task.id === action.attributes.taskId) {
+            return {
+              ...task,
+              done: moment(),
+            }
+          }
+          return task;
+        })
+      };
+
     case SET_BED_ID_FOR_TASK:
       return {
         ...state,
@@ -262,50 +279,73 @@ export default (
       };
 
     case LOAD_TASKS:
-      let tasks: Task[] = []
-      state.setup.beds.filter(element => element.typeId !== 'gewaechshaus').forEach((element, index) => {
-        tasks.push({
-          bedId: element.id,
-          done: false,
-          id: uuidv1(),
-          taskType: 'giessen'
-        } as Task)
-      });
+      let tasks: Task[] = [ ...state.tasks ]
 
-      Object.entries(state.setup.crops).filter(([element, value]) => value).forEach(([element, index]) => {
-        if (element === 'tomato') {
+      state.setup.beds.filter(element => element.typeId !== 'gewaechshaus').forEach((element, index) => {
+        if(shoudldAddTask(tasks, element.id, taskTypes['giessen'])){
           tasks.push({
-            cropId: element,
+            bedId: element.id,
             done: false,
             id: uuidv1(),
-            taskType: taskTypes['tomaten_ausgeizen'].id
-          } as Task);
-          tasks.push({
-            cropId: element,
-            done: false,
-            id: uuidv1(),
-            taskType: taskTypes['laub_entfernen'].id
-          } as Task);
-          tasks.push({
-            cropId: element,
-            done: false,
-            id: uuidv1(),
-            taskType: taskTypes['triebe_reduzieren'].id
+            taskType: taskTypes['giessen'].id
           } as Task)
         }
       });
 
-      tasks.push({
-        done: false,
-        id: uuidv1(),
-        taskType: taskTypes['tools'].id
-      } as Task);
+      Object.entries(state.setup.crops).filter(([element, value]) => value).forEach(([element, index]) => {
+        if (element === 'tomato') {
+          if(shoudldAddTask(tasks, element, taskTypes['tomaten_ausgeizen'])){
+            tasks.push({
+              cropId: element,
+              done: false,
+              id: uuidv1(),
+              taskType: taskTypes['tomaten_ausgeizen'].id
+            } as Task);
+          }
+          if(shoudldAddTask(tasks, element, taskTypes['laub_entfernen'])){
+            tasks.push({
+              cropId: element,
+              done: false,
+              id: uuidv1(),
+              taskType: taskTypes['laub_entfernen'].id
+            } as Task);
+          }
+          if(shoudldAddTask(tasks, element, taskTypes['triebe_reduzieren'])){
+            tasks.push({
+              cropId: element,
+              done: false,
+              id: uuidv1(),
+              taskType: taskTypes['triebe_reduzieren'].id
+            } as Task)
+          }
+        }
+        if (element === 'lettuce') {
+          if(shoudldAddTask(tasks, element, taskTypes['schnecken_sammeln'])){
+            tasks.push({
+              cropId: 'lettuce',
+              done: false,
+              id: uuidv1(),
+              taskType: taskTypes['schnecken_sammeln'].id
+            } as Task)
+          }
+        }
+      });
 
-      tasks.push({
-        done: false,
-        id: uuidv1(),
-        taskType: 'bienenhotel'
-      } as Task);
+      if(!shoudldAddTask(tasks, 'NONE', taskTypes['tools'])){
+        tasks.push({
+          done: false,
+          id: uuidv1(),
+          taskType: taskTypes['tools'].id
+        } as Task);
+      }
+
+      if(shoudldAddTask(tasks, 'NONE', taskTypes['bienenhotel'])){
+        tasks.push({
+          done: false,
+          id: uuidv1(),
+          taskType: taskTypes['bienenhotel'].id
+        } as Task);
+      }
 
       return {
         ...state,
@@ -322,3 +362,14 @@ export default (
       return state;
   }
 };
+
+function shoudldAddTask(tasks: Task[], element: string, tasktype : TaskType) {
+  const task = tasks.find(x => x.taskType === tasktype.id && (x.cropId === element || x.cropId === element));
+  if(!task) return true;
+  if(!task.done) return false;
+  if(tasktype.frequencyInDays === 0) return false;
+  if(moment().diff(task.done as Moment, 'days') >= tasktype.frequencyInDays){
+      return true;
+  }
+  return false;
+}

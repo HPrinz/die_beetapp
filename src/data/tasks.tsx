@@ -1,5 +1,3 @@
-import weather from "../components/weather";
-import { cropTypes } from "../reducers/garden";
 
 export type TaskType = {
     id: string,
@@ -9,17 +7,19 @@ export type TaskType = {
     description: string,
     cropTypes?: string[],
     type: 'TIP' | 'TASK',
+    frequencyInDays: number,
     metadata: {}
   }
   
 
-export const taskTypes: {[id: string]: TaskType} = {
+export const taskTypes : {[id: string]: TaskType} = {
     'saen': { 
       id: "saen",
       name: "Säen",
       description: "",
       icon: require("../../assets/img/tasks/icons/saen.png"),
       image: require("../../assets/img/tasks/pics/saen.jpg"),
+      frequencyInDays: 0,
       type: 'TASK',
       metadata: {}
     },
@@ -29,6 +29,7 @@ export const taskTypes: {[id: string]: TaskType} = {
       description: "Am besten morgens oder abends. Als Faustregel für die Gießmenge gilt: Je größer die Blätter, desto höher der Wasserbedarf. Mediterrane Pflanzen sind es hingegen gewöhnt, mit wenig Feuchtigkeit auszukommen. Sie überstehen auch einige trockene Tage. Am besten wartet man, bis die Erde ausgetrocknet ist und gießt dann reichlich. \n Besser einmal richtig gießen heißt auch die Devise im Gemüsebeet: Die Experten der Bayerischen Gartenakademie raten, besser 14 Liter pro Woche an einem einzigen Tag ins Beet zu gießen. Und zwar verteilt auf mehrere Stunden, so dass das Wasser jeweils Zeit bekommt, einzusickern.",
       icon: require("../../assets/img/tasks/icons/giessen.png"),
       image: require("../../assets/img/tasks/pics/giessen.jpg"),
+      frequencyInDays: 2,
       type: 'TASK',
       metadata: {}
     },
@@ -40,6 +41,7 @@ export const taskTypes: {[id: string]: TaskType} = {
       icon: require("../../assets/img/tasks/icons/tomaten_ausgeizen.png"),
       image: require("../../assets/img/tasks/pics/tomaten_ausgeizen.jpg"),
       cropTypes: ['tomato'],
+      frequencyInDays: 3, 
       type: 'TASK',
       metadata: {}
     },
@@ -51,6 +53,7 @@ export const taskTypes: {[id: string]: TaskType} = {
       icon: require("../../assets/img/tasks/icons/tomaten_ausgeizen.png"),
       image: require("../../assets/img/tasks/pics/laub_entfernen.jpg"),
       cropTypes: ['tomato'],
+      frequencyInDays: 7, 
       type: 'TASK',
       metadata: {}
     },
@@ -62,6 +65,7 @@ export const taskTypes: {[id: string]: TaskType} = {
       icon: require("../../assets/img/tasks/icons/tomaten_ausgeizen.png"),
       image: require("../../assets/img/tasks/pics/laub_entfernen.jpg"),
       cropTypes: ['tomato'],
+      frequencyInDays: 14,
       type: 'TASK',
       metadata: {}
     },
@@ -72,17 +76,21 @@ export const taskTypes: {[id: string]: TaskType} = {
         "Die wohl schönste Arbeit im Garten - auch weil sie sich meistens selbst erklärt.",
       icon: require("../../assets/img/tasks/icons/ernten.png"),
       image: require("../../assets/img/tasks/pics/ernten.jpg"),
+      frequencyInDays: 3,
       type: 'TASK',
       metadata: {}
     },
-
-
-
-
-
-
-
-
+    'schnecken_sammeln': {
+      id: "schnecken_sammeln",
+      name: "Schnecken sammeln",
+      description:
+        "Es sind faszinierende Biester, diese Schnecken. Und im Salat haben sie absolut nichts zu suchen, den haben sie ruck zuck aufgefressen. Deshalb müssen sie regelmäßig abgesammelt werden.",
+      icon: require("../../assets/img/tasks/icons/schnecken_sammeln.png"),
+      image: require("../../assets/img/tasks/pics/schnecken_sammeln.jpg"),
+      frequencyInDays: 1,
+      type: 'TASK',
+      metadata: {}
+    },
 
     'tools': {
       id: "tools",
@@ -91,6 +99,7 @@ export const taskTypes: {[id: string]: TaskType} = {
         "Man muss nicht alles selbst besitzen. Mach eine Liste von den Werkzeugen, die du verleihen kannst und verteil sie an die sympathischsten Nachbarn. Vielleicht bekommst du eine Liste zurück.",
       icon: require("../../assets/img/tasks/icons/ernten.png"),
       image: require("../../assets/img/tasks/pics/tools.jpg"),
+      frequencyInDays: 0,
       type: 'TIP',
       metadata: {}
     },
@@ -101,6 +110,7 @@ export const taskTypes: {[id: string]: TaskType} = {
         "Regenwasser ist weicher und hat eine für die Pflanzen angenehmere Temperatur",
       icon: require("../../assets/img/tasks/icons/giessen.png"),
       image: require("../../assets/img/tasks/pics/giessen.jpg"),
+      frequencyInDays: 0,
       type: 'TIP',
       metadata: {}
     },
@@ -111,6 +121,7 @@ export const taskTypes: {[id: string]: TaskType} = {
         "Ohne Bienen kein Gemüse. Hilf ihnen, indem du ihnen mit Bambusröhren einen Rückzugsort bietest",
       icon: require("../../assets/img/tasks/icons/biene.png"),
       image: require("../../assets/img/tasks/pics/biene.jpg"),
+      frequencyInDays: 0,
       type: 'TIP',
       metadata: {}
     },

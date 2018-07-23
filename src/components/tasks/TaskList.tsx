@@ -5,7 +5,6 @@ import { Button, Card, ListItem, Text } from "react-native-elements";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
 
-
 import { RootState } from "../../reducers";
 import { selectTask, markTaskResolved, OtherActionResponse, loadTasks, setWeather } from "../../actions";
 import { Bed, Task, cropTypes, Crop } from "../../reducers/garden";
@@ -14,11 +13,15 @@ import { getWeather } from "../../actions/getWeather";
 import { taskTypes } from "../../data/tasks";
 import Weather from "../../reducers/weather";
 import WeatherView from "../WeatherView";
+import moment, { Moment } from 'moment' 
+import 'moment/min/moment-with-locales';
+import 'moment/locale/de';
 
 type OwnProps = {};
 
 type StateToPropsType = {
     taskList: Task[];
+    // showTasks: string[];
     beds: Bed[];
     bedLocation: LatLng;
     weather: Weather | undefined;
@@ -49,7 +52,7 @@ class TaskList extends React.Component<Props, State> {
 
     componentDidMount(){
         if(!this.props.weather) this._fetchWeather(this.props.bedLocation);
-        if(!this.props.taskList || this.props.taskList.length == 0) this.props.loadTasks();
+        this.props.loadTasks();
     }
 
     private _fetchWeather(location: LatLng) {
@@ -64,11 +67,13 @@ class TaskList extends React.Component<Props, State> {
     }
 
     private _getSubtitle(task : Task) {
+        console.log('0 ' + JSON.stringify(task));
         const bed = task.bedId && this.props.beds.find(bed => bed.id === task.bedId) ? (this.props.beds.find(bed => bed.id === task.bedId) as Bed) : undefined;
+        console.log('1 ' + JSON.stringify(task.cropId));
         const crop = task.cropId && cropTypes.find(crop => crop.id === (task.cropId as string)) ? (cropTypes.find(crop => crop.id === (task.cropId as string)) as Crop) : undefined;
+        console.log('2 ' + JSON.stringify(crop));
         const bedText = !bed ? '' : ' im ' + bed.name + '';   
         const cropText = !crop ? '' : 'bei den ' + crop.name + 'n';   
-    
         return bedText + cropText;
     }
 
@@ -85,9 +90,9 @@ class TaskList extends React.Component<Props, State> {
                             key={u.id}
                             title={taskTypes[u.taskType].name}
                             subtitle={this._getSubtitle(u)}
-                            leftAvatar={{ source: taskTypes[u.taskType].icon, overlayContainerStyle:{backgroundColor: '#cce8e2'} }}
-                            titleStyle={{ fontSize: '14', fontWeight: 'light' }}
-                            subtitleStyle={{ fontSize: '12', color: 'grey' }}
+                            leftAvatar={{ source: taskTypes[u.taskType].icon, overlayContainerStyle: u.done ? {backgroundColor: '#efefef' } : {backgroundColor: '#cce8e2'} }}
+                            titleStyle={ u.done ? { fontSize: '14', fontWeight: 'light', color: 'grey'} : { fontSize: '14', fontWeight: 'light' }}
+                            subtitleStyle={ { fontSize: '12', color: 'grey' }}
                             containerStyle={{paddingTop: 5, paddingBottom :10}}
                         />)
                     )}
@@ -105,10 +110,18 @@ class TaskList extends React.Component<Props, State> {
 
 function mapStateToProps(state: RootState): StateToPropsType {
     return {
-        taskList: state.garden.tasks,
+        taskList: state.garden.tasks.filter((task:Task) => {
+            if(task.done && moment().diff(task.done as Moment, 'seconds') >= 15) return false;
+            return true;
+        }),
         beds: state.garden.setup.beds,
         bedLocation: state.garden.setup.location as LatLng,
         weather: state.garden.weather,
+        // showTasks: state.garden.tasks.filter((task:Task) => {
+        //     if(task.done && isMoment(task.done) && moment().diff(task.done, 'seconds') >= 15) return false;
+        //     return true;
+        // }
+        // ).map(task => task.id);
     }
 }
 
@@ -120,7 +133,6 @@ function mapDispatchToProps(dispatch: Dispatch<OtherActionResponse>): DispatchTo
         loadTasks: () => dispatch(loadTasks())
     }
 };
-
 
 export { TaskList as PureComponent };
 export default withRouter(connect(
