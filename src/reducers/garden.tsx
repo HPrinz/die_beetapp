@@ -4,11 +4,12 @@ import { LatLng } from "react-native-maps";
 import uniqueId from 'lodash-es/uniqueId';
 import uuidv1 from 'uuid/v1';
 import { ImageSourcePropType } from "react-native";
-import { taskTypes, TaskType } from "../data/tasks";
-import Weather from "./weather";
+import { taskTypes, TaskType, LITER_EVERY_M2_BY_DAY, ADDITIONAL_WATER_NEED_FOR_KUEBEL_KAESTEN_BY_DAY } from "../data/tasks";
+import Weather, { getRain, getRainTotalAmount } from "./weather";
 import moment, { Moment, isMoment } from 'moment' 
 import 'moment/min/moment-with-locales';
 import 'moment/locale/de';
+import { bedTypes } from "../data/bedTypes";
 
 export type BedProps = {
   name: string;
@@ -20,8 +21,8 @@ export type Bed = {
   id: string;
   name: string;
   typeId: string;
-  sunHours?: number;
-  size?: number;
+  sunHours: number;
+  size: number;
 };
 
 export type Crop = {
@@ -36,40 +37,10 @@ export interface Task {
   done: boolean | Moment;
   bedId?: string;
   cropId?: string;
+  amount?: number;
+  category: string;
 }
 
-export const bedTypes: { [bedTypeId: string]: BedProps } = {
-  'beet': {
-    id: 'beet',
-    name: "Beet",
-    image: require("../../assets/img/beete/beet.png"),
-  },
-  'fruehbeet': {
-    id: 'fruehbeet',
-    name: "Frühbeet",
-    image: require("../../assets/img/beete/fruehbeet.png"),
-  },
-  'hochbeet': {
-    id: 'hochbeet',
-    name: "Hochbeet",
-    image: require("../../assets/img/beete/hochbeet.png"),
-  },
-  'kuebel_kasten': {
-    id: 'kuebel_kasten',
-    name: "Kübel/Kasten",
-    image: require("../../assets/img/beete/kuebel.png"),
-  },
-  'gewaechshaus': {
-    id: 'gewaechshaus',
-    name: "Gewächshaus",
-    image: require("../../assets/img/beete/gewaechshaus.png"),
-  },
-  'gewaechshaus_beheizt': {
-    id: 'gewaechshaus_beheizt',
-    name: "Gewächshaus (beheizt)",
-    image: require("../../assets/img/beete/gewaechshaus_beheizt.png"),
-  }
-};
 
 export const cropTypes: Crop[] = [{
   id: 'tomato',
@@ -281,13 +252,17 @@ export default (
     case LOAD_TASKS:
       let tasks: Task[] = [ ...state.tasks ]
 
-      state.setup.beds.filter(element => element.typeId !== 'gewaechshaus').forEach((element, index) => {
-        if(shoudldAddTask(tasks, element.id, taskTypes['giessen'])){
+      state.setup.beds.forEach((element, index) => {
+        const waterNeeds = shoudldWater(tasks, element.id, element.typeId, taskTypes['giessen'], state.weather)
+        console.log('ASA' + waterNeeds*element.size);
+        if(waterNeeds > 0){
           tasks.push({
             bedId: element.id,
             done: false,
             id: uuidv1(),
-            taskType: taskTypes['giessen'].id
+            taskType: taskTypes['giessen'].id,
+            amount: waterNeeds * element.size,
+            category: taskTypes['giessen'].type,
           } as Task)
         }
       });
@@ -299,7 +274,8 @@ export default (
               cropId: element,
               done: false,
               id: uuidv1(),
-              taskType: taskTypes['tomaten_ausgeizen'].id
+              taskType: taskTypes['tomaten_ausgeizen'].id,
+              category: taskTypes['tomaten_ausgeizen'].type,
             } as Task);
           }
           if(shoudldAddTask(tasks, element, taskTypes['laub_entfernen'])){
@@ -307,7 +283,8 @@ export default (
               cropId: element,
               done: false,
               id: uuidv1(),
-              taskType: taskTypes['laub_entfernen'].id
+              taskType: taskTypes['laub_entfernen'].id,
+              category: taskTypes['laub_entfernen'].type,
             } as Task);
           }
           if(shoudldAddTask(tasks, element, taskTypes['triebe_reduzieren'])){
@@ -315,7 +292,8 @@ export default (
               cropId: element,
               done: false,
               id: uuidv1(),
-              taskType: taskTypes['triebe_reduzieren'].id
+              taskType: taskTypes['triebe_reduzieren'].id,
+              category: taskTypes['triebe_reduzieren'].type,
             } as Task)
           }
         }
@@ -325,17 +303,28 @@ export default (
               cropId: 'lettuce',
               done: false,
               id: uuidv1(),
-              taskType: taskTypes['schnecken_sammeln'].id
+              taskType: taskTypes['schnecken_sammeln'].id,
+              category: taskTypes['schnecken_sammeln'].type,
             } as Task)
           }
         }
       });
 
-      if(!shoudldAddTask(tasks, 'NONE', taskTypes['tools'])){
+      if(shoudldAddTask(tasks, 'NONE', taskTypes['tools'])){
         tasks.push({
           done: false,
           id: uuidv1(),
-          taskType: taskTypes['tools'].id
+          taskType: taskTypes['tools'].id,
+          category: taskTypes['tools'].type,
+        } as Task);
+      }
+
+      if(shoudldAddTask(tasks, 'NONE', taskTypes['regenwasser'])){
+        tasks.push({
+          done: false,
+          id: uuidv1(),
+          taskType: taskTypes['regenwasser'].id,
+          category: taskTypes['regenwasser'].type,
         } as Task);
       }
 
@@ -343,7 +332,8 @@ export default (
         tasks.push({
           done: false,
           id: uuidv1(),
-          taskType: taskTypes['bienenhotel'].id
+          taskType: taskTypes['bienenhotel'].id,
+          category: taskTypes['bienenhotel'].type,
         } as Task);
       }
 
@@ -364,7 +354,16 @@ export default (
 };
 
 function shoudldAddTask(tasks: Task[], element: string, tasktype : TaskType) {
-  const task = tasks.find(x => x.taskType === tasktype.id && (x.cropId === element || x.cropId === element));
+  const task = tasks.find(x => {
+    const isSameTaskType = x.taskType === tasktype.id;
+    if(!x.bedId && !x.cropId){
+      return isSameTaskType;
+    }
+    const bedCondition = x.bedId === element
+    const cropCondition = x.cropId === element;
+    return isSameTaskType && (bedCondition || cropCondition);
+  });
+
   if(!task) return true;
   if(!task.done) return false;
   if(tasktype.frequencyInDays === 0) return false;
@@ -372,4 +371,25 @@ function shoudldAddTask(tasks: Task[], element: string, tasktype : TaskType) {
       return true;
   }
   return false;
+}
+function shoudldWater(tasks: Task[], element: string, bedType : string, tasktype : TaskType, weather : Weather | undefined) {
+  if (shoudldAddTask(tasks, element, tasktype)){
+    let waterNeeds = LITER_EVERY_M2_BY_DAY * tasktype.frequencyInDays;
+    console.log("START = " + waterNeeds);
+    console.log("bedType = " + bedType);
+    if(!weather) return waterNeeds;
+    if(bedType === bedTypes['gewaechshaus'].id){ // || bedType === bedTypes['gewaechshaus_beheizt'].id
+      console.log("GWH = " + waterNeeds);
+      return waterNeeds;
+    }
+    if(bedType === bedTypes['kuebel_kasten'].id){
+      waterNeeds = waterNeeds + (ADDITIONAL_WATER_NEED_FOR_KUEBEL_KAESTEN_BY_DAY * tasktype.frequencyInDays);
+      console.log("KK = " + waterNeeds);
+    }
+    const waterNeedsLeft = waterNeeds - getRainTotalAmount((weather as Weather), tasktype.frequencyInDays);
+    console.log('RD = ' + waterNeedsLeft);
+    return waterNeedsLeft;
+  }
+  console.log('3');
+  return 0;
 }

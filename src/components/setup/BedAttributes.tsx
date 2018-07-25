@@ -6,8 +6,9 @@ import { connect } from "react-redux";
 import { Dispatch } from "redux";
 
 import { setBedSize, setBedSun, setOnboardingStepCompleted, setBedSetUp, setBedName, OtherActionResponse } from "../../actions";
-import { Bed, bedTypes } from "../../reducers/garden";
+import { Bed} from "../../reducers/garden";
 import { RootState } from "../../reducers";
+import { bedTypes } from "../../data/bedTypes";
 
 type OwnProps = {};
 

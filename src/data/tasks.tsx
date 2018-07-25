@@ -1,4 +1,8 @@
 
+export const LITER_EVERY_M2_BY_WEEK = 26; 
+export const LITER_EVERY_M2_BY_DAY = LITER_EVERY_M2_BY_WEEK / 7; 
+export const ADDITIONAL_WATER_NEED_FOR_KUEBEL_KAESTEN_BY_DAY = 1; 
+
 export type TaskType = {
     id: string,
     name: string,

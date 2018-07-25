@@ -7,7 +7,8 @@ import { Dispatch } from "redux";
 
 import { addBedType, removeBedType, setOnboardingStepCompleted, OtherActionResponse, selectBed } from "../../actions";
 import { RootState } from "../../reducers";
-import { BedProps, Bed, bedTypes } from "../../reducers/garden";
+import { BedProps, Bed} from "../../reducers/garden";
+import { bedTypes } from "../../data/bedTypes";
 
 type OwnProps = {
 };

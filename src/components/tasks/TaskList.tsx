@@ -51,13 +51,17 @@ class TaskList extends React.Component<Props, State> {
     }
 
     componentDidMount(){
-        if(!this.props.weather) this._fetchWeather(this.props.bedLocation);
-        this.props.loadTasks();
+        if(!this.props.weather) {
+            this._fetchWeather(this.props.bedLocation)
+        }else{
+            this.props.loadTasks();
+        }
     }
 
     private _fetchWeather(location: LatLng) {
         getWeather(location).then((weather) => {
             if(weather) this.props.setWeather(weather);
+            this.props.loadTasks();
         });
     }
 
@@ -67,12 +71,12 @@ class TaskList extends React.Component<Props, State> {
     }
 
     private _getSubtitle(task : Task) {
-        console.log('0 ' + JSON.stringify(task));
+        // console.log('0 ' + JSON.stringify(task));
         const bed = task.bedId && this.props.beds.find(bed => bed.id === task.bedId) ? (this.props.beds.find(bed => bed.id === task.bedId) as Bed) : undefined;
-        console.log('1 ' + JSON.stringify(task.cropId));
+        // console.log('1 ' + JSON.stringify(task.cropId));
         const crop = task.cropId && cropTypes.find(crop => crop.id === (task.cropId as string)) ? (cropTypes.find(crop => crop.id === (task.cropId as string)) as Crop) : undefined;
-        console.log('2 ' + JSON.stringify(crop));
-        const bedText = !bed ? '' : ' im ' + bed.name + '';   
+        // console.log('2 ' + JSON.stringify(crop));
+        const bedText = !bed ? '' : 'im ' + bed.name + '';   
         const cropText = !crop ? '' : 'bei den ' + crop.name + 'n';   
         return bedText + cropText;
     }
@@ -82,13 +86,29 @@ class TaskList extends React.Component<Props, State> {
             <View>
                 <WeatherView />
                 <Card title="Tasks">
-                    {this.props.taskList.map(u => (
+                    {this.props.taskList.filter(u => u.category === 'TASK').map(u => (
                         <Link
                             to="/taskdetail"
                             onPress={() => this.props.onSelectTask(u.id)}
                             component={ListItem}
                             key={u.id}
-                            title={taskTypes[u.taskType].name}
+                            title={taskTypes[u.taskType].name + (taskTypes[u.taskType].id === 'giessen' && u.amount ? ' (' + Math.round(u.amount) + ' liter)': '')}
+                            subtitle={this._getSubtitle(u)}
+                            leftAvatar={{ source: taskTypes[u.taskType].icon, overlayContainerStyle: u.done ? {backgroundColor: '#efefef' } : {backgroundColor: '#cce8e2'} }}
+                            titleStyle={ u.done ? { fontSize: '14', fontWeight: 'light', color: 'grey'} : { fontSize: '14', fontWeight: 'light' }}
+                            subtitleStyle={ { fontSize: '12', color: 'grey' }}
+                            containerStyle={{paddingTop: 5, paddingBottom :10}}
+                        />)
+                    )}
+                </Card>
+                <Card title="Tips">
+                    {this.props.taskList.filter(u => u.category === 'TIP').map(u => (
+                        <Link
+                            to="/taskdetail"
+                            onPress={() => this.props.onSelectTask(u.id)}
+                            component={ListItem}
+                            key={u.id}
+                            title={taskTypes[u.taskType].name + (taskTypes[u.taskType].id === 'giessen' && u.amount ? ' (' + Math.round(u.amount) + ' liter)': '')}
                             subtitle={this._getSubtitle(u)}
                             leftAvatar={{ source: taskTypes[u.taskType].icon, overlayContainerStyle: u.done ? {backgroundColor: '#efefef' } : {backgroundColor: '#cce8e2'} }}
                             titleStyle={ u.done ? { fontSize: '14', fontWeight: 'light', color: 'grey'} : { fontSize: '14', fontWeight: 'light' }}

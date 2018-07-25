@@ -111,29 +111,26 @@ export function getRainTotalAmount(weather: Weather | undefined, days: number): 
     var moment = require('moment');
 
     var now = moment(new Date());
-    var nowString = now.format("DD-MM-YYYY HH:mm:ss");
+    // var nowString = now.format("DD-MM-YYYY HH:mm:ss");
 
-    var dateTimeString = moment.unix(weather.now.dt).format("DD-MM-YYYY HH:mm:ss");
-    console.log(nowString + ":" + weather.now.dt + " - " + dateTimeString);
+    // var dateTimeString = moment.unix(weather.now.dt).format("DD-MM-YYYY HH:mm:ss");
+    // console.log(nowString + ":" + weather.now.dt + " - " + dateTimeString);
 
-    if (weather.forecast == undefined) {
-        return rainAmount;
-    }
+    if (!weather.forecast) return rainAmount;
+    if (!weather.forecast.list) return rainAmount;
 
-    if (weather.forecast.list == undefined) {
-        return rainAmount;
-    }
-
-
-
-
-    for (let entry of weather.forecast.list) {
-        let rain = getRain(entry);
+    weather.forecast.list.filter((forecast : OpenWeather) => {
+        return moment.unix(forecast.dt).diff(now, 'days') <= days
+    }).forEach(forecast => {
+        let rain = getRain(forecast);
         if (rain != undefined) {
             //console.log(rain);
             rainAmount = rainAmount + rain;
-        }
-    }
+        } 
+    });
+
+    console.log('ASDASD ' + JSON.stringify(weather.forecast.list, null, 4));
+    console.log(rainAmount);
 
     return rainAmount;
 }
