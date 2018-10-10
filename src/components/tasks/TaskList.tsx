@@ -162,6 +162,6 @@ export default withRouter(connect(
 const styles = StyleSheet.create({
     button: {
         margin: 10,
-        marginBottom: 0
+        marginBottom: 20
     }
 });

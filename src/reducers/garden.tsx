@@ -4,8 +4,8 @@ import { LatLng } from "react-native-maps";
 import uniqueId from 'lodash-es/uniqueId';
 import uuidv1 from 'uuid/v1';
 import { ImageSourcePropType } from "react-native";
-import { taskTypes, TaskType, LITER_EVERY_M2_BY_DAY, ADDITIONAL_WATER_NEED_FOR_KUEBEL_KAESTEN_BY_DAY } from "../data/tasks";
-import Weather, { getRain, getRainTotalAmount } from "./weather";
+import { taskTypes, TaskType, LITER_EVERY_M2_BY_DAY, ADDITIONAL_WATER_NEED_FOR_KUEBEL_KAESTEN_BY_DAY, ADDITIONAL_WATER_SUNNY, MIN_SUN_HOURS_FOR_SUNNY_STATE } from "../data/tasks";
+import Weather, { getRain, getRainTotalAmount, getSunHours } from "./weather";
 import moment, { Moment, isMoment } from 'moment' 
 import 'moment/min/moment-with-locales';
 import 'moment/locale/de';
@@ -253,7 +253,8 @@ export default (
       let tasks: Task[] = [ ...state.tasks ]
 
       state.setup.beds.forEach((element, index) => {
-        const waterNeeds = shoudldWater(tasks, element.id, element.typeId, taskTypes['giessen'], state.weather)
+
+        const waterNeeds = shoudldWater(tasks, element, taskTypes['giessen'], state.weather)
         console.log('ASA' + waterNeeds*element.size);
         if(waterNeeds > 0){
           tasks.push({
@@ -372,24 +373,28 @@ function shoudldAddTask(tasks: Task[], element: string, tasktype : TaskType) {
   }
   return false;
 }
-function shoudldWater(tasks: Task[], element: string, bedType : string, tasktype : TaskType, weather : Weather | undefined) {
-  if (shoudldAddTask(tasks, element, tasktype)){
-    let waterNeeds = LITER_EVERY_M2_BY_DAY * tasktype.frequencyInDays;
-    console.log("START = " + waterNeeds);
-    console.log("bedType = " + bedType);
-    if(!weather) return waterNeeds;
-    if(bedType === bedTypes['gewaechshaus'].id){ // || bedType === bedTypes['gewaechshaus_beheizt'].id
-      console.log("GWH = " + waterNeeds);
-      return waterNeeds;
-    }
-    if(bedType === bedTypes['kuebel_kasten'].id){
-      waterNeeds = waterNeeds + (ADDITIONAL_WATER_NEED_FOR_KUEBEL_KAESTEN_BY_DAY * tasktype.frequencyInDays);
-      console.log("KK = " + waterNeeds);
-    }
-    const waterNeedsLeft = waterNeeds - getRainTotalAmount((weather as Weather), tasktype.frequencyInDays);
-    console.log('RD = ' + waterNeedsLeft);
-    return waterNeedsLeft;
+function shoudldWater(tasks: Task[], bed : Bed, tasktype : TaskType, weather : Weather | undefined) {
+  if (!shoudldAddTask(tasks, bed.id, tasktype)) return 0;
+
+  const days = tasktype.frequencyInDays
+
+  // basic needs
+  let waterNeeds = LITER_EVERY_M2_BY_DAY * days;
+  if(!weather) return waterNeeds;
+  
+  if((getSunHours(weather, days) / days) > MIN_SUN_HOURS_FOR_SUNNY_STATE && bed.sunHours > MIN_SUN_HOURS_FOR_SUNNY_STATE){
+    waterNeeds += ADDITIONAL_WATER_SUNNY;
   }
-  console.log('3');
-  return 0;
+
+  if(bed.typeId === bedTypes['kuebel_kasten'].id){
+    waterNeeds += ADDITIONAL_WATER_NEED_FOR_KUEBEL_KAESTEN_BY_DAY;
+  }
+  
+  let needsForNDays = waterNeeds * days;
+
+  // TODO || bedType === bedTypes['gewaechshaus_beheizt'].id
+  if(bed.typeId === bedTypes['gewaechshaus'].id) return needsForNDays;
+  
+  needsForNDays = needsForNDays - getRainTotalAmount((weather as Weather), days);
+  return needsForNDays;
 }

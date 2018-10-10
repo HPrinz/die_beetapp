@@ -9,6 +9,7 @@ import { setBedSize, setBedSun, setOnboardingStepCompleted, setBedSetUp, setBedN
 import { Bed} from "../../reducers/garden";
 import { RootState } from "../../reducers";
 import { bedTypes } from "../../data/bedTypes";
+import NumericInput from 'react-native-numeric-input';
 
 type OwnProps = {};
 
@@ -52,21 +53,27 @@ class BedAttributes extends React.Component<Props, State> {
   render() {
     const {bed} = this.props;
     return (
-      <View>
-          <Card title={bedTypes[bed.typeId].name + ' | ' + bed.name}  key={bed.id}>
+      <View >
+          <Card wrapperStyle={{alignItems: 'center', flex: 1}}
+        title={bedTypes[bed.typeId].name + ' | ' + bed.name}  key={bed.id}>
 
             {/* <View style={styles.hor}> */}
-              <Text style={{fontSize: 16, color: '#0C6E5D'}}>Beetname:</Text>
-              <Input placeholder={bedTypes[bed.typeId].name + " " + 1} onChangeText={(value) => this.props.setBedName(bed.id, value)}>{bed.name}</Input>
+              <Text style={{marginTop: 20, marginBottom: 10, fontSize: 14, color: '#0C6E5D'}}>Beetname:</Text>
+              <Input inputStyle={{borderWidth: 1, borderColor: 'lightgrey', margin: 10, paddingLeft: 10}} underlineColorAndroid='transparent' placeholder={bedTypes[bed.typeId].name + " " + 1} onChangeText={(value) => this.props.setBedName(bed.id, value)}>{bed.name}</Input>
             {/* </View> */}
 
             {/* <View style={styles.hor}> */}
-              <Text style={{marginTop: 15, fontSize: 16, color: '#0C6E5D'}}>Beetgröße im m2:</Text>
-              <Input keyboardType="numeric" placeholder="3" onChangeText={(value) => this.props.setBedSize(bed.id, +value)} >{bed.size}</Input>
+            <View style={{flexDirection: 'row', alignItems: 'flex-start', marginTop: 20, marginBottom: 10}}>
+              <Text style={{fontSize: 14, color: '#0C6E5D'}}>Beetgröße im m</Text>
+              <Text style={{fontSize: 8, lineHeight: 16, color: '#0C6E5D'}}>2</Text>
+              <Text style={{fontSize: 14, color: '#0C6E5D'}}>:</Text>
+              </View>
+              {/* <Input keyboardType="numeric" placeholder="3" onChangeText={(value) => this.props.setBedSize(bed.id, +value)} >{bed.size}</Input> */}
+              <NumericInput value={bed.size} onChange={(value : number) => this.props.setBedSize(bed.id, +value)} />
             {/* </View> */}
             
-            <Text style={{marginTop: 15, fontSize: 16, color: '#0C6E5D'}}>Beetstandort einstellen:</Text>
-            <View >
+            <Text style={{marginTop: 20, marginBottom: 10, fontSize: 14, color: '#0C6E5D'}}>Beetstandort einstellen:</Text>
+            
               <Slider
                 value={bed.sunHours || 4}
                 minimumValue={0}
@@ -74,10 +81,10 @@ class BedAttributes extends React.Component<Props, State> {
                 step={1}
                 thumbTintColor='#0C6E5D'
                 onValueChange={value => this.props.setBedSun(bed.id, value)}
-                style={{width: '80%', flex: 1, alignSelf: 'center'}}
-              />
-              <Text style={{textAlign: 'center'}}>{bed.sunHours} Sonnenstunden - {getSunAsName(bed.sunHours || 4)}</Text>
-            </View>
+                style={{width: 200}}
+                />
+                
+              <Text style={{textAlign: 'center', fontSize: 10}}>{bed.sunHours} Sonnenstunden - {getSunAsName(bed.sunHours || 4)}</Text>
           </Card>
 
            <Link

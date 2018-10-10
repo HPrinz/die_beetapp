@@ -94,58 +94,73 @@ export default class Weather implements WeatherModel {
 }
 
 export function getCondition(weather: OpenWeather | undefined): WeatherCondition {
-    if (weather == undefined) {
-        return WeatherCondition.Unkown;
-    }
+    if (!weather) return WeatherCondition.Unkown;
     return weather.weather[0].id as WeatherCondition;
 }
 
 export function getRainTotalAmount(weather: Weather | undefined, days: number): number {
-    if (weather == undefined) {
-        return 0;
-    }
-
-    var rainAmount: number = 0.0;
-    rainAmount = rainAmount + getRain(weather.now);
-
-    var moment = require('moment');
-
-    var now = moment(new Date());
-    // var nowString = now.format("DD-MM-YYYY HH:mm:ss");
-
+    // var nowString = now.format("DD-MM-YYYY HH:mm:ss");    
     // var dateTimeString = moment.unix(weather.now.dt).format("DD-MM-YYYY HH:mm:ss");
     // console.log(nowString + ":" + weather.now.dt + " - " + dateTimeString);
-
+    
+    var rainAmount: number = 0.0;
+    if (!weather)return rainAmount;
     if (!weather.forecast) return rainAmount;
     if (!weather.forecast.list) return rainAmount;
-
+    
+    var moment = require('moment');
+    var now = moment(new Date());
     weather.forecast.list.filter((forecast : OpenWeather) => {
         return moment.unix(forecast.dt).diff(now, 'days') <= days
     }).forEach(forecast => {
         let rain = getRain(forecast);
-        if (rain != undefined) {
+        if (rain) {
             //console.log(rain);
             rainAmount = rainAmount + rain;
         } 
     });
 
-    console.log('ASDASD ' + JSON.stringify(weather.forecast.list, null, 4));
-    console.log(rainAmount);
-
     return rainAmount;
 }
 
+export function getSunHours(weather: Weather | undefined, days: number): number {
+    
+    var sunAmount: number = 0;
+    if (!weather)return sunAmount;
+    if (!weather.forecast) return sunAmount;
+    if (!weather.forecast.list) return sunAmount;
+
+    var moment = require('moment');
+    var now = moment(new Date());
+
+    weather.forecast.list.filter((forecast : OpenWeather) => {
+        return moment.unix(forecast.dt).diff(now, 'days') <= days &&
+        moment.unix(forecast.dt).isAfter(moment.unix(forecast.sys.sunrise)) && 
+        moment.unix(forecast.dt).isBefore(moment.unix(forecast.sys.sunset));
+    }).forEach(forecast => {
+        // * 3 for three hours 
+        let sunHours = (getSun(forecast) * 3) / 100;
+        sunAmount += sunHours;
+    });
+    console.log(sunAmount);
+
+    return sunAmount;
+}
+
 export function getRain(weather: OpenWeather | undefined): number {
-    if (weather == undefined) {
-        return 0.0;
-    }
-    if (weather.rain == undefined) {
-        return 0.0;
-    }
-    if (weather.rain['3h'] == undefined) {
-        return 0.0;
-    }
+    if (!weather)return 0;
+    if (!weather.rain) return 0;
+    if (!weather.rain["3h"]) return 0;
+
     return weather.rain["3h"];
+}
+
+export function getSun(weather: OpenWeather | undefined): number {
+    if (!weather)return 0;
+    if (!weather.clouds) return 0;
+    if (!weather.clouds.all) return 0;
+
+    return 100 - weather.clouds.all;
 }
 
 export function getRainAsString(weather: OpenWeather | undefined): string {

@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, Image, Share, ShareContent, ShareOptions} from "react-native";
+import { StyleSheet, Text, Image, Share, ShareContent, ShareOptions, View} from "react-native";
 import { Card, Button } from "react-native-elements";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
@@ -9,6 +9,7 @@ import { RootState } from "../../reducers";
 import { Bed, Task, cropTypes, Crop } from "../../reducers/garden";
 import { selectTask, OtherActionResponse, setBedForTask, markTaskResolved } from "../../actions";
 import { taskTypes, TaskType } from "../../data/tasks";
+import { bedTypes } from "../../data/bedTypes";
 
 type OwnProps = {};
 
@@ -67,14 +68,24 @@ class TaskDetailItem extends React.Component<Props, State> {
     const { task} = this.props;
     const { taskType, bed, crop } = this.state;
     return (
-      <Card title={taskType.name} image={taskType.icon} imageStyle={{height: 20, width: 20, flex: 1, alignSelf: 'center'}} >
+      <Card 
+        title={taskTypes[task.taskType].name + (taskTypes[task.taskType].id === 'giessen' && task.amount ? ' (' + Math.round(task.amount) + ' liter)': '')} 
+        image={taskType.icon} 
+        imageStyle={{height: 20, width: 20, alignSelf: 'center'}} 
+        wrapperStyle={{alignItems: 'center', flex: 1}}
+        containerStyle={{flex: 1}}>
+        { (bed || crop ) && <Text>{(bed ? bedTypes[bed.typeId].name  + ': ' + bed.name : '') + (crop ? 'Kultur: ' + crop.name : '') }</Text> }
         <Image style={{flex: 1, width: 250, height: 200}} source={taskType.image} resizeMode="contain" />
-        <Text>{ bed ? 'Beet: ' + bed.name : '' }</Text>
-        <Text>{ crop ? 'Kultur: ' + crop.name : ''}</Text>
         <Text>{taskType.description}</Text>
-        <Button onPress={() => this.props.onMarkTaskResolved(task.id)} title='erledigt'></Button>
-        <Button onPress={() => this._shareTask()} title='teilen'></Button>
-        <Link to="/" component={Button} onPress={() => this.props.onBack()} title='zurück' />
+        <View style={{flex: 1, flexDirection: 'row', marginTop: 10, marginBottom: 20, justifyContent: "space-between"}}>
+          <Link to="/" component={Button} onPress={() => this.props.onBack()} title='zurück'  style={{margin: 10}}/>
+          <Button onPress={() => this._shareTask()} title='teilen' style={{margin: 10}}></Button>
+          <Link to="/" component={Button} title='erledigt' style={{margin: 10}} onPress={() => {
+            this.props.onMarkTaskResolved(task.id);
+            this.props.onBack();
+            }}/>
+        
+        </View>
       </Card>
     );
   }

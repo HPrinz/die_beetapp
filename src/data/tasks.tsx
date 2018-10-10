@@ -2,6 +2,8 @@
 export const LITER_EVERY_M2_BY_WEEK = 26; 
 export const LITER_EVERY_M2_BY_DAY = LITER_EVERY_M2_BY_WEEK / 7; 
 export const ADDITIONAL_WATER_NEED_FOR_KUEBEL_KAESTEN_BY_DAY = 1; 
+export const ADDITIONAL_WATER_SUNNY = 1; 
+export const MIN_SUN_HOURS_FOR_SUNNY_STATE = 4; 
 
 export type TaskType = {
     id: string,
@@ -30,7 +32,7 @@ export const taskTypes : {[id: string]: TaskType} = {
     'giessen': {
       id: "giessen",
       name: "Gießen",
-      description: "Am besten morgens oder abends. Als Faustregel für die Gießmenge gilt: Je größer die Blätter, desto höher der Wasserbedarf. Mediterrane Pflanzen sind es hingegen gewöhnt, mit wenig Feuchtigkeit auszukommen. Sie überstehen auch einige trockene Tage. Am besten wartet man, bis die Erde ausgetrocknet ist und gießt dann reichlich. \n Besser einmal richtig gießen heißt auch die Devise im Gemüsebeet: Die Experten der Bayerischen Gartenakademie raten, besser 14 Liter pro Woche an einem einzigen Tag ins Beet zu gießen. Und zwar verteilt auf mehrere Stunden, so dass das Wasser jeweils Zeit bekommt, einzusickern.",
+      description: "Am besten morgens oder abends. Als Faustregel für die Gießmenge gilt: Je größer die Blätter, desto höher der Wasserbedarf. Mediterrane Pflanzen sind es hingegen gewöhnt, mit wenig Feuchtigkeit auszukommen. Sie überstehen auch einige trockene Tage. Am besten wartet man, bis die Erde ausgetrocknet ist und gießt dann reichlich. \nBesser einmal richtig gießen heißt auch die Devise im Gemüsebeet: Die Experten der Bayerischen Gartenakademie raten, besser 14 Liter pro Woche an einem einzigen Tag ins Beet zu gießen. Und zwar verteilt auf mehrere Stunden, so dass das Wasser jeweils Zeit bekommt, einzusickern.",
       icon: require("../../assets/img/tasks/icons/giessen.png"),
       image: require("../../assets/img/tasks/pics/giessen.jpg"),
       frequencyInDays: 2,
@@ -101,7 +103,7 @@ export const taskTypes : {[id: string]: TaskType} = {
       name: "Geräte teilen",
       description:
         "Man muss nicht alles selbst besitzen. Mach eine Liste von den Werkzeugen, die du verleihen kannst und verteil sie an die sympathischsten Nachbarn. Vielleicht bekommst du eine Liste zurück.",
-      icon: require("../../assets/img/tasks/icons/ernten.png"),
+      icon: require("../../assets/img/tasks/icons/tools.png"),
       image: require("../../assets/img/tasks/pics/tools.jpg"),
       frequencyInDays: 0,
       type: 'TIP',

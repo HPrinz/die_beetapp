@@ -1,16 +1,21 @@
 import React from "react";
-import { StyleSheet, View, Dimensions, Alert } from "react-native";
+import { StyleSheet, View, Alert, Dimensions} from "react-native";
 import { RouteComponentProps, withRouter, Link } from "react-router-native";
-import MapView, { Region, Marker } from "react-native-maps";
-import { Input, Button, Text } from "react-native-elements";
+import { Slider, Input, Button, Card, Text, Divider } from "react-native-elements";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
 
-import { setOnboardingStepCompleted, OtherActionResponse, setLocation } from "../../actions";
+import { setBedSize, setBedSun, setOnboardingStepCompleted, setBedSetUp, setBedName, OtherActionResponse, setLocation } from "../../actions";
+import { Bed} from "../../reducers/garden";
+import { RootState } from "../../reducers";
+import { bedTypes } from "../../data/bedTypes";
+import MapView, { Region, LatLng, Marker } from "react-native-maps";
 
 type OwnProps = {};
 
-type StateToPropsType = {};
+type StateToPropsType = {
+  location: LatLng | undefined;
+};
 
 type DispatchToPropsType = {
   setLocation: (latitude: number, longitude: number) => void;
@@ -72,7 +77,17 @@ class BedPostion extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    console.log('Component did mount');
+    this.state = {
+      region: {
+        latitude: this.props.location ? this.props.location.latitude : initialRegion.latitude,
+        longitude: this.props.location ? this.props.location.longitude : initialRegion.longitude,
+        latitudeDelta: initialRegion.latitudeDelta,
+        longitudeDelta: initialRegion.longitudeDelta,
+      },
+      place: "",
+      ready: false,
+      map: null,
+    };
   }
 
   getCurrentPosition() {
@@ -115,7 +130,7 @@ class BedPostion extends React.Component<Props, State> {
         </View> */}
 
         <View style={{
-          flex: 2, flexDirection: 'row', justifyContent: 'center',
+          flex: 3, flexDirection: 'row', justifyContent: 'center',
         }}>
 
           <MapView
@@ -136,13 +151,19 @@ class BedPostion extends React.Component<Props, State> {
 
         </View>
         <View style={{
-          flex: 1, flexDirection: 'column', justifyContent: 'space-around', alignItems: 'stretch',
+          flex: 1, flexDirection: 'column', alignItems: 'stretch', marginTop: 10
         }}>
-        </View>
         <Link to="/crops" component={Button} title='Fertig!' onPress={() => this.props.setLocation(this.state.region.latitude, this.state.region.longitude)} />
+        </View>
       </View>
     );
   }
+}
+
+function mapStateToProps(state: RootState): StateToPropsType {
+  return {
+    location: state.garden.setup.location,
+  };
 }
 
 function mapDispatchToProps(dispatch: Dispatch<OtherActionResponse>): DispatchToPropsType {
